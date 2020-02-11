@@ -1,0 +1,19 @@
+{
+  "manifest_version": 2,
+  "name": "Web Orders",
+  "description": "Extension to save online order Invoices to structured file on disk.",
+  "version": "0.1",
+  "content_scripts": [
+    {
+      "matches": [
+        "https://*.amazon.com/gp/css/summary/print.html/ref=*invoice*"
+      ],
+      "js": [
+        "amazon_invoice.js"
+      ]
+    }
+  ],
+  "permissions": [
+    "activeTab"
+  ]
+}
