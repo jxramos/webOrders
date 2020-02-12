@@ -9,16 +9,20 @@ transaction["Order#"] = document.getElementsByClassName("h1")[0].innerText.repla
 xpathOrderDate = "/html/body/table/tbody/tr/td/table[1]/tbody/tr[1]/td";
 dateText = document.evaluate(xpathOrderDate, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null )
                    .singleNodeValue.innerText;
-transaction["OrderDate"] = dateText.split(": ")[1];
-
-// Get Substribe & Save Status
-transaction["IsSubscribeSave"] = dateText.includes("Subscribe and Save");
+dateString = dateText.split(": ")[1];
+orderDate = new Date(dateString);
+transaction["OrderDate"] = orderDate.toLocaleDateString();
 
 // Get ShipDate
 xpathShipDate = "/html/body/table/tbody/tr/td/table[2]/tbody/tr/td/table/tbody/tr[1]/td/table/tbody/tr/td/b/center";
-transaction["ShipDate"] = document.evaluate(xpathShipDate, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null )
+shipDateString = document.evaluate(xpathShipDate, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null )
                                   .singleNodeValue.innerText
-                                  .replace("Shipped on","");
+                         .replace("Shipped on ","");
+shipDate = new Date(shipDateString)
+transaction["ShipDate"] = shipDate.toLocaleDateString();
+
+// Get Substribe & Save Status
+transaction["IsSubscribeSave"] = dateText.includes("Subscribe and Save");
 
 // Get Order Total
 xpathOrderTotal = "/html/body/table/tbody/tr/td/table[1]/tbody/tr[3]/td/b";
