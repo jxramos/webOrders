@@ -41,7 +41,7 @@ PAYMENT METADATA
 payment_metadata = [];
 
 // Get Payment Information element
-xpathPaymentInfo = "/html/body/table/tbody/tr/td/table[3]/tbody/tr/td/table/tbody/tr[2]/td/table/tbody/tr/td";
+xpathPaymentInfo = "/html/body/table/tbody/tr/td/table[last()]/tbody/tr/td/table/tbody/tr[2]/td/table/tbody/tr/td";
 paymentInfo = document.evaluate(xpathPaymentInfo, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null )
                       .singleNodeValue
                       .childNodes;
