@@ -70,3 +70,20 @@ for( var i = 0; i < paymentInfo.length; i++){
 }
 
 transaction["PaymentMethod"] = payment_metadata;
+
+/*==========================================================================================
+ORDER ITEMIZATION
+==========================================================================================*/
+
+purchased_items = []
+
+// Get Shipment / secondary table elements
+xpathShipments = "/html/body/table/tbody/tr/td/table[1 < position() and position() < last()]";
+shipmentTables = document.evaluate(xpathShipments, document, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null )
+
+// Parse purchased items
+while ((node = shipmentTables.iterateNext()) != null) {
+    console.log(node)
+}
+
+transaction["Items"] = purchased_items;
