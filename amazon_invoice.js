@@ -60,7 +60,7 @@ for( var i = 0; i < paymentInfo.length; i++){
     }
     if (child.nodeName == "#text") {
         payment_text = child.textContent.trim()
-        
+
         if (payment_text) {
             payment_metadata.push(payment_text);
         }
@@ -75,15 +75,38 @@ transaction["PaymentMethod"] = payment_metadata;
 ORDER ITEMIZATION
 ==========================================================================================*/
 
-purchased_items = []
+purchased_items = [];
 
 // Get Shipment / secondary table elements
 xpathShipments = "/html/body/table/tbody/tr/td/table[1 < position() and position() < last()]";
-shipmentTables = document.evaluate(xpathShipments, document, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null )
+shipmentTablesXPR = document.evaluate(xpathShipments, document, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
 
 // Parse purchased items
-while ((node = shipmentTables.iterateNext()) != null) {
-    console.log(node)
+while ((nodeShipTable = shipmentTablesXPR.iterateNext()) != null) {
+    // Iterate shipment items (skipping header row)
+    xpathShipmentTableRows = "./tbody/tr/td/table/tbody/tr[2]/td/table/tbody/tr/td/table[2]/tbody/tr[position() > 1]";
+    shipmentTableRowsXPR = document.evaluate(xpathShipmentTableRows, nodeShipTable, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
+
+    // Parse purchased item / rows
+    while ((nodeRow = shipmentTableRowsXPR.iterateNext()) != null) {
+        purchased_item = []
+        lineItem = nodeRow.getElementsByTagName("td");
+
+        // Item Description
+        item_data = lineItem[0].childNodes
+        description = item_data[0].textContent.trim().replace(/\s+/g, ' ');
+        item_count = parseInt(description.replace(" of:", ""));
+        description += ' ' + item_data[1].textContent.trim();
+        purchased_item.push(description)
+
+        // Item Price
+        unit_price = parseFloat(lineItem[1].textContent.trim().replace('$',''));
+        price = item_count*unit_price;
+        purchased_item.push(price);
+
+        // Integrate line item
+        purchased_items.push(purchased_item);
+    }
 }
 
 transaction["Items"] = purchased_items;
