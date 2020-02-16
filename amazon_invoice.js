@@ -1,7 +1,7 @@
 function processAmazonInvoice() {
     console.log("processAmazonInvoice")
 
-    var transaction = {'type':'Amazon'};
+    var transaction = {'Vendor':'Amazon.com'};
     scrapeOrderData(transaction);
     downloadJsonTransaction(transaction);
 }
@@ -20,7 +20,7 @@ function downloadJsonTransaction(transaction) {
     var transactionJson = JSON.stringify(transaction);
     let a = document.createElement('a');
     a.href = "data:application/octet-stream,"+encodeURIComponent(transactionJson);
-    a.download = transaction['type']+'--'+transaction['Order#']+'.json';
+    a.download = transaction['Vendor']+'--'+transaction['Order#']+'.json';
     a.click();
 }
 
