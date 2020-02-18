@@ -55,7 +55,7 @@ function getOrderMetaData(transaction) {
     transaction["IsSubscribeSave"] = dateText.includes("Subscribe and Save");
 
     // Get Order Total
-    xpathOrderTotal = "/html/body/table/tbody/tr/td/table[1]/tbody/tr[3]/td/b";
+    xpathOrderTotal = "/html/body/table/tbody/tr/td/table[1]/tbody/tr[last()]/td/b";
     transaction["Total"] = parseFloat(document.evaluate(xpathOrderTotal, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null )
                                     .singleNodeValue.innerText
                                     .replace("Order Total: $",""));
