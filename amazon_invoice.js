@@ -3,7 +3,7 @@ function processAmazonInvoice() {
 
     var transaction = {'Vendor':'Amazon.com'};
     scrapeOrderData(transaction);
-    downloadJsonTransaction(transaction);
+    downloadQifTransaction(transaction);
 }
 
 function scrapeOrderData(transaction) {
@@ -14,14 +14,51 @@ function scrapeOrderData(transaction) {
     getOrderItemization(transaction);
 }
 
+function downloadContent(filename, content) {
+    let a = document.createElement('a');
+    a.href = "data:application/octet-stream,"+encodeURIComponent(content);
+    a.download = filename;
+    a.click();
+}
+
 function downloadJsonTransaction(transaction) {
     console.log("downloadJsonTransaction")
 
     var transactionJson = JSON.stringify(transaction);
-    let a = document.createElement('a');
-    a.href = "data:application/octet-stream,"+encodeURIComponent(transactionJson);
-    a.download = transaction['Vendor']+'--'+transaction['Order#']+'.json';
-    a.click();
+    downloadContent(transaction['Vendor']+'--'+transaction['Order#']+'.json', transactionJson);
+}
+
+function downloadQifTransaction(transaction) {
+    // Header
+    var transactionQif = "!Type:Bank\n";
+
+    // Date
+    transactionQif += "D" + transaction["OrderDate"] + "\n";
+
+    // Payee
+    transactionQif += "P" + transaction["Vendor"] + "\n";
+
+    // Total Amount
+    transactionQif += "T-" + transaction["Total"] + "\n";
+
+    // Memo
+    memo = "M" + transaction["Order#"]
+    if (transaction["PaymentMethod"].length > 1 ) {
+        memo += "; (split payment, " + transaction["PaymentMethod"].slice(1,) + ")"
+    }
+    transactionQif += memo + "\n";
+
+    // Splits
+    items = transaction["Items"];
+    for (let i = 0; i < items.length; i++) {
+        item = items[i];
+        transactionQif += "E"  + item[0] + "\n";
+        transactionQif += "$-" + item[1] + "\n";
+    }
+    transactionQif += "^\n"
+
+    // Save to disk
+    downloadContent(transaction['Vendor']+'--'+transaction['Order#']+'.qif', transactionQif);
 }
 
 
