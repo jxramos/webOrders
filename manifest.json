@@ -11,6 +11,22 @@
       "js": [
         "amazon_invoice.js"
       ]
+    },
+    {
+      "matches": [
+        "https://*.amazon.com/gp/digital/your-account/order-summary.html*"
+      ],
+      "js" :[
+        "amazon_digital_invoice.js"
+      ]
+    },
+    {
+      "matches" : [
+        "https://primenow.amazon.com/orderStatus?orderId=*"
+      ],
+      "js": [
+        "primenow_invoice.js"
+      ]
     }
   ],
   "permissions": [
