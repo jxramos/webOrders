@@ -3,7 +3,7 @@ function processAmazonInvoice() {
 
     var transaction = {'Vendor':'Amazon.com'};
     scrapeOrderData(transaction);
-    downloadQifTransaction(transaction);
+    downloadJsonTransaction(transaction);
 }
 
 function scrapeOrderData(transaction) {
@@ -25,7 +25,7 @@ function downloadJsonTransaction(transaction) {
     console.log("downloadJsonTransaction")
 
     var transactionJson = JSON.stringify(transaction);
-    downloadContent(transaction['Vendor']+'--'+transaction['Order#']+'.json', transactionJson);
+    downloadContent(transaction['Vendor']+'--'+transaction['Order#']+'.wo.json', transactionJson);
 }
 
 function downloadQifTransaction(transaction) {
