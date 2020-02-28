@@ -70,7 +70,7 @@ function getOrderMetaData(transaction) {
     console.log("getOrderMetaData")
 
     // Get Order Number
-    transaction["Order#"] = document.getElementsByClassName("h1")[0].innerText.replace("Final Details for ","");
+    transaction["Order#"] = document.getElementsByClassName("h1")[0].innerText.split("Details for Order #")[1].trim();
 
     // Get OrderDate
     xpathOrderDate = "/html/body/table/tbody/tr/td/table[1]/tbody/tr[1]/td";
