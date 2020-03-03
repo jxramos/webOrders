@@ -9,7 +9,7 @@
         "https://*.amazon.com/gp/css/summary/print.html/ref=*invoice*"
       ],
       "js": [
-        "amazon_invoice.js"
+        "invoice_scripts/amazon_invoice.js"
       ]
     },
     {
@@ -17,7 +17,7 @@
         "https://*.amazon.com/gp/digital/your-account/order-summary.html*"
       ],
       "js" :[
-        "amazon_digital_invoice.js"
+        "invoice_scripts/amazon_digital_invoice.js"
       ]
     },
     {
@@ -25,7 +25,7 @@
         "https://primenow.amazon.com/orderStatus?orderId=*"
       ],
       "js": [
-        "primenow_invoice.js"
+        "invoice_scripts/primenow_invoice.js"
       ]
     }
   ],
