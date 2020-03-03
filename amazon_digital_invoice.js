@@ -47,7 +47,7 @@ function getOrderMetaData(transaction) {
     transaction["OrderDate"] = orderDate.toLocaleDateString();
 
     // Get Order Total
-    xpathOrderTotal = "/html/body/table/tbody/tr[2]/td/table/tbody/tr/td/div/div[2]/div[6]";
+    xpathOrderTotal = "/html/body/table/tbody/tr[2]/td/table/tbody/tr/td/div/div[2]/div[last()]";
     transaction["Total"] = parseFloat(document.evaluate(xpathOrderTotal, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null )
                                       .singleNodeValue.innerText.split("$")[1]);
 }
@@ -62,32 +62,42 @@ function getPaymentMetaData(transaction) {
     payment_metadata = [];
 
     // Get Payment Information element
-    xpathPaymentInfo = "/html/body/table/tbody/tr[2]/td/table/tbody/tr/td/div/div[1]/div[1]/div[2]/ul/li";
-    paymentInfo = document.evaluate(xpathPaymentInfo, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null )
-                  .singleNodeValue
-                  .children;
+    var xpathPaymentInfo = "/html/body/table/tbody/tr[2]/td/table/tbody/tr/td/div/div[1]/div[1]/div[2]/ul/li";
+    var paymentInfoXPR = document.evaluate(xpathPaymentInfo, document, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null );
 
-    // Parse Payment Information
-    for(var i = 0; i < paymentInfo.length; i++){
-        var payment_text = [];
+    // Parse payment methods
+    while ((nodePaymentInfo = paymentInfoXPR.iterateNext()) != null) {
 
-        // Retrieve the line item payment detail
-        paymentElement = paymentInfo[i];
-        for (var j=0; j < paymentElement.children.length; j++){
-            paymentToken = paymentElement.children[j];
+        var paymentInfo = nodePaymentInfo.children;
 
-            if (paymentToken instanceof Image) {
-                token_text = paymentToken.alt;
+        // Parse Payment Information
+        for(var i = 0; i < paymentInfo.length; i++){
+            var payment_text = [];
+
+            // Retrieve the line item payment detail
+            var paymentElement = paymentInfo[i];
+
+            if ( paymentElement.childElementCount == 0 ) {
+                payment_text.push(paymentElement.textContent)
             } else {
-                token_text = paymentToken.innerText;
+                for (var j=0; j < paymentElement.children.length; j++){
+                    paymentToken = paymentElement.children[j];
+
+                    if (paymentToken instanceof Image) {
+                        token_text = paymentToken.alt;
+                    } else {
+                        token_text = paymentToken.innerText;
+                    }
+
+                    if (token_text) {
+                        payment_text.push(token_text);
+                    }
+                }
             }
 
-            if (token_text) {
-                payment_text.push(token_text);
-            }
-        }
-        payment_metadata.push(payment_text.join(' '))
-    }
+            payment_metadata.push(payment_text.join(' '))
+        } // for
+    } // while
 
     transaction["PaymentMethod"] = payment_metadata;
 }
