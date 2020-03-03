@@ -27,6 +27,14 @@
       "js": [
         "invoice_scripts/primenow_invoice.js"
       ]
+    },
+    {
+      "matches" : [
+        "https://www.vitacost.com/MyAccount/OrderSummary.aspx*"
+      ],
+      "js": [
+        "invoice_scripts/vitacost_invoice.js"
+      ]
     }
   ],
   "permissions": [
