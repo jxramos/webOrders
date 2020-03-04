@@ -171,7 +171,7 @@ function getOrderItemization(transaction){
             purchased_item.push(description)
 
             // Item Price
-            unit_price = parseFloat(lineItem[1].textContent.trim().replace('$',''));
+            unit_price = parsePrice(lineItem[1]);
             price = item_count*unit_price;
             purchased_item.push(price);
 
@@ -180,7 +180,31 @@ function getOrderItemization(transaction){
         }
     }
 
+    // Shipping & Sales Tax
+    var xpathPaymentItemRows = "/html/body/table/tbody/tr/td/table[last()]/tbody/tr/td/table/tbody/tr[2]/td/table/tbody/tr/td/table/tbody/tr/td/table/tbody/tr";
+    var paymentInfoTableRowsXPR = document.evaluate(xpathPaymentItemRows, document, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
+    while ((nodeRow = paymentInfoTableRowsXPR.iterateNext()) != null) {
+        // Shipping
+        if (nodeRow.innerText.includes("Shipping & Handling:")) {
+            var shippingCost = parsePrice(nodeRow.children[1]);
+            if ( shippingCost > 0.00 ) {
+                purchased_items.push(["Shipping", shippingCost]);
+            }
+        }
+        // Sales Tax
+        else if (nodeRow.innerText.includes("Estimated tax to be collected:")) {
+            var salesTax = parsePrice(nodeRow.children[1]);
+            if ( salesTax > 0.00 ) {
+                purchased_items.push(["Sales Tax", salesTax]);
+            }
+        }
+    }
+
     transaction["Items"] = purchased_items;
+}
+
+function parsePrice(item){
+    return parseFloat(item.textContent.trim().replace('$',''))
 }
 
 processAmazonInvoice();
