@@ -188,7 +188,7 @@ function getOrderItemization(transaction){
     var paymentInfoTableRowsXPR = document.evaluate(xpathPaymentItemRows, document, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
     while ((nodeRow = paymentInfoTableRowsXPR.iterateNext()) != null) {
         // Shipping
-        if (nodeRow.innerText.includes("Shipping & Handling:")) {
+        if (nodeRow.innerText.includes("Shipping")) {
             var shippingCost = parsePrice(nodeRow.children[1]);
             if ( shippingCost > 0.00 ) {
                 purchased_items.push(["Shipping", shippingCost]);
