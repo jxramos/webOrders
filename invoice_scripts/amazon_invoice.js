@@ -171,6 +171,7 @@ function getOrderItemization(transaction){
             description = item_data[0].textContent.trim().replace(/\s+/g, ' ');
             item_count = parseInt(description.replace(" of:", ""));
             description += ' ' + item_data[1].textContent.trim();
+            description = description.replace("1 of: ", "")
             purchased_item.push(description)
 
             // Item Price
