@@ -166,14 +166,29 @@ function getOrderItemization(transaction){
             purchased_item = []
             lineItem = nodeRow.getElementsByTagName("td");
 
+            //-------------------------
             // Item Description
             item_data = lineItem[0].childNodes
             description = item_data[0].textContent.trim().replace(/\s+/g, ' ');
             item_count = parseInt(description.replace(" of:", ""));
-            description += ' ' + item_data[1].textContent.trim();
+
+            for (let i = 1; i < item_data.length; i++) {
+                var desc_token = item_data[i]
+                if (desc_token instanceof HTMLSpanElement && desc_token.classList.contains("tiny")) {
+                    break;
+                }
+                desc_token = desc_token.textContent.trim()
+                if ( desc_token == "") {
+                    continue
+                }
+                description += ' ' + desc_token;
+            }
+
+            // clean up description
             description = description.replace("1 of: ", "")
             purchased_item.push(description)
 
+            //-------------------------
             // Item Price
             unit_price = parsePrice(lineItem[1]);
             price = item_count*unit_price;
