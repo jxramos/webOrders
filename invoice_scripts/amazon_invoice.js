@@ -184,24 +184,18 @@ function getOrderItemization(transaction){
         }
     }
 
-    // Shipping & Sales Tax
+    // Non-Product Itemization: shipping, sales tax, promotions, subscribe & save
     var xpathPaymentItemRows = "/html/body/table/tbody/tr/td/table[last()]/tbody/tr/td/table/tbody/tr[2]/td/table/tbody/tr/td/table/tbody/tr/td/table/tbody/tr";
     var paymentInfoTableRowsXPR = document.evaluate(xpathPaymentItemRows, document, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
+    var ignoredRows = new RegExp("Item\\(s\\) Subtotal:|Total before tax:|Grand Total:|-----");
+
     while ((nodeRow = paymentInfoTableRowsXPR.iterateNext()) != null) {
-        // Shipping
-        if (nodeRow.innerText.includes("Shipping")) {
-            var shippingCost = parsePrice(nodeRow.children[1]);
-            if ( shippingCost > 0.00 ) {
-                purchased_items.push(["Shipping", shippingCost]);
-            }
+        // Ignore Irrelevant Rows
+        if (ignoredRows.test(nodeRow.innerText)) {
+            continue
         }
-        // Sales Tax
-        else if (nodeRow.innerText.includes("Estimated tax to be collected:")) {
-            var salesTax = parsePrice(nodeRow.children[1]);
-            if ( salesTax > 0.00 ) {
-                purchased_items.push(["Sales Tax", salesTax]);
-            }
-        }
+
+        purchased_items.push([nodeRow.children[0].innerText.replace(":",""), parsePrice(nodeRow.children[1])]);
     }
 
     transaction["Items"] = purchased_items;
