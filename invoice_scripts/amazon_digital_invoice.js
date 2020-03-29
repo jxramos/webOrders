@@ -1,7 +1,10 @@
 function processAmazonDigitalInvoice() {
     console.log("processAmazonInvoice")
 
-    var transaction = {'Vendor':'Amazon.com'};
+    var transaction = {
+        "Vendor":"Amazon.com",
+        "URL": window.location.href
+    };
     scrapeOrderData(transaction);
     downloadJsonTransaction(transaction);
 }
@@ -109,12 +112,15 @@ ORDER ITEMIZATION
 function getOrderItemization(transaction){
     console.log("getOrderItemization");
 
+    purchased_items = [];
+
     // Get digital order (always single items)
     var xpathItemOrdered = "/html/body/div[1]/table[2]/tbody/tr[2]/td/table/tbody/tr/td/table/tbody/tr[2]";
     var itemTableXPR = document.evaluate(xpathItemOrdered, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null )
                         .singleNodeValue;
     var purchased_item = []
 
+    //-------------------------
     // Parse purchased item description
     var descriptionElement = itemTableXPR.children[0].childNodes;
     var description = []
@@ -129,11 +135,33 @@ function getOrderItemization(transaction){
     }
     purchased_item.push(description.join(' '))
 
-    // Parse purchase price
-    var price = parseFloat(itemTableXPR.children[1].innerText.trim().replace('$',''))
+    //-------------------------
+    // Item Price
+    var price =  parsePrice(itemTableXPR.children[1]);
     purchased_item.push(price);
 
-    transaction["Items"] = [purchased_item];
+    // Integrate line item
+    purchased_items.push(purchased_item);
+
+    // Non-Product Itemization: shipping, sales tax, promotions, subscribe & save
+    var xpathPaymentItemRows = "//*[contains(@class, 'pmts-amount-breakdown-sub-totals')]";
+    var paymentInfoTableRowsXPR = document.evaluate(xpathPaymentItemRows, document, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
+    var ignoredRows = new RegExp("Item\\(s\\) Subtotal:|Total Before Tax:");
+
+    while ((nodeRow = paymentInfoTableRowsXPR.iterateNext()) != null) {
+        // Ignore Irrelevant Rows
+        if (ignoredRows.test(nodeRow.innerText)) {
+            continue
+        }
+
+        purchased_items.push([nodeRow.children[0].innerText.replace(":",""), parsePrice(nodeRow.children[1])]);
+    }
+
+    transaction["Items"] = purchased_items;
+}
+
+function parsePrice(item){
+    return parseFloat(item.textContent.trim().replace('$',''))
 }
 
 processAmazonDigitalInvoice();
