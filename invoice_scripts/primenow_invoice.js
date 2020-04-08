@@ -13,6 +13,7 @@ function scrapeOrderData(transaction) {
     console.log("scrapeOrderData")
 
     getOrderMetaData(transaction);
+    getPaymentMetaData(transaction);
 }
 
 function downloadContent(filename, content) {
@@ -58,6 +59,26 @@ function getOrderMetaData(transaction) {
     transaction["Total"] = parsePrice(document.getElementById("checkout-total-price-field"));
 }
 
+/*==========================================================================================
+PAYMENT METADATA
+==========================================================================================*/
+
+function getPaymentMetaData(transaction) {
+    console.log("getPaymentMetaData")
+
+    var payment_metadata = [];
+
+    // Get Payment Information element
+    var xpathPaymentItemRows = "//*[contains(@class, 'pmts-payments-instrument-details')]";
+    var paymentInfoTableRowsXPR = document.evaluate(xpathPaymentItemRows, document, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
+
+    while ((nodeRow = paymentInfoTableRowsXPR.iterateNext()) != null) {
+        var paymentMethod = nodeRow.getElementsByTagName("img")[0].alt + ' ' + nodeRow.innerText
+        payment_metadata.push(paymentMethod)
+    }
+
+    transaction["PaymentMethod"] = payment_metadata;
+}
 function parsePrice(item){
     return parseFloat(item.textContent.trim().replace('$',''))
 }
