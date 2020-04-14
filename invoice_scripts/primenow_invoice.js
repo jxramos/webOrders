@@ -104,8 +104,8 @@ function getOrderItemization(transaction){
 
         // Handle Add variants
         if ( itemXPR.singleNodeValue === null ) {
-            var xpathItem = "./div/div/div/div[1]/a";
-            var itemXPR = document.evaluate(xpathItem, nodePurchasedItem, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
+            xpathItem = "./div/div/div/div[1]/a";
+            itemXPR = document.evaluate(xpathItem, nodePurchasedItem, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
         }
 
         var itemNode = itemXPR.singleNodeValue.childNodes;
@@ -126,11 +126,28 @@ function getOrderItemization(transaction){
         purchased_items.push(purchased_item);
     }
 
+    // Non-Product Itemization: delivery fee, sales tax, tip, promotions, etc
+    var xpathOrderSummary = "/html/body/div[1]/div[1]/div[4]/div[3]/div[1]/div[2]/div[2 < position() and position() < last()]"
+    var orderSummaryXPR = document.evaluate(xpathOrderSummary, document, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null )
+    var ignoredRows = new RegExp("Total before tax & tip:|Order total:");
+    while ((nodeRow = orderSummaryXPR.iterateNext()) != null) {
+        // Ignore Irrelevant Rows
+        if (ignoredRows.test(nodeRow.innerText)) {
+            continue
+        }
+
+        purchased_items.push([nodeRow.children[0].innerText.replace(":",""), parsePrice(nodeRow.children[1])]);
+    }
+
     transaction["Items"] = purchased_items;
 }
 
 function parsePrice(item){
-    return parseFloat(item.textContent.trim().replace('$',''))
+    var price = item.textContent.trim().replace('$','')
+    if (price == "FREE") {
+        price = 0.0;
+    }
+    return parseFloat(price)
 }
 
 processAmazonPrimeNowInvoice();
