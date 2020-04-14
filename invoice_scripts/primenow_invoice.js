@@ -91,7 +91,7 @@ function getOrderItemization(transaction){
     var purchased_items = [];
 
     // Get Items Purchased
-    xpathItemsPurchased = "/html/body/div[1]/div[1]/div[4]/div[3]/div[3]/div[2]/div/div[position() > 1]";
+    xpathItemsPurchased = "/html/body/div[1]/div[1]/div[4]/div[3]/div[3]/div[2]/div/div[position() > 1] | /html/body/div[1]/div[1]/div[4]/div[3]/div[3]/div[1]/div/div[position() > 1]";
     itemsPurchasedXPR = document.evaluate(xpathItemsPurchased, document, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
 
     // Parse purchased items
@@ -99,13 +99,10 @@ function getOrderItemization(transaction){
         var purchased_item = []
 
         // Drill into purchased item
-        var xpathItem = "./div/a/div/div/div[2]"
+        var xpathItem = "./div/a/div/div/div[2] | ./div/div/div/div[1]/a"
         var itemXPR = document.evaluate(xpathItem, nodePurchasedItem, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
-
-        // Handle Add variants
         if ( itemXPR.singleNodeValue === null ) {
-            xpathItem = "./div/div/div/div[1]/a";
-            itemXPR = document.evaluate(xpathItem, nodePurchasedItem, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
+            continue
         }
 
         var itemNode = itemXPR.singleNodeValue.childNodes;
