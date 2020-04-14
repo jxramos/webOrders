@@ -99,8 +99,15 @@ function getOrderItemization(transaction){
         var purchased_item = []
 
         // Drill into purchased item
-        var xpathItem = "./div/a/div/div/div[2]"; // TODO this breaks when there's an Add button in the DOM
+        var xpathItem = "./div/a/div/div/div[2]"
         var itemXPR = document.evaluate(xpathItem, nodePurchasedItem, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
+
+        // Handle Add variants
+        if ( itemXPR.singleNodeValue === null ) {
+            var xpathItem = "./div/div/div/div[1]/a";
+            var itemXPR = document.evaluate(xpathItem, nodePurchasedItem, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
+        }
+
         var itemNode = itemXPR.singleNodeValue.childNodes;
         var priceNodes = itemNode[3].children;
 
