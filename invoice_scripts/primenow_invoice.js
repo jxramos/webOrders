@@ -107,23 +107,33 @@ function getOrderItemization(transaction){
 
         var itemNode = itemXPR.singleNodeValue.childNodes;
         var priceNodes = itemNode[3].children;
+        var is_weighed = priceNodes[1].innerText.includes("per pound")
+        var priceNode = priceNodes[1];
 
         //-------------------------
         // Item Description
         var quantity = priceNodes[0].innerText.split("$")[0].trim()
         description = quantity + "; " + itemNode[1].innerText;
+        if (is_weighed) {
+            var weight_data = itemNode[5].children[itemNode[5].childElementCount-1]
+
+            // parse actual weight
+            var weight = weight_data.children[1].innerText;
+
+            // tag on unit price
+            description += "; " + weight + " @ " + priceNodes[1].innerText;
+
+            // select correct price node
+            priceNode = weight_data.children[2];
+        }
         purchased_item.push(description)
 
         //-------------------------
         // Item Price
-        var price = parsePrice(priceNodes[1]);
+        var price = parsePrice(priceNode);
         purchased_item.push(price);
 
-        // Integrate line item
-        purchased_items.push(purchased_item);
-    }
-
-    // Non-Product Itemization: delivery fee, sales tax, tip, promotions, etc
+        // Integrate mization: delivery fee, sales tax, tip, promotions, etc
     var xpathOrderSummary = "/html/body/div[1]/div[1]/div[4]/div[3]/div[1]/div[2]/div[2 < position() and position() < last()]"
     var orderSummaryXPR = document.evaluate(xpathOrderSummary, document, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null )
     var ignoredRows = new RegExp("Total before tax & tip:|Order total:");
