@@ -58,6 +58,8 @@ function getOrderMetaData(transaction) {
 
     // Get Order Total
     transaction["Total"] = parsePrice(document.getElementById("checkout-total-price-field"));
+
+    transaction["is_split_tip_across_statements"] = false
 }
 
 /*==========================================================================================
@@ -107,25 +109,52 @@ function getOrderItemization(transaction){
 
         var itemNode = itemXPR.singleNodeValue.childNodes;
         var priceNodes = itemNode[3].children;
-        var is_weighed = priceNodes[1].innerText.includes("per pound")
         var priceNode = priceNodes[1];
 
         //-------------------------
         // Item Description
-        var quantity = priceNodes[0].innerText.split("$")[0].trim()
-        description = quantity + "; " + itemNode[1].innerText;
-        if (is_weighed) {
-            var weight_data = itemNode[5].children[itemNode[5].childElementCount-1]
+        var quantity = priceNodes[0].innerText.split("$")[0].trim();
+        var description = quantity + "; " + itemNode[1].innerText;
 
-            // parse actual weight
-            var weight = weight_data.children[1].innerText;
+        // handle special annotated cases
+        if (itemNode.length > 5) {
+            var node_annotation = itemNode[5];
 
-            // tag on unit price
-            description += "; " + weight + " @ " + priceNodes[1].innerText;
+            // handle weighed product case
+            var is_weighed = priceNodes[1].innerText.includes("per pound")
+            if (is_weighed) {
+                var weight_data = node_annotation.children[itemNode[5].childElementCount-1]
 
-            // select correct price node
-            priceNode = weight_data.children[2];
+                // parse actual weight
+                var weight = weight_data.children[1].innerText;
+
+                // tag on unit price
+                description += "; " + weight + " @ " + priceNodes[1].innerText;
+
+                // select correct price node
+                priceNode = weight_data.children[2];
+            }
+
+            // handle out of stock case
+            var is_out_of_stock = node_annotation.innerText.includes("Out of stock")
+            if (is_out_of_stock) {
+                // Correct quantity
+                var qty_out_of_stock = node_annotation.children[0].innerText;
+                var pos_lparens = qty_out_of_stock.indexOf("(")+1;
+                var pos_rparens = qty_out_of_stock.lastIndexOf(")");
+                var qty_out_of_stock = parseInt(qty_out_of_stock.slice(pos_lparens, pos_rparens));
+                var tokens_desc = description.split("; ");
+                var tokens_count = tokens_desc[0].split(" ");
+                var qty_ordered = parseInt(tokens_count[1]) - qty_out_of_stock;
+                description = tokens_count[0] + " " + qty_ordered + "; " + tokens_desc[1] + "(" + qty_out_of_stock + "x out of stock)";
+
+                // Correct price
+                var price_adjustment = parsePrice(node_annotation.children[1]);
+                var price = parsePrice(priceNode) + price_adjustment;
+                priceNode = price
+            }
         }
+
         purchased_item.push(description)
 
         //-------------------------
@@ -160,6 +189,9 @@ function getOrderItemization(transaction){
 }
 
 function parsePrice(item){
+    if (isFinite(item)) {
+        return item
+    }
     var price = item.textContent.trim().replace('$','')
     if (price == "FREE") {
         price = 0.0;
