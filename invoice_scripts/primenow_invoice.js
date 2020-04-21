@@ -133,7 +133,11 @@ function getOrderItemization(transaction){
         var price = parsePrice(priceNode);
         purchased_item.push(price);
 
-        // Integrate mization: delivery fee, sales tax, tip, promotions, etc
+        // Integrate line item
+        purchased_items.push(purchased_item);
+    }
+
+    // Non-Product Itemization: delivery fee, sales tax, tip, promotions, etc
     var xpathOrderSummary = "/html/body/div[1]/div[1]/div[4]/div[3]/div[1]/div[2]/div[2 < position() and position() < last()]"
     var orderSummaryXPR = document.evaluate(xpathOrderSummary, document, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null )
     var ignoredRows = new RegExp("Total before tax & tip:|Order total:");
