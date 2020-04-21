@@ -147,6 +147,12 @@ function getOrderItemization(transaction){
             continue
         }
 
+        // Split tip across statements
+        if (nodeRow.innerText.includes("The tip will appear as a separate charge on your statement.")){
+            transaction["is_split_tip_across_statements"] = true;
+            continue
+        }
+
         purchased_items.push([nodeRow.children[0].innerText.replace(":",""), parsePrice(nodeRow.children[1])]);
     }
 
