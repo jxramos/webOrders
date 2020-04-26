@@ -108,12 +108,19 @@ function getOrderItemization(transaction){
         }
 
         var itemNode = itemXPR.singleNodeValue.childNodes;
+        console.log("Parsing purchased item: " + itemNode[1].innerText)
         var priceNodes = itemNode[3].children;
         var priceNode = priceNodes[1];
+        var weightElementIndex = 1;
 
         //-------------------------
         // Item Description
         var quantity = priceNodes[0].innerText.split("$")[0].trim();
+        if (quantity === "") {
+            // fill in for omitted quantity
+            quantity = "QTY: 1"
+            weightElementIndex = 0
+        }
         var description = quantity + "; " + itemNode[1].innerText;
 
         // handle special annotated cases
@@ -121,7 +128,7 @@ function getOrderItemization(transaction){
             var node_annotation = itemNode[5];
 
             // handle weighed product case
-            var is_weighed = priceNodes[1].innerText.includes("per pound")
+            var is_weighed = priceNodes[weightElementIndex].innerText.includes("per pound")
             if (is_weighed) {
                 var weight_data = node_annotation.children[itemNode[5].childElementCount-1]
 
@@ -129,7 +136,7 @@ function getOrderItemization(transaction){
                 var weight = weight_data.children[1].innerText;
 
                 // tag on unit price
-                description += "; " + weight + " @ " + priceNodes[1].innerText;
+                description += "; " + weight + " @ " + priceNodes[weightElementIndex].innerText;
 
                 // select correct price node
                 priceNode = weight_data.children[2];
