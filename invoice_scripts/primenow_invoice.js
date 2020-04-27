@@ -176,10 +176,17 @@ function getOrderItemization(transaction){
     // Non-Product Itemization: delivery fee, sales tax, tip, promotions, etc
     var xpathOrderSummary = "/html/body/div[1]/div[1]/div[4]/div[3]/div[1]/div[2]/div[2 < position() and position() < last()]"
     var orderSummaryXPR = document.evaluate(xpathOrderSummary, document, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null )
-    var ignoredRows = new RegExp("Total before tax & tip:|Order total:");
+    var ignoredRows = new RegExp("Total before tax & tip:|Order total:|Refund:");
     while ((nodeRow = orderSummaryXPR.iterateNext()) != null) {
         // Ignore Irrelevant Rows
         if (ignoredRows.test(nodeRow.innerText)) {
+            continue
+        }
+
+        // Handle refund case for original total
+        if (nodeRow.children[0].innerText.includes("Original Charge:"))
+        {
+            transaction["Total"] = parsePrice(nodeRow.children[1]);
             continue
         }
 
