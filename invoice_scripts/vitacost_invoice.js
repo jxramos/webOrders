@@ -120,15 +120,36 @@ function getOrderItemization(transaction){
         purchased_items.push(purchased_item);
     }
 
+    // Non-Product Itemization: delivery fee, sales tax, tip, promotions, etc
+    var non_product_elements = document.getElementById("orderSummary").children[1].children[0];
+    var non_product_items = non_product_elements.getElementsByTagName("dt");
+    var non_product_amounts = non_product_elements.getElementsByTagName("dd");
+    var ignoredRows = new RegExp("Subtotal|Order Total:");
+    for (var i = 0; i < non_product_items.length; i++) {
+        var nodeRow = non_product_items[i];
+        // Ignore Irrelevant Rows
+        if (ignoredRows.test(nodeRow.innerText)) {
+            continue
+        }
+
+        purchased_items.push([nodeRow.innerText.replace(":",""), parsePrice(non_product_amounts[i])]);
+    }
+
     transaction["Items"] = purchased_items;
 }
 
 function parsePrice(item){
+    // handle literal numeric
     if (isFinite(item)) {
         return item
     }
     var price = item.textContent.trim().replace('$','')
-    if (price == "FREE") {
+
+    // handle negative representation
+    if (price.includes("(")) {
+        price = "-" + price.replace("(","").replace(")", "")
+    // handle free literals
+    } else if (price == "FREE") {
         price = 0.0;
     }
     return parseFloat(price)
