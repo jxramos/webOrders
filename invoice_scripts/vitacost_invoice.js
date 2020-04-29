@@ -13,6 +13,7 @@ function scrapeOrderData(transaction) {
     console.log("scrapeOrderData")
 
     getOrderMetaData(transaction);
+    getPaymentMetaData(transaction);
 }
 
 function downloadContent(filename, content) {
@@ -48,6 +49,27 @@ function getOrderMetaData(transaction) {
 
     // Get Order Total
     transaction["Total"] = parsePrice(document.getElementsByClassName("total")[1]);
+}
+
+/*==========================================================================================
+PAYMENT METADATA
+==========================================================================================*/
+
+function getPaymentMetaData(transaction) {
+    console.log("getPaymentMetaData")
+
+    var payment_metadata = [];
+
+    // Get Payment Methods(s) element
+    var xpathPaymentItemRows = "//*[@id='IamMasterFrameYesIam_ctl02_pmtList']/dl/dd[position() < last()]";
+    var paymentInfoTableRowsXPR = document.evaluate(xpathPaymentItemRows, document, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
+    var payment_str = ""
+    while ((nodeRow = paymentInfoTableRowsXPR.iterateNext()) != null) {
+        payment_str += nodeRow.innerText + " "
+    }
+    payment_metadata.push(payment_str.trim())
+
+    transaction["PaymentMethod"] = payment_metadata;
 }
 
 function parsePrice(item){
