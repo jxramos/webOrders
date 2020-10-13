@@ -91,7 +91,7 @@ function getOrderMetaData(transaction) {
     shipDate = new Date(shipDateString)
     transaction["ShipDate"] = shipDate.toLocaleDateString();
 
-    // Get Substribe & Save Status
+    // Get Subscribe & Save Status
     transaction["IsSubscribeSave"] = dateText.includes("Subscribe and Save");
 
     // Get Order Total
