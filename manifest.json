@@ -35,6 +35,14 @@
       "js": [
         "invoice_scripts/vitacost_invoice.js"
       ]
+    },
+    {
+      "matches" : [
+        "https://www.walmart.com/account/wmpurchasehistory*"
+      ],
+      "js": [
+        "invoice_scripts/walmart_invoice.js"
+      ]
     }
   ],
   "permissions": [
