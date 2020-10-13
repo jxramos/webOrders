@@ -1,20 +1,30 @@
 function processWalmartInvoice() {
     console.log("processWalmartInvoice")
 
-    var transaction = {
-        "Vendor":"Walmart.com",
-        "URL": window.location.href
-    };
-    scrapeOrderData(transaction);
-    downloadJsonTransaction(transaction);
+    // Get the multiple Walmart orders listed per page
+    var orders = document.getElementsByClassName("order-new");
+
+    // Process all orders found on the current page
+    for (var i = 0; i < orders.length; i++) {
+        console.log("order[i="+i+"]")
+        var transaction = {
+            "Vendor":"Walmart.com",
+            "URL": window.location.href
+        };
+
+        var order = orders[i];
+
+        scrapeOrderData(order, transaction);
+        downloadJsonTransaction(transaction);
+    }
 }
 
-function scrapeOrderData(transaction) {
+function scrapeOrderData(order, transaction) {
     console.log("scrapeOrderData")
 
-    getOrderMetaData(transaction);
-    getPaymentMetaData(transaction);
-    getOrderItemization(transaction);
+    getOrderMetaData(order, transaction);
+    getPaymentMetaData(order, transaction);
+    getOrderItemization(order, transaction);
 }
 
 function downloadContent(filename, content) {
@@ -36,7 +46,7 @@ function downloadJsonTransaction(transaction) {
 ORDER METADATA
 ==========================================================================================*/
 
-function getOrderMetaData(transaction) {
+function getOrderMetaData(order, transaction) {
     console.log("getOrderMetaData")
 }
 
@@ -44,7 +54,7 @@ function getOrderMetaData(transaction) {
 PAYMENT METADATA
 ==========================================================================================*/
 
-function getPaymentMetaData(transaction) {
+function getPaymentMetaData(order, transaction) {
     console.log("getPaymentMetaData")
 }
 
@@ -52,7 +62,7 @@ function getPaymentMetaData(transaction) {
 ORDER ITEMIZATION
 ==========================================================================================*/
 
-function getOrderItemization(transaction){
+function getOrderItemization(order, transaction){
     console.log("getOrderItemization");
 
     var purchased_items = [];
