@@ -48,6 +48,20 @@ ORDER METADATA
 
 function getOrderMetaData(order, transaction) {
     console.log("getOrderMetaData")
+
+    var order_header_element = order.getElementsByClassName("order-tile-head")[0];
+
+    // Get Order Number
+    var order_number = order_header_element.children[1].firstElementChild.innerText;
+    transaction["Order#"] = order_number.replace("Order #", "");
+
+    // Get OrderDate
+    var order_header = order_header_element.children[0];
+    var orderDate = new Date(order_header.children[0].innerText);
+    transaction["OrderDate"] = orderDate.toLocaleDateString();
+
+    // Get Order Total
+    transaction["Total"] = parsePrice(order_header.children[1].innerText);
 }
 
 /*==========================================================================================
