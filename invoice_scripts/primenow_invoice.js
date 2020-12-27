@@ -3,7 +3,8 @@ function processAmazonPrimeNowInvoice() {
 
     var transaction = {
         "Vendor":"Amazon.com",
-        "URL": window.location.href
+        "URL": window.location.href,
+        "is_prime_now": true,
     };
     scrapeOrderData(transaction);
     downloadJsonTransaction(transaction);
