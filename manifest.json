@@ -6,7 +6,7 @@
   "content_scripts": [
     {
       "matches": [
-        "https://*.amazon.com/gp/css/summary/print.html/ref=*invoice*"
+        "https://*.amazon.com/gp/css/summary/print.html*"
       ],
       "js": [
         "invoice_scripts/amazon_invoice.js"
