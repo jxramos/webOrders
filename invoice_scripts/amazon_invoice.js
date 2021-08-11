@@ -93,7 +93,9 @@ function getOrderMetaData(transaction) {
     dateString = dateText.split(": ")[1];
     orderDate = new Date(dateString);
     transaction["OrderDate"] = orderDate.toLocaleDateString();
-    transaction["OrderDateFormatted"] = orderDate.getFullYear() + "-" + (orderDate.getMonth()+1) + "-" + String(orderDate.getDate()).padStart(2, '0');
+    transaction["OrderDateFormatted"] = orderDate.getFullYear() +
+                                        "-" + String(orderDate.getMonth()+1).padStart(2, '0') +
+                                        "-" + String(orderDate.getDate()).padStart(2, '0');
 
     // Get ShipDate
     xpathShipDate = "/html/body/table/tbody/tr/td/table[2]/tbody/tr/td/table/tbody/tr[1]/td/table/tbody/tr/td/b/center";

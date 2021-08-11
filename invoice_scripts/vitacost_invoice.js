@@ -58,7 +58,9 @@ function getOrderMetaData(transaction) {
     // Get OrderDate
     var orderDate = new Date(order_meta_tokens[1].replace("at ", ""))
     transaction["OrderDate"] = orderDate.toLocaleDateString();
-    transaction["OrderDateFormatted"] = orderDate.getFullYear() + "-" + (orderDate.getMonth()+1) + "-" + String(orderDate.getDate()).padStart(2, '0');
+    transaction["OrderDateFormatted"] = orderDate.getFullYear() +
+                                        "-" + String(orderDate.getMonth()+1).padStart(2, '0') +
+                                        "-" + String(orderDate.getDate()).padStart(2, '0');
 
     // Get Order Total
     transaction["Total"] = parsePrice(document.getElementsByClassName("total")[1]);
