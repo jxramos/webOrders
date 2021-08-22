@@ -200,11 +200,22 @@ function getOrderItemization(transaction){
 
             // clean up description
             description = description.replace("1 of: ", "")
+
+            // pull in unit price rate if present
+            price_text = lineItem[1].innerText
+            if ( price_text.indexOf("/lb)") != -1 ){
+                price_tokens = price_text.trim().split(" ")
+                description += " " + price_tokens[0].trim()
+                price_text = price_tokens[1].trim()
+
+                // weighted items counts don't factor in
+                item_count = 1
+            }
             purchased_item.push(description)
 
             //-------------------------
             // Item Price
-            unit_price = parsePrice(lineItem[1]);
+            unit_price = parsePrice(price_text);
             price = item_count*unit_price;
             purchased_item.push(price);
 
@@ -231,7 +242,12 @@ function getOrderItemization(transaction){
 }
 
 function parsePrice(item){
-    return parseFloat(item.textContent.trim().replace('$',''))
+    if (typeof item === 'string' || item instanceof String){
+        price_value = item
+    } else {
+        price_value = item.textContent
+    }
+    return parseFloat(price_value.trim().replace('$',''))
 }
 
 processAmazonInvoice();
