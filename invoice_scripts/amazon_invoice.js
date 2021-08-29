@@ -163,7 +163,7 @@ ORDER ITEMIZATION
 function getOrderItemization(transaction){
     console.log("getOrderItemization");
 
-    purchased_items = [];
+    var purchased_items = [];
 
     // Get Shipment / secondary table elements
     xpathShipments = "/html/body/table/tbody/tr/td/table[1 < position() and position() < last()]";
