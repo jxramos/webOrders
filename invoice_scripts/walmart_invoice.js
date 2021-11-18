@@ -1,23 +1,18 @@
+summary_xpath = "/html/body/div[1]/div[1]/div/div/div/div/section/div[2]/div/main/div[2]/div[2]/div/div[4]"
+
 async function processWalmartInvoice() {
     console.log("processWalmartInvoice")
-    await new Promise(r => setTimeout(r, 4000));
+    await new Promise(r => setTimeout(r, 500));
 
-    // Get the multiple Walmart orders listed per page
-    var orders = document.getElementsByClassName("order-new");
+    var transaction = {
+        "Vendor":"Walmart.com",
+        "URL": window.location.href
+    };
 
-    // Process all orders found on the current page
-    for (var i = 0; i < orders.length; i++) {
-        console.log("order[i="+i+"]")
-        var transaction = {
-            "Vendor":"Walmart.com",
-            "URL": window.location.href
-        };
-
-        var order = orders[i];
-
-        scrapeOrderData(order, transaction);
-        downloadJsonTransaction(transaction);
-    }
+    var order = document.getElementsByTagName("main")[0];
+    scrapeOrderData(order, transaction);
+    retitlePage(transaction);
+    downloadJsonTransaction(transaction);
 }
 
 function scrapeOrderData(order, transaction) {
@@ -43,6 +38,15 @@ function downloadJsonTransaction(transaction) {
     downloadContent(filename, transactionJson);
 }
 
+function retitlePage(transaction) {
+    console.log("retitlePage")
+
+    // Rename title bar to prefix with order date to keep printed invoices sorted by order date
+    xpathPageTitle = "/html/head/title";
+    pageTitle = document.evaluate(xpathPageTitle, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null )
+    pageTitle.singleNodeValue.innerText = transaction["OrderDateFormatted"] + " " + pageTitle.singleNodeValue.innerText.replace("Manage Account - Purchase history - ", "") + " " + transaction["Order#"]
+}
+
 
 /*==========================================================================================
 ORDER METADATA
@@ -51,22 +55,27 @@ ORDER METADATA
 function getOrderMetaData(order, transaction) {
     console.log("getOrderMetaData")
 
-    var order_header_element = order.getElementsByClassName("order-tile-head")[0];
+    var order_header_elements = order.firstElementChild.firstElementChild.firstElementChild.children;
 
     // Get Order Number
-    var order_number = order_header_element.children[1].firstElementChild.innerText;
-    transaction["Order#"] = order_number.replace("Order #", "");
+    transaction["Order#"] = order_header_elements[2].innerText;
 
     // Get OrderDate
-    var order_header = order_header_element.children[0];
-    var orderDate = new Date(order_header.children[0].innerText);
+    var orderDate = new Date(order_header_elements[0].innerText.replace(" purchase", "").replace("order", ""));
     transaction["OrderDate"] = orderDate.toLocaleDateString();
     transaction["OrderDateFormatted"] = orderDate.getFullYear() +
                                         "-" + String(orderDate.getMonth()+1).padStart(2, '0') +
                                         "-" + String(orderDate.getDate()).padStart(2, '0');
 
     // Get Order Total
-    transaction["Total"] = parsePrice(order_header.children[1].innerText);
+    summary_section = document.evaluate(summary_xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+    transaction["Total"] = parsePrice(summary_section.children[summary_section.childElementCount-3].children[1].innerText);
+
+    // Update vendor if this is in fact an in-store purchase
+    is_instore_purchase = Boolean(document.evaluate("//*[contains(@id,'Store_purchase')]", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null ).singleNodeValue)
+    if (is_instore_purchase) {
+        transaction["Vendor"] = "Walmart"
+    }
 }
 
 /*==========================================================================================
@@ -77,10 +86,8 @@ function getPaymentMetaData(order, transaction) {
     console.log("getPaymentMetaData")
 
     // Get Payment Method
-    var payment_method = order.getElementsByClassName("payment-method-row")[0].innerText;
-    if (transaction["Order#"].match("In-store")) {
-        payment_method = payment_method.split("\n")[1].trim();
-    }
+    var paymentInfoXPR = document.evaluate(summary_xpath+"/./..", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+    payment_method = paymentInfoXPR.children[2].innerText
     transaction["Account"] = payment_method;
 }
 
@@ -94,21 +101,21 @@ function getOrderItemization(order, transaction){
     var purchased_items = [];
 
     // get purchased items
-    var item_elements = order.getElementsByClassName("product-block-info");
+    xpathPaymentInfo = "//*[@data-testid='productName']"
+    var paymentInfoXPR = document.evaluate(xpathPaymentInfo, document, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null );
 
-    // Process all items under the given orders
-    for (var i = 0; i < item_elements.length; i++) {
+    // Parse purchased items
+    while ((nodePaymentInfo = paymentInfoXPR.iterateNext()) != null) {
         purchased_item = []
-        var item = item_elements[i];
 
+        // TODO handle Qty > 1
         //-------------------------
         // Item Description
-        var description = item.getElementsByClassName("product-info-beacon-on-link-wrapper")[0].innerText;
-        purchased_item.push(description);
+        purchased_item.push(nodePaymentInfo.innerText);
 
         //-------------------------
         // Item Price
-        var price = parsePrice(item.getElementsByClassName("price-group")[0].innerText);
+        var price = parsePrice(nodePaymentInfo.parentElement.parentElement.parentElement.parentElement.parentElement.lastElementChild.innerText);
         purchased_item.push(price);
 
         // Integrate line item
@@ -116,12 +123,16 @@ function getOrderItemization(order, transaction){
     }
 
     // Integrate any sales tax
-    var order_summary_details_element = order.getElementsByClassName("order-summary-details")[0];
-    var order_summary_subtotal = order_summary_details_element.children[0].getElementsByTagName("tr");
-    for (var i = 0; i < order_summary_subtotal.length; i++) {
-        var row = order_summary_subtotal[i];
+    summary_section = document.evaluate(summary_xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.children;
+    for (var i = 0; i < summary_section.length; i++) {
+        var row = summary_section[i];
+        // ignore non-div elements
+        if (!(row instanceof HTMLDivElement)) {
+            continue
+        }
+
         if(row.children[0].innerText.match("Tax")){
-            var sales_tax = row.children[1].innerText;
+            var sales_tax = parsePrice(row.children[1].innerText);
             purchased_item = ["Tax", sales_tax];
             purchased_items.push(purchased_item);
         }
