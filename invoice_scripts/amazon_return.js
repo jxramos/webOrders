@@ -17,6 +17,10 @@ function reformatPage() {
     element = document.getElementsByClassName("navLeftFooter")[0];
     element.parentElement.removeChild(element);
 
+    // Delete the cart checkout flyout
+    element = document.getElementById("nav-flyout-ewc")
+    element.parentElement.removeChild(element);
+
     //----------------------------------------------------------------------------
     // Refine line items
     return_section = document.getElementById("returning-items-section")
@@ -46,23 +50,24 @@ function reformatPage() {
             is_remove_next_element = true
         } else {
             // is a returned item
+            // TODO handle multiple returns in a single order
             is_remove_next_element = false
             return_item_instance = return_element
         }
     }
 
-    // Remove all identified items
+    // Remove all identified irrelevant/non-return items
     for(var i = 0; i < elements_to_remove.length; i++){
         return_section.removeChild(elements_to_remove[i])
     }
 
     //----------------------------------------------------------------------------
-    // Inject the order number to the section title
+    // Inject the order number to the section details
     popup_element = return_item_instance.getElementsByClassName("a-popover-preload")[0]
     order_number = popup_element.children[3].innerText.replaceAll(" ", "").replaceAll("\n", "").replace(":", ": ")
-    xpath_title = "/html/body/div[1]/div[2]/div/div/div/div[1]/div[1]/div/div/div/div[1]/div[1]/div[1]/h1"
-    pageTitle = document.evaluate(xpath_title, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null)
-    pageTitle.singleNodeValue.innerText = pageTitle.singleNodeValue.innerText + "    " + order_number
+    xpath_title = "/html/body/div[1]/div[2]/div/div/div/div[1]/div[1]/div[1]/div/div/div/div[1]/div[1]/form/div/div/div/div[2]/div/div[1]/div/div[2]/span/a/span"
+    returnedItemDetails = document.evaluate(xpath_title, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null)
+    returnedItemDetails.singleNodeValue.innerText = order_number
 
     //----------------------------------------------------------------------------
     // Rename title bar to prefix with return date and order number to keep printed invoices sorted by order date
