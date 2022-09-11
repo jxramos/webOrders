@@ -8,6 +8,7 @@ function processAmazonInvoice() {
     scrapeOrderData(transaction);
     retitlePage(transaction);
     downloadJsonTransaction(transaction);
+    cleanupPage();
 }
 
 function scrapeOrderData(transaction) {
@@ -248,6 +249,13 @@ function parsePrice(item){
         price_value = item.textContent
     }
     return parseFloat(price_value.trim().replace('$',''))
+}
+
+function cleanupPage(){
+    // delete the last two trailing details at the footer
+    var center_elems = document.getElementsByTagName('center');
+    center_elems[center_elems.length-1].remove()
+    center_elems[center_elems.length-1].remove()
 }
 
 processAmazonInvoice();
