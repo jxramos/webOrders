@@ -38,6 +38,14 @@
     },
     {
       "matches" : [
+        "https://*.amazon.com/gp/your-account/order-details*"
+      ],
+      "js": [
+        "cleanup_scripts/amazon_order_details.js"
+      ]
+    },
+    {
+      "matches" : [
         "https://www.vitacost.com/MyAccount/OrderSummary.aspx*"
       ],
       "js": [
