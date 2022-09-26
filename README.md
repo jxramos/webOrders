@@ -17,3 +17,4 @@ The current list of vendors supported.
     + prime now orders
     + digital orders
 * vitacost.com
+* Walmart.com
