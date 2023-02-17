@@ -9,7 +9,7 @@ async function processWalmartInvoice() {
         "URL": window.location.href
     };
 
-    var order = document.getElementsByTagName("main")[0];
+    var order = document.getElementsByClassName("print-bill-body")[0];
     scrapeOrderData(order, transaction);
     retitlePage(transaction);
     downloadJsonTransaction(transaction);
@@ -19,7 +19,6 @@ function scrapeOrderData(order, transaction) {
     console.log("scrapeOrderData")
 
     getOrderMetaData(order, transaction);
-    getPaymentMetaData(order, transaction);
     getOrderItemization(order, transaction);
 }
 
@@ -55,7 +54,7 @@ ORDER METADATA
 function getOrderMetaData(order, transaction) {
     console.log("getOrderMetaData")
 
-    var order_header_elements = order.firstElementChild.firstElementChild.firstElementChild.children;
+    var order_header_elements = order.firstElementChild.firstElementChild.children;
 
     // Get Order Number
     transaction["Order#"] = order_header_elements[2].innerText;
@@ -67,28 +66,19 @@ function getOrderMetaData(order, transaction) {
                                         "-" + String(orderDate.getMonth()+1).padStart(2, '0') +
                                         "-" + String(orderDate.getDate()).padStart(2, '0');
 
+    // Get Payment Method
+    payment_section = document.getElementsByClassName("bill-order-payment-cards")[0]
+    transaction["Account"] = payment_section.innerText.split("\n")[1].replace(" ending in", "")
+
     // Get Order Total
-    summary_section = document.evaluate(summary_xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
-    transaction["Total"] = parsePrice(summary_section.children[summary_section.childElementCount-3].children[1].innerText);
+    summary_section = document.getElementsByClassName("bill-order-total-payment")[0]
+    transaction["Total"] = parsePrice(summary_section.innerText.split("\n")[1]);
 
     // Update vendor if this is in fact an in-store purchase
     is_instore_purchase = Boolean(document.evaluate("//*[contains(@id,'Store_purchase')]", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null ).singleNodeValue)
     if (is_instore_purchase) {
         transaction["Vendor"] = "Walmart"
     }
-}
-
-/*==========================================================================================
-PAYMENT METADATA
-==========================================================================================*/
-
-function getPaymentMetaData(order, transaction) {
-    console.log("getPaymentMetaData")
-
-    // Get Payment Method
-    var paymentInfoXPR = document.evaluate(summary_xpath+"/./..", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
-    payment_method = paymentInfoXPR.children[2].innerText
-    transaction["Account"] = payment_method;
 }
 
 /*==========================================================================================
