@@ -1,5 +1,5 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "Web Orders",
   "description": "Extension to save online order Invoices to structured file on disk.",
   "version": "0.1",
