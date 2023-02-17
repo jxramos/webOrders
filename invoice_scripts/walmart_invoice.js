@@ -91,21 +91,23 @@ function getOrderItemization(order, transaction){
     var purchased_items = [];
 
     // get purchased items
-    xpathPaymentInfo = "//*[@data-testid='productName']"
-    var paymentInfoXPR = document.evaluate(xpathPaymentInfo, document, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null );
+    xpathPaymentInfo = "//*[@data-testid='category-accordion-']"
+    var paymentInfoXPR = document.evaluate(xpathPaymentInfo, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null ).singleNodeValue.children;
 
     // Parse purchased items
-    while ((nodePaymentInfo = paymentInfoXPR.iterateNext()) != null) {
+    for(var i = 2; i < paymentInfoXPR.length; i += 2) {  // take every second element
         purchased_item = []
+        nodePaymentInfo = paymentInfoXPR[i]
 
         // TODO handle Qty > 1
+        //class="bill-order-weight-adjust"
         //-------------------------
         // Item Description
-        purchased_item.push(nodePaymentInfo.innerText);
+        purchased_item.push(nodePaymentInfo.getElementsByClassName("print-item-title")[0].innerText);
 
         //-------------------------
         // Item Price
-        var price = parsePrice(nodePaymentInfo.parentElement.parentElement.parentElement.parentElement.parentElement.lastElementChild.innerText);
+        var price = parsePrice(nodePaymentInfo.getElementsByClassName("black tr")[0].innerText);
         purchased_item.push(price);
 
         // Integrate line item
@@ -113,7 +115,7 @@ function getOrderItemization(order, transaction){
     }
 
     // Integrate any sales tax
-    summary_section = document.evaluate(summary_xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.children;
+    summary_section = document.getElementsByClassName("bill-order-payment-spacing")[0].children;
     for (var i = 0; i < summary_section.length; i++) {
         var row = summary_section[i];
         // ignore non-div elements
@@ -125,6 +127,7 @@ function getOrderItemization(order, transaction){
             var sales_tax = parsePrice(row.children[1].innerText);
             purchased_item = ["Tax", sales_tax];
             purchased_items.push(purchased_item);
+            break
         }
     }
 
