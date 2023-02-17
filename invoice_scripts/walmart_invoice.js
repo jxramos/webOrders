@@ -111,7 +111,7 @@ function getOrderItemization(order, transaction){
         //class="bill-order-weight-adjust"
         //-------------------------
         // Item Description
-        purchased_item.push(nodePaymentInfo.getElementsByClassName("print-item-title")[0].innerText);
+        purchased_item.push(nodePaymentInfo.getElementsByClassName("print-item-title")[0].innerText.replace("\n", " "));
 
         //-------------------------
         // Item Price
