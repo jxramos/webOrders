@@ -40,6 +40,14 @@ function downloadJsonTransaction(transaction) {
 function retitlePage(transaction) {
     console.log("retitlePage")
 
+    // Clean up the page of cruft
+    footer_element = document.getElementsByTagName("footer")[0]
+    footer_element.parentElement.removeChild(footer_element)
+    header_element = document.getElementsByTagName("header")[0]
+    header_element.parentElement.removeChild(header_element)
+    ad_banner = document.getElementById("ORDERDETAILS-SkylineDisplayAd-top");
+    ad_banner.parentElement.removeChild(ad_banner)
+
     // Rename title bar to prefix with order date to keep printed invoices sorted by order date
     xpathPageTitle = "/html/head/title";
     pageTitle = document.evaluate(xpathPageTitle, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null )
