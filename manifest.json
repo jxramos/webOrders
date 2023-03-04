@@ -24,12 +24,12 @@
       "matches": [
         "https://*.amazon.com/gp/digital/your-account/order-summary.html*"
       ],
-      "js" :[
+      "js": [
         "invoice_scripts/amazon_digital_invoice.js"
       ]
     },
     {
-      "matches" : [
+      "matches": [
         "https://primenow.amazon.com/orderStatus?orderId=*"
       ],
       "js": [
@@ -37,7 +37,7 @@
       ]
     },
     {
-      "matches" : [
+      "matches": [
         "https://*.amazon.com/gp/your-account/order-details*"
       ],
       "js": [
@@ -45,7 +45,7 @@
       ]
     },
     {
-      "matches" : [
+      "matches": [
         "https://www.vitacost.com/MyAccount/OrderSummary.aspx*"
       ],
       "js": [
@@ -53,7 +53,7 @@
       ]
     },
     {
-      "matches" : [
+      "matches": [
         "https://www.walmart.com/account/wmpurchasehistory*"
       ],
       "js": [
@@ -61,12 +61,20 @@
       ]
     },
     {
-      "matches" : [
+      "matches": [
         "https://www.walmart.com/orders*"
       ],
       "js": [
         "invoice_scripts/walmart_invoice.js"
       ]
+    },
+    {
+       "matches": [
+         "https://wd5.myworkday.com/*/d/inst/*/rel-task/*.htmld"
+       ],
+       "js": [
+         "invoice_scripts/workday_payslip.js"
+       ]
     }
   ],
   "permissions": [
