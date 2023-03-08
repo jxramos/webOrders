@@ -1,6 +1,6 @@
 async function processWorkdayPayslip() {
     console.log("processWorkdayPayslip")
-    await new Promise(r => setTimeout(r, 3800));
+    await new Promise(r => setTimeout(r, 4200));
 
     var transaction = {
         "Vendor": "CompanyXYZ",
@@ -92,6 +92,11 @@ function getPayslipItemization(table_captions, transaction){
     var line_items = [];
 
     //------------------------------------------------------------------------
+    // Table: Current and YTD Totals
+    table_current_totals = table_captions[2].parentElement
+    gross_pay = parsePrice(table_current_totals.children[2].children[0].children[2].innerText)
+
+    //------------------------------------------------------------------------
     // Table: Earnings
     table_earnings = table_captions[3].parentElement.children[2].children
     for (let i = 1; i < table_earnings.length - 1; i++) {
@@ -124,27 +129,33 @@ function getPayslipItemization(table_captions, transaction){
     // Table: Deductions
     for (let i = 4; i <= 6; i++) {
         table_deduction = table_captions[i].parentElement
-        process_deductions(table_deduction, line_items)
+        process_deductions(table_deduction, gross_pay, line_items)
     }
 
     transaction["Items"] = line_items;
 }
 
-function process_deductions(table_deduction, line_items) {
+function process_deductions(table_deduction, gross_pay, line_items) {
     rows_deduction = table_deduction.children[2].children
     for (let i = 0; i < rows_deduction.length - 1; i++) {
         row_deduction = rows_deduction[i]
         line_item = []
-
-        // Description
-        line_item.push(row_deduction.children[0].innerText)
 
         // Amount
         line_amount = row_deduction.children[1].innerText
         if (line_amount == "") {
             line_amount = 0.0
         }
-        line_item.push(-1 * parsePrice(line_amount))
+        line_amount = parsePrice(line_amount)
+
+        // Percent of gross pay
+        pct_gross = Number(line_amount / gross_pay).toLocaleString(undefined,{style: 'percent', minimumFractionDigits:2});
+
+        // Description
+        description = row_deduction.children[0].innerText + " (" + pct_gross + ")"
+
+        line_item.push(description)
+        line_item.push(-1 * line_amount)
         line_items.push(line_item)
     }
 }
