@@ -76,7 +76,7 @@ function getOrderMetaData(order, transaction) {
 
     // Get Payment Method
     payment_section = document.getElementsByClassName("bill-order-payment-cards")[0]
-    transaction["Account"] = payment_section.innerText.split("\n")[1].replace(" ending in", "")
+    transaction["PaymentMethod"] = payment_section.innerText.split("\n")[1].replace(" ending in", "")
 
     // Get Order Total
     summary_section = document.getElementsByClassName("bill-order-total-payment")[0]
