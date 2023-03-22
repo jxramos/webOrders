@@ -46,6 +46,14 @@
     },
     {
       "matches": [
+          "https://www.costco.com/OrderStatusCmd*"
+      ],
+      "js": [
+          "invoice_scripts/costco_invoice.js"
+      ]
+    },
+    {
+      "matches": [
         "https://www.vitacost.com/MyAccount/OrderSummary.aspx*"
       ],
       "js": [

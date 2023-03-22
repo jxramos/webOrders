@@ -46,6 +46,7 @@ The current list of vendors supported.
     + regular orders
     + prime now orders
     + digital orders
+* costco.com
 * vitacost.com
 * Walmart.com
 * workday.com payslips
