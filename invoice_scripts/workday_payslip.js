@@ -143,7 +143,7 @@ function process_deductions(table_deduction, gross_pay, line_items) {
 
         // Amount
         line_amount = row_deduction.children[1].innerText
-        if (line_amount == "") {
+        if (line_amount == "" || row_deduction.childElementCount == 2 /* YTD only table */ ) {
             line_amount = 0.0
         }
         line_amount = parsePrice(line_amount)
