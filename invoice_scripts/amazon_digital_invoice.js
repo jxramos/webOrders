@@ -128,34 +128,38 @@ function getOrderItemization(transaction){
 
     purchased_items = [];
 
-    // Get digital order (always single items)
+    // Get digital order
     var xpathItemOrdered = "/html/body/div[1]/table[2]/tbody/tr[2]/td/table/tbody/tr/td/table/tbody/tr[2]";
     var itemTableXPR = document.evaluate(xpathItemOrdered, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null )
-                        .singleNodeValue;
-    var purchased_item = []
+                        .singleNodeValue.parentElement.children;
 
-    //-------------------------
-    // Parse purchased item description
-    var descriptionElement = itemTableXPR.children[0].childNodes;
-    var description = []
-    for (var i=0; i < descriptionElement.length; i++){
-        var descToken = descriptionElement[i].textContent.trim();
+    for (var i_row=1; i_row < itemTableXPR.length - 1; i_row++){
+        line_item = itemTableXPR[i_row]
+        var purchased_item = []
 
-        if ( descToken === "" || descToken.startsWith("Quantity:") || descToken.startsWith("Sold  By:") ) {
-            continue;
+        //-------------------------
+        // Parse purchased item description
+        var descriptionElement = line_item.children[0].childNodes;
+        var description = []
+        for (var i=0; i < descriptionElement.length; i++){
+            var descToken = descriptionElement[i].textContent.trim();
+
+            if ( descToken === "" || descToken.startsWith("Quantity:") || descToken.startsWith("Sold  By:") ) {
+                continue;
+            }
+
+            description.push(descToken)
         }
+        purchased_item.push(description.join(' '))
 
-        description.push(descToken)
+        //-------------------------
+        // Item Price
+        var price =  parsePrice(line_item.children[1]);
+        purchased_item.push(price);
+
+        // Integrate line item
+        purchased_items.push(purchased_item);
     }
-    purchased_item.push(description.join(' '))
-
-    //-------------------------
-    // Item Price
-    var price =  parsePrice(itemTableXPR.children[1]);
-    purchased_item.push(price);
-
-    // Integrate line item
-    purchased_items.push(purchased_item);
 
     // Non-Product Itemization: shipping, sales tax, promotions, subscribe & save
     var xpathPaymentItemRows = "//*[contains(@class, 'pmts-amount-breakdown-sub-totals')]";
