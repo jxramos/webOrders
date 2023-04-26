@@ -6,7 +6,7 @@ function processAmazonDigitalInvoice() {
         "URL": window.location.href
     };
     scrapeOrderData(transaction);
-    retitlePage(transaction);
+    reformatPage(transaction);
     downloadJsonTransaction(transaction);
 }
 
@@ -31,6 +31,26 @@ function downloadJsonTransaction(transaction) {
     var transactionJson = JSON.stringify(transaction);
     filename = transaction["OrderDateFormatted"] + ' ' + transaction['Vendor']+'--'+transaction['Order#']+'.wo.json'
     downloadContent(filename, transactionJson);
+}
+
+/*==========================================================================================
+WEBSITE BEAUTIFICATION
+==========================================================================================*/
+
+function reformatPage(transaction) {
+    /*
+    Deletes extraneous elements not necessary for printing out the return information.
+    Inject order information to make discovery easier
+    */
+    console.log("reformatPage")
+
+    retitlePage(transaction)
+
+    // Delete the footer elements
+    center_tags = document.getElementsByTagName("center")
+    while (center_tags.length > 1) {
+        center_tags[1].parentElement.removeChild(center_tags[1])
+    }
 }
 
 function retitlePage(transaction) {
