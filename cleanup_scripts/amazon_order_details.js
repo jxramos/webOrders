@@ -107,7 +107,7 @@ function retitlePage(transaction) {
     // Rename title bar to prefix with order date to keep printed invoices sorted by order date
     xpathPageTitle = "/html/head/title";
     pageTitle = document.evaluate(xpathPageTitle, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null)
-    pageTitle.singleNodeValue.innerText = transaction["OrderDateFormatted"] + " Amazon " + transaction["Order#"]
+    pageTitle.singleNodeValue.innerText = transaction["OrderDateFormatted"] + " Amazon.com - Order " + transaction["Order#"] + " details"
 }
 
 processAmazonOrderDetails()
