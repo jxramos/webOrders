@@ -96,6 +96,12 @@ ORDER ITEMIZATION
 function getOrderItemization(order, transaction){
     console.log("getOrderItemization");
 
+    // bring itemization into view
+    button_items_toggler = document.querySelectorAll('[data-automation-id="items-toggle-link"]')
+    if (button_items_toggler.length > 0){
+        button_items_toggler[0].click()
+    }
+
     var purchased_items = [];
 
     // get purchased items
@@ -103,7 +109,7 @@ function getOrderItemization(order, transaction){
     var paymentInfoXPR = document.evaluate(xpathPaymentInfo, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null ).singleNodeValue.children;
 
     // Parse purchased items
-    for(var i = 2; i < paymentInfoXPR.length; i += 2) {  // take every second element
+    for(var i = 1; i < paymentInfoXPR.length; i += 2) {  // take every second element
         purchased_item = []
         nodePaymentInfo = paymentInfoXPR[i]
 
