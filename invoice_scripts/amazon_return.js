@@ -63,11 +63,18 @@ function reformatPage() {
 
     //----------------------------------------------------------------------------
     // Inject the order number to the section details
-    popup_element = return_item_instance.getElementsByClassName("a-popover-preload")[0]
-    order_number = popup_element.children[3].innerText.replaceAll(" ", "").replaceAll("\n", "").replace(":", ": ")
-    xpath_title = "/html/body/div[1]/div[2]/div/div/div/div[1]/div[1]/div[1]/div/div/div/div[1]/div[1]/form/div/div/div/div[2]/div/div[1]/div/div[2]/span/a/span"
-    returnedItemDetails = document.evaluate(xpath_title, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null)
-    returnedItemDetails.singleNodeValue.innerText = order_number
+    order_ids = []
+    detail_items = []
+    for (const s of document.querySelectorAll("span")) {
+        if (s.textContent == " Order #:  ") {
+            order_ids.push(s.parentElement.textContent.trim())
+        } else if (s.textContent == " Details ") {
+            detail_items.push(s)
+        }
+    }
+    for(var i = 0; i < detail_items.length; i++){
+        detail_items[i].innerText = order_ids[i]
+    }
 
     //----------------------------------------------------------------------------
     // Rename title bar to prefix with return date and order number to keep printed invoices sorted by order date
