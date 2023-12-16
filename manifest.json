@@ -46,10 +46,10 @@
     },
     {
       "matches": [
-          "https://www.costco.com/OrderStatusCmd*"
+        "https://www.costco.com/myaccount/*"
       ],
       "js": [
-          "invoice_scripts/costco_invoice.js"
+        "invoice_scripts/costco_invoice.js"
       ]
     },
     {

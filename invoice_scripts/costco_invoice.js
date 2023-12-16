@@ -1,3 +1,48 @@
+async function crawlCostcoReceipts() {
+    console.log("crawlCostcoReceipts")
+    await new Promise(r => setTimeout(r, 2700));
+
+    // select the In-Warehouse tab
+    document.querySelector('[automation-id="myWarehouseOrdersTab"]').click()
+    await new Promise(r => setTimeout(r, 1200));
+
+    // navigate to every button and view receipts
+    var is_continue = true;
+    while(is_continue) {
+        receipt_buttons = document.querySelectorAll('[automation-id="ViewInWareHouseReciept"]')
+        for(i = 0; i < receipt_buttons.length; i++){
+            receipt_button = receipt_buttons[i]
+            receipt_button.click()
+            await new Promise(r => setTimeout(r, 1200));
+
+            processCostcoInvoice()
+
+            // prompt user to continue to the next receipt
+            is_continue = confirm("Do you wish to continue to the next Costco receipt?")
+        }
+
+        // advance to the next page if desired
+        if(is_continue) {
+            current_page = document.querySelector('[aria-current="true"]')
+
+            // find the current page selector index
+            page_selector = current_page.parentElement.parentElement.children
+            idx_selector_current_page = Array.from(page_selector).findIndex((e) => e.innerText == current_page.innerText)
+
+            // get the element of the next page
+            idx_selector_next_page = idx_selector_current_page + 1
+
+            if (idx_selector_next_page == page_selector.length) {
+                alert("No more receipts to process.")
+                break
+            }
+            next_page = page_selector[idx_selector_next_page].firstChild
+            console.log(" --> advance to next page: " + next_page.innerText)
+            next_page.click()
+        }
+    }
+}
+
 function processCostcoInvoice() {
     console.log("processCostcoInvoice")
 
@@ -17,7 +62,7 @@ function processCostcoInvoice() {
 function scrapeOrderData(transaction) {
     console.log("scrapeOrderData")
 
-    table_rows = document.getElementsByTagName("table")[0].children[1].children
+    table_rows = document.querySelector(".printWrapper").children[1].rows
     idx_meta = getOrderItemization(table_rows, transaction)
     getOrderMetaData(idx_meta, table_rows, transaction)
 }
@@ -48,7 +93,7 @@ function getOrderMetaData(idx_meta, table_rows, transaction) {
     transaction["Total"] = parsePrice(table_rows[idx_meta].children[3].innerText)
 
     // Get Order Date
-    date_str = table_rows[idx_meta + 6].children[0].innerText.split(" ")[0]
+    date_str = table_rows[idx_meta + 5].children[0].innerText.substr(0,10)
     var orderDate = new Date(date_str);
     transaction["OrderDate"] = orderDate.toLocaleDateString();
     order_date_formatted = orderDate.getFullYear() +
@@ -57,13 +102,15 @@ function getOrderMetaData(idx_meta, table_rows, transaction) {
     transaction["OrderDateFormatted"] = order_date_formatted
 
     // Get Payment Method
-    account_name = table_rows[idx_meta + 7].children[0].innerText
-    account_num  = table_rows[idx_meta + 3].children[0].innerText
+    account_name = table_rows[idx_meta + 6].children[0].innerText
+    account_num  = table_rows[idx_meta + 2].children[0].innerText.substr(11)
     transaction["PaymentMethod"] = account_name + " " + account_num
 
     // Get Order Number
-    img = document.querySelector("img[alt*=barcode]")
-    transaction["Order#"] = img.alt.split(" ")[1]
+    transaction["Order#"] = document.querySelector(".barcode").innerText
+
+    // close the order
+    document.querySelector('[automation-id="closePopup"]').click()
 }
 
 /*==========================================================================================
@@ -76,31 +123,42 @@ function getOrderItemization(table_rows, transaction){
     var line_items = [];
 
     // Scrape line items
-    for (let i = 0; i < table_rows.length - 1; i++) {
+    for (let i = 0; i < table_rows.length; i++) {
         row = table_rows[i]
-        line_sku = row.children[1].innerText
-        line_product = row.children[2].innerText
 
         // check if we reached the end of the line items
-        if (line_product == "SUBTOTAL") {
+        if (row.innerText.includes("SUBTOTAL")) {
             // grab the next row which is the sales tax
-            row = table_rows[i+1]
-            line_product = row.children[2].innerText
-            line_amount = row.children[3].innerText.replace
-            line_item = [line_product, parsePrice(line_amount)]
-            line_items.push(line_item)
+            row = table_rows[i+1].children
+            line_product = row[1].innerText
+            meta_data_row = i+1
+            if (line_product == "TAX"){
+                line_amount = row[2].innerText
+                line_item = [line_product, parsePrice(line_amount)]
+                line_items.push(line_item)
+                meta_data_row += 1
+            }
             transaction["Items"] = line_items;
 
             // return the index to the next row after sales tax, which should be the TOTAL row
-            return i+2
+            return meta_data_row
         }
 
         // integrate line item
-        line_amount = row.children[3].innerText.replace(" A", "")
+        row = row.children
+        line_sku = row[1].innerText
+        line_product = row[2].innerText
+        line_amount = row[3].innerText.replace(/ [AYN]$/, "")
+        is_coupon = false
         if (line_amount.substr(-1) == "-") {
-            line_description = line_product + " (coupon)"
+            // detect if coupon
+            if (line_product.startsWith("/")){
+                line_description = line_product + " (coupon) " + line_items[i-1][0]
+                is_coupon = true
+            }
             line_amount = "-" + line_amount.substr(0, line_amount.length-1)
-        } else {
+        }
+        if (!is_coupon) {
             line_description = line_product + " (SKU " + line_sku + ")"
         }
         line_item = [line_description, parsePrice(line_amount)]
@@ -130,4 +188,5 @@ function parsePrice(item){
     return parseFloat(price_value)
 }
 
-console.log("processCostcoInvoice();") // TODO button press callback because this is a SPA.
+
+crawlCostcoReceipts()
