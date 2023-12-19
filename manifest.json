@@ -77,6 +77,14 @@
       ]
     },
     {
+      "matches": [
+        "https://www.walmart.com/receipt-details?sbt=1"
+      ],
+      "js": [
+        "invoice_scripts/walmart_receipt_lookup_invoice.js"
+      ]
+    },
+    {
        "matches": [
          "https://wd5.myworkday.com/*/d/inst/*/rel-task/*.htmld"
        ],
