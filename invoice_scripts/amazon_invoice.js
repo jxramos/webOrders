@@ -40,7 +40,7 @@ function retitlePage(transaction) {
     // Rename title bar to prefix with order date to keep printed invoices sorted by order date
     xpathPageTitle = "/html/head/title";
     pageTitle = document.evaluate(xpathPageTitle, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null )
-    pageTitle.singleNodeValue.innerText = transaction["OrderDateFormatted"] + " " + pageTitle.singleNodeValue.innerText
+    pageTitle.singleNodeValue.innerText = transaction["OrderDateFormatted"] + " " + pageTitle.singleNodeValue.innerText.replace(" - Order ", "--")
 }
 
 function downloadQifTransaction(transaction) {
