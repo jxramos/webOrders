@@ -14,9 +14,8 @@ function processAmazonInvoice() {
 function scrapeOrderData(transaction) {
     console.log("scrapeOrderData")
 
-    getOrderMetaData(transaction);
-    getPaymentMetaData(transaction);
-    getOrderItemization(transaction);
+    payment_information_div = getOrderMetaData(transaction);
+    getOrderItemization(payment_information_div, transaction);
 }
 
 function downloadContent(filename, content) {
@@ -88,7 +87,7 @@ function getOrderMetaData(transaction) {
     transaction["Order#"] = document.getElementsByClassName("h1")[0].innerText.split("Details for Order #")[1].trim();
 
     // Get OrderDate
-    xpathOrderDate = "/html/body/table/tbody/tr/td/table[1]/tbody/tr[1]/td";
+    xpathOrderDate = "/html/body/div[1]/div[1]/table/tbody/tr/td/table/tbody/tr[1]/td";
     dateText = document.evaluate(xpathOrderDate, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null )
                     .singleNodeValue.innerText;
     dateString = dateText.split(": ")[1];
@@ -99,7 +98,7 @@ function getOrderMetaData(transaction) {
                                         "-" + String(orderDate.getDate()).padStart(2, '0');
 
     // Get ShipDate
-    xpathShipDate = "/html/body/table/tbody/tr/td/table[2]/tbody/tr/td/table/tbody/tr[1]/td/table/tbody/tr/td/b/center";
+    xpathShipDate = "/html/body/div[1]/div[1]/table/tbody/tr/td/div[1]/table[1]/tbody/tr/td/table/tbody/tr[1]/td/table/tbody/tr/td/b/center";
     shipDateString = document.evaluate(xpathShipDate, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null )
                             .singleNodeValue.innerText
                             .replace("Shipped on ","");
@@ -110,67 +109,48 @@ function getOrderMetaData(transaction) {
     transaction["IsSubscribeSave"] = dateText.includes("Subscribe and Save");
 
     // Get Order Total
-    xpathOrderTotal = "/html/body/table/tbody/tr/td/table[1]/tbody/tr[contains(., 'Order Total')]/td/b";
-    transaction["Total"] = parseFloat(document.evaluate(xpathOrderTotal, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null )
-                                    .singleNodeValue.innerText
-                                    .replace("Order Total: $",""));
-}
-
-/*==========================================================================================
-PAYMENT METADATA
-==========================================================================================*/
-
-function getPaymentMetaData(transaction) {
-    console.log("getPaymentMetaData")
-
-    payment_metadata = [];
-
-    // Get Payment Information element
-    xpathPaymentInfo = "/html/body/table/tbody/tr/td/table[last()]/tbody/tr/td/table/tbody/tr[2]/td/table/tbody/tr/td";
-    paymentInfo = document.evaluate(xpathPaymentInfo, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null )
-    .singleNodeValue
-    .childNodes;
+    payment_information_div = document.querySelectorAll("[id='pos_view_section']")[1]; // invalid HTML reuses ID, last match is the metadata div
+    xpathOrderTotal = '//b[text()="Grand Total:"]/../../td[2]';
+    order_total = document.evaluate(xpathOrderTotal, payment_information_div, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.innerText
+    transaction["Total"] = parsePrice(order_total);
 
     // Parse Payment Information
-    payment_text = "";
-    for( var i = 0; i < paymentInfo.length; i++){
-        child = paymentInfo[i];
+    payment_metadata = [];
+    payment_nodes = payment_information_div.getElementsByClassName("pmts-payment-instrument-billing-address")
+    for(i = 0; i < payment_nodes.length; i++){
+        payment_metadata.push(payment_nodes[i].innerText.trim().replace("Amazon.com ", "").replace("ending in ", "*"))
+    }
+    transaction["PaymentMethod"] = payment_metadata;
 
-        // ignore irrelevant elements
-        if (child instanceof HTMLBRElement || child instanceof HTMLTableElement) {
-            continue;
+    // Detect divided transactions
+    xpathCreditCardTransactions = '//b[contains(.,"Credit Card transactions")]/../../../td[2]'
+    cc_transactions = document.evaluate(xpathCreditCardTransactions, payment_information_div, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.getElementsByTagName("tr")
+    if(cc_transactions.length > 1){
+        divided_payments = []
+        for(i = 0; i < cc_transactions.length; i++){
+            divided_payments.push(cc_transactions[i].children[1].innerText)
         }
-        if (child.innerText == "Billing address") {
-            break;
-        }
-        if (child.nodeName == "#text") {
-            payment_text = child.textContent.trim()
-
-            if (payment_text) {
-                payment_metadata.push(payment_text);
-            }
-        } else if (child.tagName == "NOBR") {
-            payment_metadata[payment_metadata.length - 1] += child.textContent;
-        }
+        transaction["divided_payment"] = divided_payments
     }
 
-    transaction["PaymentMethod"] = payment_metadata;
+    return payment_information_div
 }
 
 /*==========================================================================================
 ORDER ITEMIZATION
 ==========================================================================================*/
 
-function getOrderItemization(transaction){
+function getOrderItemization(payment_information_div, transaction){
     console.log("getOrderItemization");
 
     var purchased_items = [];
 
-    // Get Shipment / secondary table elements
-    xpathShipments = "/html/body/table/tbody/tr/td/table[1 < position() and position() < last()]";
-    shipmentTablesXPR = document.evaluate(xpathShipments, document, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
+    // Get Shipments in order, ie primary table elements
+    itemization_div = document.getElementById("pos_view_section");
+    xpathShipments = "./table";
+    shipmentTablesXPR = document.evaluate(xpathShipments, itemization_div, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
 
-    // Parse purchased items
+    // Parse purchased items within shipment in the secondary nested table elements
     while ((nodeShipTable = shipmentTablesXPR.iterateNext()) != null) {
         // Iterate shipment items (skipping header row)
         xpathShipmentTableRows = "./tbody/tr/td/table/tbody/tr[2]/td/table/tbody/tr/td/table[2]/tbody/tr[position() > 1]";
@@ -225,9 +205,9 @@ function getOrderItemization(transaction){
         }
     }
 
-    // Non-Product Itemization: shipping, sales tax, promotions, subscribe & save
-    var xpathPaymentItemRows = "/html/body/table/tbody/tr/td/table[last()]/tbody/tr/td/table/tbody/tr[2]/td/table/tbody/tr/td/table/tbody/tr/td/table/tbody/tr";
-    var paymentInfoTableRowsXPR = document.evaluate(xpathPaymentItemRows, document, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
+    // Non-Product Itemization: shipping, sales tax, promotions, subscribe & save discount
+    var xpathPaymentItemRows = "./table/tbody/tr/td/table/tbody/tr[2]/td/table/tbody/tr/td/table/tbody/tr/td[2]/table/tbody/tr";
+    var paymentInfoTableRowsXPR = document.evaluate(xpathPaymentItemRows, payment_information_div, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
     var ignoredRows = new RegExp("Item\\(s\\) Subtotal:|Total before tax:|Grand Total:|-----");
 
     while ((nodeRow = paymentInfoTableRowsXPR.iterateNext()) != null) {
@@ -254,8 +234,12 @@ function parsePrice(item){
 function cleanupPage(){
     // delete the last two trailing details at the footer
     var center_elems = document.getElementsByTagName('center');
-    center_elems[center_elems.length-1].remove()
-    center_elems[center_elems.length-1].remove()
+    center_elems[center_elems.length-1].remove() // to view the status of you order
+    center_elems[center_elems.length-1].remove() // copyright stuff
+
+    // delete footer
+    footer = document.getElementById("navFooter")
+    footer.parentElement.removeChild(footer)
 }
 
 processAmazonInvoice();
