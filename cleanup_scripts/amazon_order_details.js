@@ -67,7 +67,7 @@ function reformatPage(transaction) {
     element.removeChild(element.children[4])
 
     // delete irrelevant divs
-    xpathIgnoreDivs = "//div[contains(text(),'Your package was left near') or contains(text(),'Return eligible through') or contains(text(),'Return window closed')]";
+    xpathIgnoreDivs = "//div[contains(text(),'Your package was left near') or contains(text(),'Return eligible through') or contains(text(),'Return window closed on')]|//a[contains(text(),'View or Print invoice')]/../..";
     var ignoreDivsXPR = document.evaluate(xpathIgnoreDivs, document, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null );
     ignoreDivs = []
     while ((ignoreDiv = ignoreDivsXPR.iterateNext()) != null) {
@@ -99,6 +99,10 @@ function reformatPage(transaction) {
         ignoreDiv = ignoreDivs[i]
         ignoreDiv.remove()
     }
+
+    // delete footer (related to items you've viewed, continue series you started, etc)
+    footer = document.getElementById("desktop-yo-orderdetails_ALL_desktop-yo-orderdetails_0_container")
+    footer.parentElement.removeChild(footer)
 }
 
 function retitlePage(transaction) {
@@ -107,7 +111,7 @@ function retitlePage(transaction) {
     // Rename title bar to prefix with order date to keep printed invoices sorted by order date
     xpathPageTitle = "/html/head/title";
     pageTitle = document.evaluate(xpathPageTitle, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null)
-    pageTitle.singleNodeValue.innerText = transaction["OrderDateFormatted"] + " Amazon.com - Order " + transaction["Order#"] + "_details"
+    pageTitle.singleNodeValue.innerText = transaction["OrderDateFormatted"] + " Amazon.com--" + transaction["Order#"] + "_details"
 }
 
 processAmazonOrderDetails()
