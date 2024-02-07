@@ -54,6 +54,14 @@
     },
     {
       "matches": [
+        "https://www.homedepot.com/order/view/ereceipt/summary"
+      ],
+      "js": [
+        "invoice_scripts/home_depot_invoice.js"
+      ]
+    },
+    {
+      "matches": [
         "https://www.vitacost.com/MyAccount/OrderSummary.aspx*"
       ],
       "js": [
