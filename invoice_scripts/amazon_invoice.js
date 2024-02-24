@@ -115,24 +115,33 @@ function getOrderMetaData(transaction) {
     transaction["Total"] = parsePrice(order_total);
 
     // Parse Payment Information
-    payment_metadata = [];
-    payment_nodes = payment_information_div.getElementsByClassName("pmts-payment-instrument-billing-address")
+    payment_metadata = {};
+    payment_nodes = payment_information_div.getElementsByClassName("pmts-payment-instrument-billing-address")[0].children
     for(i = 0; i < payment_nodes.length; i++){
-        payment_metadata.push(payment_nodes[i].innerText.trim().replace("Amazon.com ", "").replace("ending in ", "*"))
+        payment_node = payment_nodes[i]
+        if (payment_node.tagName == "SPAN" && !payment_node.innerText.includes("% back")) {
+            account = payment_nodes[i].innerText.trim().replace("Amazon.com ", "").replace("ending in ", "*")
+            payment_metadata[account] = 0 // start with zero to be populated later
+        }
     }
     transaction["PaymentMethod"] = payment_metadata;
 
     // Detect divided transactions
     xpathCreditCardTransactions = '//b[contains(.,"Credit Card transactions")]/../../../td[2]'
-    cc_transactions = document.evaluate(xpathCreditCardTransactions, payment_information_div, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.getElementsByTagName("tr")
+    cc_transactions_cell = document.evaluate(xpathCreditCardTransactions, payment_information_div, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue
+    if (cc_transactions_cell) {
+        cc_transactions = cc_transactions_cell.getElementsByTagName("tr")
     if(cc_transactions.length > 1){
         divided_payments = []
         for(i = 0; i < cc_transactions.length; i++){
-            divided_payments.push(cc_transactions[i].children[1].innerText)
+                cc_transaction = cc_transactions[i]
+                account = cc_transaction.children[0].innerText.split(":")[0].trim().replace("Amazon.com ", "").replace("ending in ", "*")
+                amount = parsePrice(cc_transaction.children[1].innerText)
+                divided_payments.push([account, amount])
         }
         transaction["divided_payment"] = divided_payments
     }
-
+    }
     return payment_information_div
 }
 
