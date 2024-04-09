@@ -47,6 +47,7 @@ The current list of vendors supported.
     + prime now orders
     + digital orders
 * costco.com
+* ebay.com
 * homedepot.com
 * vitacost.com
 * Walmart.com

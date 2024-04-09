@@ -54,6 +54,14 @@
     },
     {
       "matches": [
+        "https://order.ebay.com/ord/show?*"
+      ],
+      "js": [
+        "invoice_scripts/ebay_invoice.js"
+      ]
+    },
+    {
+      "matches": [
         "https://www.homedepot.com/order/view/ereceipt/summary"
       ],
       "js": [
