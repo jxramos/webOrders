@@ -62,6 +62,14 @@
     },
     {
       "matches": [
+        "https://www.fcpeuro.com/orders/R*?checkout_complete=true"
+      ],
+      "js": [
+        "invoice_scripts/fcp_euro_invoice.js"
+      ]
+    },
+    {
+      "matches": [
         "https://www.homedepot.com/order/view/ereceipt/summary"
       ],
       "js": [

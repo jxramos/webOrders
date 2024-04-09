@@ -48,6 +48,7 @@ The current list of vendors supported.
     + digital orders
 * costco.com
 * ebay.com
+* fcpeuro.com
 * homedepot.com
 * vitacost.com
 * Walmart.com
