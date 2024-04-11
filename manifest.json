@@ -46,6 +46,14 @@
     },
     {
       "matches": [
+        "https://secure.chase.com/web/auth/dashboard#/dashboard/overview/index;flyout=payCardConfirm*"
+      ],
+      "js": [
+        "invoice_scripts/chase_payment.js"
+      ]
+    },
+    {
+      "matches": [
         "https://www.costco.com/myaccount/*"
       ],
       "js": [
