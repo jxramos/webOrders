@@ -47,6 +47,7 @@ The current list of vendors supported.
     + prime now orders
     + digital orders
 * chase.com (credit card payments)
+* citi.com (credit card payments)
 * costco.com
 * ebay.com
 * fcpeuro.com

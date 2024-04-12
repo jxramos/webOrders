@@ -54,6 +54,14 @@
     },
     {
       "matches": [
+        "https://online.citi.com/US/ag/payments/crecarpay/success"
+      ],
+      "js": [
+        "invoice_scripts/citi_payment.js"
+      ]
+    },
+    {
+      "matches": [
         "https://www.costco.com/myaccount/*"
       ],
       "js": [
