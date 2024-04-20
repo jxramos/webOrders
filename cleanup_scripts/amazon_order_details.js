@@ -40,7 +40,7 @@ function reformatPage(transaction) {
     console.log("reformatPage")
 
     // Delete the navigation breadcrumbs
-    element = document.getElementsByClassName("breadcrumbs")[0];
+    element = document.querySelectorAll("[data-component='breadcrumb']")[0];
     element.parentElement.removeChild(element);
 
     // Delete select elements by ID
@@ -63,8 +63,8 @@ function reformatPage(transaction) {
     }
 
     // delete the shipping address and order summary table
-    element = document.getElementById("orderDetails")
-    element.removeChild(element.children[4])
+    element = document.querySelectorAll("[data-component='paymentDetails']")[0];
+    element.parentElement.removeChild(element);
 
     // delete irrelevant divs
     xpathIgnoreDivs = "//div[contains(text(),'Your package was left near') or contains(text(),'Return eligible through') or contains(text(),'Return window closed on')]|//a[contains(text(),'View or Print invoice')]/../..";
