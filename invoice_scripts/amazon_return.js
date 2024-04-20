@@ -9,6 +9,11 @@ function reformatPage() {
     */
     console.log("reformatPage")
 
+    // Guard against reformatting while an actual return workflow was initiated
+    if (document.querySelector("#rex-items-section-expanded-view-celWidget > div.a-section > h1").innerText == "Choose items to return"){
+        return
+    }
+
     // Delete the continue shopping button
     element = document.getElementById("summary-section")
     element.parentElement.removeChild(element);
