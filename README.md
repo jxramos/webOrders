@@ -53,5 +53,5 @@ The current list of vendors supported.
 * fcpeuro.com
 * homedepot.com
 * vitacost.com
-* Walmart.com
+* walmart.com
 * workday.com payslips

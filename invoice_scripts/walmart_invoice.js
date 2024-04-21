@@ -40,6 +40,11 @@ function downloadJsonTransaction(transaction) {
 function retitlePage(transaction) {
     console.log("retitlePage")
 
+    // Rename title bar to prefix with order date to keep printed invoices sorted by order date
+    xpathPageTitle = "/html/head/title";
+    pageTitle = document.evaluate(xpathPageTitle, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null )
+    pageTitle.singleNodeValue.innerText = transaction["OrderDateFormatted"] + " " + pageTitle.singleNodeValue.innerText.replace("Manage Account - Purchase history - ", "") + " " + transaction["Order#"]
+
     // Clean up the page of cruft
     footer_element = document.getElementsByTagName("footer")[0]
     footer_element.parentElement.removeChild(footer_element)
@@ -47,11 +52,6 @@ function retitlePage(transaction) {
     header_element.parentElement.removeChild(header_element)
     ad_banner = document.getElementById("ORDERDETAILS-SkylineDisplayAd-top");
     ad_banner.parentElement.removeChild(ad_banner)
-
-    // Rename title bar to prefix with order date to keep printed invoices sorted by order date
-    xpathPageTitle = "/html/head/title";
-    pageTitle = document.evaluate(xpathPageTitle, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null )
-    pageTitle.singleNodeValue.innerText = transaction["OrderDateFormatted"] + " " + pageTitle.singleNodeValue.innerText.replace("Manage Account - Purchase history - ", "") + " " + transaction["Order#"]
 }
 
 
