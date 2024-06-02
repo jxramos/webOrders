@@ -194,7 +194,7 @@ function getOrderItemization(order_element, transaction){
 
         //-------------------------
         // Item Price
-        price = item_count*parsePrice(line_amount)
+        price = parsePrice(line_amount)
         purchased_item.push(price)
 
         // integrate line item
