@@ -59,7 +59,7 @@ function processHomeDepotInvoice(order_element) {
     console.log("processHomeDepotInvoice")
 
     var transaction = {
-        "Vendor": "HomeDepot",
+        "Vendor": "Home Depot",
         "URL": window.location.href,
         "Order#": "",
         "OrderDate": "",
