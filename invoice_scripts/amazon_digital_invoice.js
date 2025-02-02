@@ -51,6 +51,8 @@ function reformatPage(transaction) {
     while (center_tags.length > 1) {
         center_tags[1].parentElement.removeChild(center_tags[1])
     }
+    footer = document.getElementById("navFooter")
+    footer.parentElement.removeChild(footer)
 }
 
 function retitlePage(transaction) {
@@ -73,7 +75,7 @@ function getOrderMetaData(transaction) {
     transaction["Order#"] = document.getElementsByClassName("h1")[0].innerText.split("Details for Order #")[1].trim();
 
     // Get OrderDate
-    xpathOrderDate = "/html/body/div[1]/table[2]/tbody/tr[1]/td";
+    xpathOrderDate = "/html/body/div[1]/div[1]/table[2]/tbody/tr[1]/td";
     dateText = document.evaluate(xpathOrderDate, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null )
                     .singleNodeValue.innerText;
     dateString = dateText.split(": ")[1];
@@ -84,7 +86,7 @@ function getOrderMetaData(transaction) {
                                         "-" + String(orderDate.getDate()).padStart(2, '0');
 
     // Get Order Total
-    xpathOrderTotal = "/html/body/table/tbody/tr[2]/td/table/tbody/tr/td/div/div[2]/div[last()]";
+    xpathOrderTotal = "/html/body/div[1]/table/tbody/tr[2]/td/table/tbody/tr/td/div/div[2]/div[last()]"
     transaction["Total"] = parseFloat(document.evaluate(xpathOrderTotal, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null )
                                       .singleNodeValue.innerText.split("$")[1]);
 }
@@ -99,7 +101,7 @@ function getPaymentMetaData(transaction) {
     payment_metadata = [];
 
     // Get Payment Information element
-    var xpathPaymentInfo = "/html/body/table/tbody/tr[2]/td/table/tbody/tr/td/div/div[1]/div[1]/div[2]/ul/li";
+    var xpathPaymentInfo = "/html/body/div[1]/table/tbody/tr[2]/td/table/tbody/tr/td/div/div[1]/div[1]/div[2]/ul/li";
     var paymentInfoXPR = document.evaluate(xpathPaymentInfo, document, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null );
 
     // Parse payment methods
@@ -149,7 +151,7 @@ function getOrderItemization(transaction){
     purchased_items = [];
 
     // Get digital order
-    var xpathItemOrdered = "/html/body/div[1]/table[2]/tbody/tr[2]/td/table/tbody/tr/td/table/tbody/tr[2]";
+    var xpathItemOrdered = "/html/body/div[1]/div[1]/table[2]/tbody/tr[2]/td/table/tbody/tr/td/table/tbody/tr[2]";
     var itemTableXPR = document.evaluate(xpathItemOrdered, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null )
                         .singleNodeValue.parentElement.children;
 
