@@ -46,6 +46,7 @@ The current list of vendors supported.
     + regular orders
     + prime now orders
     + digital orders
+* appfolio.com
 * chase.com (credit card payments)
 * citi.com (credit card payments)
 * costco.com
