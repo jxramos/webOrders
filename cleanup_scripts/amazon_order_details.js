@@ -39,10 +39,6 @@ function reformatPage(transaction) {
     */
     console.log("reformatPage")
 
-    // Delete the navigation breadcrumbs
-    element = document.querySelectorAll("[data-component='breadcrumb']")[0];
-    element.parentElement.removeChild(element);
-
     // Delete select elements by ID
     ids = ["nav-top",
            "skiplink",
@@ -63,16 +59,28 @@ function reformatPage(transaction) {
     }
 
     // delete the shipping address and order summary table
-    element = document.querySelectorAll("[data-component='paymentDetails']")[0];
-    element.parentElement.removeChild(element);
+    deleted_data_components = [
+        "breadcrumb",
+        "personalization",
+        "orderSummary",
+        "itemConnections",
+    ]
+    for(var i=0; i<deleted_data_components.length; i++){
+        data_component = deleted_data_components[i];
+        element = document.querySelectorAll("[data-component='"+data_component+"']")[0];
+        if (element != null) {
+            element.parentElement.removeChild(element);
+        } else {
+            console.warn("ERROR--data component " + data_component + " not found")
+        }
+    }
 
     // delete irrelevant divs
-    xpathIgnoreDivs = "//div[contains(text(),'Your package was left near') or contains(text(),'Return eligible through') or contains(text(),'Return window closed on')]|//a[contains(text(),'View or Print invoice')]/../..";
+    xpathIgnoreDivs = "//div[contains(text(),'Your package was left near') or contains(text(),'Return eligible through') or contains(text(),'Return window closed on')]|//a[contains(text(),'View or Print invoice') or contains(text(), 'View your item') or contains(text(), 'Buy it again')]/../..";
     var ignoreDivsXPR = document.evaluate(xpathIgnoreDivs, document, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null );
     ignoreDivs = []
     while ((ignoreDiv = ignoreDivsXPR.iterateNext()) != null) {
         ignoreDivs.push(ignoreDiv)
-
     }
 
     // delete interaction buttons on  the right div
@@ -102,7 +110,16 @@ function reformatPage(transaction) {
 
     // delete footer (related to items you've viewed, continue series you started, etc)
     footer = document.getElementById("desktop-yo-orderdetails_ALL_desktop-yo-orderdetails_0_container")
-    footer.parentElement.removeChild(footer)
+    if (footer != null) {
+        footer.parentElement.removeChild(footer)
+    }
+
+    // delete buttons, such as buy it again variants
+    buttons = document.getElementsByClassName("a-button ")
+    for(var i=0; i<buttons.length; i++){
+        button = buttons[i]
+        button.parentElement.removeChild(button);
+    }
 }
 
 function retitlePage(transaction) {
