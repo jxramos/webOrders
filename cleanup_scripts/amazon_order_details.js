@@ -14,13 +14,13 @@ function processAmazonOrderDetails() {
 function getOrderMetaData(transaction) {
     console.log("getOrderMetaData")
 
-    order_info = document.getElementsByClassName("order-date-invoice-item");
+    order_info = document.querySelector("[data-component=briefOrderInfo]").innerText.split("Order # ")
 
     // Get Order Number
-    transaction["Order#"] = order_info[1].innerText.split("Order# ")[1].trim()
+    transaction["Order#"] = order_info[1].trim()
 
     // Get OrderDate
-    dateString = order_info[0].innerText.split(" on ")[1].trim();
+    dateString = order_info[0].split(" placed ")[1].trim();
     orderDate = new Date(dateString);
     transaction["OrderDate"] = orderDate.toLocaleDateString();
     transaction["OrderDateFormatted"] = orderDate.getFullYear() +
