@@ -110,6 +110,14 @@
     },
     {
       "matches": [
+        "https://servicing.rocketmortgage.com/v2/payments/one-time-payment"
+      ],
+      "js": [
+        "invoice_scripts/rocket_mortgage_invoice.js"
+      ]
+    },
+    {
+      "matches": [
         "https://www.vitacost.com/MyAccount/OrderSummary.aspx*"
       ],
       "js": [
