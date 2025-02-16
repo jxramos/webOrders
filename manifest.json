@@ -94,6 +94,14 @@
     },
     {
       "matches": [
+        "https://edgecustomer.geico.com/confirmation?*contextId=*"
+      ],
+      "js": [
+        "invoice_scripts/geico_invoice.js"
+      ]
+    },
+    {
+      "matches": [
         "https://www.homedepot.com/order/view/ereceipt/summary"
       ],
       "js": [

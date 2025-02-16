@@ -20,7 +20,7 @@ The contents of the file assume the following form given below, albeit in a mini
     "URL": "https://vendor-xyz.com/invoice_q.html",
     "OrderDate": "M/DD/YYYY",
     "OrderDateFormatted": "YYYY-MM-DD",
-    "Total": 777.77,
+    "Total": 221.74,
     "PaymentMethod": "VISA 0123",
     "Order#": "XXXXXXXXXX",
     "Items": [
@@ -52,6 +52,7 @@ The current list of vendors supported.
 * costco.com
 * ebay.com
 * fcpeuro.com
+* geico.com
 * homedepot.com
 * vitacost.com
 * walmart.com
