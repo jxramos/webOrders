@@ -14,13 +14,11 @@ function processAmazonOrderDetails() {
 function getOrderMetaData(transaction) {
     console.log("getOrderMetaData")
 
-    order_info = document.querySelector("[data-component=briefOrderInfo]").innerText.split("Order # ")
-
     // Get Order Number
-    transaction["Order#"] = order_info[1].trim()
+    transaction["Order#"] = document.querySelector("[data-component=orderId").innerText
 
     // Get OrderDate
-    dateString = order_info[0].split(" placed ")[1].trim();
+    dateString = document.querySelector("[data-component=orderDate").innerText
     orderDate = new Date(dateString);
     transaction["OrderDate"] = orderDate.toLocaleDateString();
     transaction["OrderDateFormatted"] = orderDate.getFullYear() +
@@ -67,11 +65,14 @@ function reformatPage(transaction) {
     ]
     for(var i=0; i<deleted_data_components.length; i++){
         data_component = deleted_data_components[i];
-        element = document.querySelectorAll("[data-component='"+data_component+"']")[0];
-        if (element != null) {
-            element.parentElement.removeChild(element);
-        } else {
-            console.warn("ERROR--data component " + data_component + " not found")
+        elements = document.querySelectorAll("[data-component=" + data_component + "]");
+        for(var j=0; j < elements.length; j++){
+            element = elements[j]
+            if (element != null) {
+                element.parentElement.removeChild(element);
+            } else {
+                console.warn("ERROR--data component " + data_component + " not found")
+            }
         }
     }
 
