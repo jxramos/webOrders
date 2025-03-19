@@ -249,6 +249,10 @@ function cleanupPage(){
     // delete footer
     footer = document.getElementById("navFooter")
     footer.parentElement.removeChild(footer)
+
+    // delete print notice text
+    print_page_link = document.querySelector("#pos_view_content > center > a")
+    print_page_link.parentElement.removeChild(print_page_link)
 }
 
 processAmazonInvoice();

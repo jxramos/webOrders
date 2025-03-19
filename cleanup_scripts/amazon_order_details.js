@@ -37,6 +37,13 @@ function reformatPage(transaction) {
     */
     console.log("reformatPage")
 
+    // retain link to invoice view by moving it to the order ID label
+    invoice_url = document.querySelector("[data-component=orderInvoice]").getElementsByTagName("a")[0]
+    order_id_label = document.querySelector("[data-component=orderIdLabel]")
+    invoice_url.removeAttribute("class")
+    invoice_url.innerText = order_id_label.innerText
+    order_id_label.replaceChild(invoice_url, order_id_label.children[0])
+
     // Delete select elements by ID
     ids = ["nav-top",
            "skiplink",
