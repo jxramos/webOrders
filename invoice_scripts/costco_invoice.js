@@ -19,27 +19,28 @@ async function crawlCostcoReceipts() {
 
             // prompt user to continue to the next receipt
             is_continue = confirm("Do you wish to continue to the next Costco receipt?")
-        }
-
-        // advance to the next page if desired
-        if(is_continue) {
-            current_page = document.querySelector('[aria-current="true"]')
-
-            // find the current page selector index
-            page_selector = current_page.parentElement.parentElement.children
-            idx_selector_current_page = Array.from(page_selector).findIndex((e) => e.innerText == current_page.innerText)
-
-            // get the element of the next page
-            idx_selector_next_page = idx_selector_current_page + 1
-
-            if (idx_selector_next_page == page_selector.length) {
-                alert("No more receipts to process.")
-                break
+            if(!is_continue) {
+                break;
             }
-            next_page = page_selector[idx_selector_next_page].firstChild
-            console.log(" --> advance to next page: " + next_page.innerText)
-            next_page.click()
         }
+
+        // advance to the next page
+        current_page = document.querySelector('[aria-current="true"]')
+
+        // find the current page selector index
+        page_selector = current_page.parentElement.parentElement.children
+        idx_selector_current_page = Array.from(page_selector).findIndex((e) => e.innerText == current_page.innerText)
+
+        // get the element of the next page
+        idx_selector_next_page = idx_selector_current_page + 1
+
+        if (idx_selector_next_page == page_selector.length) {
+            alert("No more receipts to process.")
+            break
+        }
+        next_page = page_selector[idx_selector_next_page].firstChild
+        console.log(" --> advance to next page: " + next_page.innerText)
+        next_page.click()
     }
 }
 
