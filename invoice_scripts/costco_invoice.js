@@ -56,8 +56,21 @@ function processCostcoInvoice() {
         "PaymentMethod": "",
     };
 
-    scrapeOrderData(transaction);
+    // scrape order data
+    if (document.getElementById("alert-dialog-title").innerText == "Gas Station Receipt") {
+        scrapeGasOrderData(transaction)
+    } else {
+        scrapeOrderData(transaction);
+    }
+
     downloadJsonTransaction(transaction);
+}
+
+function scrapeGasOrderData(transaction) {
+    console.log("scrapeGasOrderData")
+
+    transaction["Vendor"] += " Gasoline"
+    getGasOrderMetaData(transaction)
 }
 
 function scrapeOrderData(transaction) {
@@ -86,6 +99,44 @@ function downloadJsonTransaction(transaction) {
 /*==========================================================================================
 ORDER METADATA
 ==========================================================================================*/
+function getGasOrderMetaData(transaction) {
+    console.log("getOrderMetaData")
+
+    div_sections = document.getElementById("dataToPrint").children[1].children
+
+    // Get Order Number
+    transaction["Order#"] = div_sections[6].children[2].innerText.split("# ")[1]
+
+    // Get Order Date
+    date_str = div_sections[2].children[5].innerText
+    var orderDate = new Date(date_str);
+    transaction["OrderDate"] = orderDate.toLocaleDateString();
+    order_date_formatted = orderDate.getFullYear() +
+    "-" + String(orderDate.getMonth()+1).padStart(2, '0') +
+    "-" + String(orderDate.getDate()).padStart(2, '0');
+    transaction["OrderDateFormatted"] = order_date_formatted
+
+    // Get Order Total
+    div_sale = div_sections[5]
+    transaction["Total"] = parsePrice(div_sale.children[5].innerText)
+
+    // Get Payment Method
+    transaction["PaymentMethod"] = div_sections[3].children[1].innerText
+
+    // itemization
+    transaction["Items"] = [["gasoline", transaction["Total"]]];
+
+    // Memo
+    div_quantity     = div_sections[4]
+    gallons          = div_quantity.children[4].innerText
+    price_per_gallon = div_quantity.children[5].innerText
+    gas_type         = div_sale.children[2].innerText
+    transaction["Description"] = gallons + "gal " + gas_type + " @ " + price_per_gallon + "/gal, "
+
+    // close the order
+    document.querySelector('[automation-id="closePopup"]').click()
+}
+
 
 function getOrderMetaData(idx_meta, table_rows, transaction) {
     console.log("getOrderMetaData")
