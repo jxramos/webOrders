@@ -41,8 +41,8 @@ function getOrderMetaData(transaction) {
     // Get OrderDate
     xpathOrderDate = "/html/body/div[1]/div[1]/table/tbody/tr/td/table/tbody/tr[1]/td";
     date_str = document.evaluate(xpathOrderDate, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null )
-                    .singleNodeValue.innerText.split(": ")[1];
-    processOrderDate(date_str, transaction)
+                    .singleNodeValue.innerText;
+    processOrderDate(date_str.split(": ")[1], transaction)
 
     // Get ShipDate
     xpathShipDate = "/html/body/div[1]/div[1]/table/tbody/tr/td/div[1]/table[1]/tbody/tr/td/table/tbody/tr[1]/td/table/tbody/tr/td/b/center";
@@ -53,7 +53,7 @@ function getOrderMetaData(transaction) {
     transaction["ShipDate"] = shipDate.toLocaleDateString();
 
     // Get Subscribe & Save Status
-    transaction["IsSubscribeSave"] = dateText.includes("Subscribe and Save");
+    transaction["IsSubscribeSave"] = date_str.includes("Subscribe and Save");
 
     // Get Order Total
     payment_information_div = document.querySelectorAll("[id='pos_view_section']")[1]; // invalid HTML reuses ID, last match is the metadata div
