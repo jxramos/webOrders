@@ -39,11 +39,8 @@ function getOrderMetaData(transaction) {
     transaction["Order#"] = order_id
 
     // Get Order Date
-    var orderDate = new Date(document.getElementsByClassName("infobox-body")[1].innerText.split(" is ")[1].replace(")", ""))
-    transaction["OrderDate"] = orderDate.toLocaleDateString();
-    transaction["OrderDateFormatted"] = orderDate.getFullYear() +
-        "-" + String(orderDate.getMonth() + 1).padStart(2, '0') +
-        "-" + String(orderDate.getDate()).padStart(2, '0');
+    date_str = document.getElementsByClassName("infobox-body")[1].innerText.split(" is ")[1].replace(")", "")
+    processOrderDate(date_str, transaction)
 
     // Get Order Total
     total = parsePrice(headers[1]);

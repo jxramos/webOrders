@@ -132,12 +132,7 @@ function getOrderMetaData(order_element, transaction) {
 
     // Get Order Date
     date_str = order_element.querySelectorAll('[data-automation-id="eReceiptsHeaderDateOrderedValue"]')[0].innerText;
-    var orderDate = new Date(date_str);
-    transaction["OrderDate"] = orderDate.toLocaleDateString();
-    order_date_formatted = orderDate.getFullYear() +
-                            "-" + String(orderDate.getMonth()+1).padStart(2, '0') +
-                            "-" + String(orderDate.getDate()).padStart(2, '0');
-    transaction["OrderDateFormatted"] = order_date_formatted
+    processOrderDate(date_str, transaction)
 
     // Get Order Number
     transaction["Order#"] = order_element.querySelectorAll('[data-automation-id="eReceiptsHeaderOrderNumberValue"]')[0].innerText;

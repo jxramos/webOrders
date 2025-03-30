@@ -9,7 +9,7 @@
         "https://*.amazon.com/gp/css/summary/print.html*"
       ],
       "js": [
-        "common/json_utilities.js",
+        "common/common.js",
         "invoice_scripts/amazon_invoice.js"
       ]
     },
@@ -26,7 +26,7 @@
         "https://*.amazon.com/gp/digital/your-account/order-summary.html*"
       ],
       "js": [
-        "common/json_utilities.js",
+        "common/common.js",
         "invoice_scripts/amazon_digital_invoice.js"
       ]
     },
@@ -35,7 +35,7 @@
         "https://primenow.amazon.com/orderStatus?orderId=*"
       ],
       "js": [
-        "common/json_utilities.js",
+        "common/common.js",
         "invoice_scripts/primenow_invoice.js"
       ]
     },
@@ -44,7 +44,7 @@
         "https://*.amazon.com/gp/your-account/order-details*"
       ],
       "js": [
-        "common/json_utilities.js",
+        "common/common.js",
         "cleanup_scripts/amazon_order_details.js"
       ]
     },
@@ -53,7 +53,7 @@
         "https://*.appfolio.com/connect/payments_flow_v2/payments/confirmation?mode=oneTimePayment"
       ],
       "js": [
-        "common/json_utilities.js",
+        "common/common.js",
         "invoice_scripts/appfolio_invoice.js"
       ]
     },
@@ -62,7 +62,7 @@
         "https://secure.chase.com/web/auth/dashboard#/dashboard/overview/index;flyout=payCardConfirm*"
       ],
       "js": [
-        "common/json_utilities.js",
+        "common/common.js",
         "invoice_scripts/chase_payment.js"
       ]
     },
@@ -71,7 +71,7 @@
         "https://online.citi.com/US/ag/payments/crecarpay/success"
       ],
       "js": [
-        "common/json_utilities.js",
+        "common/common.js",
         "invoice_scripts/citi_payment.js"
       ]
     },
@@ -80,7 +80,7 @@
         "https://www.costco.com/myaccount/*"
       ],
       "js": [
-        "common/json_utilities.js",
+        "common/common.js",
         "invoice_scripts/costco_invoice.js"
       ]
     },
@@ -89,7 +89,7 @@
         "https://order.ebay.com/ord/show?*"
       ],
       "js": [
-        "common/json_utilities.js",
+        "common/common.js",
         "invoice_scripts/ebay_invoice.js"
       ]
     },
@@ -98,7 +98,7 @@
         "https://www.fcpeuro.com/orders/R*?checkout_complete=true"
       ],
       "js": [
-        "common/json_utilities.js",
+        "common/common.js",
         "invoice_scripts/fcp_euro_invoice.js"
       ]
     },
@@ -107,7 +107,7 @@
         "https://edgecustomer.geico.com/confirmation?*contextId=*"
       ],
       "js": [
-        "common/json_utilities.js",
+        "common/common.js",
         "invoice_scripts/geico_invoice.js"
       ]
     },
@@ -116,7 +116,7 @@
         "https://www.homedepot.com/order/view/ereceipt/summary"
       ],
       "js": [
-        "common/json_utilities.js",
+        "common/common.js",
         "invoice_scripts/home_depot_invoice.js"
       ]
     },
@@ -125,7 +125,7 @@
         "https://servicing.rocketmortgage.com/v2/payments/one-time-payment"
       ],
       "js": [
-        "common/json_utilities.js",
+        "common/common.js",
         "invoice_scripts/rocket_mortgage_invoice.js"
       ]
     },
@@ -134,7 +134,7 @@
         "https://www.vitacost.com/MyAccount/OrderSummary.aspx*"
       ],
       "js": [
-        "common/json_utilities.js",
+        "common/common.js",
         "invoice_scripts/vitacost_invoice.js"
       ]
     },
@@ -143,7 +143,7 @@
         "https://www.walmart.com/account/wmpurchasehistory*"
       ],
       "js": [
-        "common/json_utilities.js",
+        "common/common.js",
         "invoice_scripts/walmart_invoice.js"
       ]
     },
@@ -152,7 +152,7 @@
         "https://www.walmart.com/orders*"
       ],
       "js": [
-        "common/json_utilities.js",
+        "common/common.js",
         "invoice_scripts/walmart_invoice.js"
       ]
     },
@@ -161,18 +161,18 @@
         "https://www.walmart.com/receipt-details?sbt=1"
       ],
       "js": [
-        "common/json_utilities.js",
+        "common/common.js",
         "invoice_scripts/walmart_receipt_lookup_invoice.js"
       ]
     },
     {
-       "matches": [
-         "https://wd5.myworkday.com/*/d/inst/*/rel-task/*.htmld"
-       ],
-       "js": [
-         "common/json_utilities.js",
-         "invoice_scripts/workday_payslip.js"
-       ]
+      "matches": [
+        "https://wd5.myworkday.com/*/d/inst/*/rel-task/*.htmld"
+      ],
+      "js": [
+        "common/common.js",
+        "invoice_scripts/workday_payslip.js"
+      ]
     }
   ],
   "permissions": [

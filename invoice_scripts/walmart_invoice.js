@@ -53,11 +53,8 @@ function getOrderMetaData(order, transaction) {
     transaction["Order#"] = order_header_elements[2].innerText;
 
     // Get OrderDate
-    var orderDate = new Date(order_header_elements[0].innerText.replace(" purchase", "").replace("order", ""));
-    transaction["OrderDate"] = orderDate.toLocaleDateString();
-    transaction["OrderDateFormatted"] = orderDate.getFullYear() +
-                                        "-" + String(orderDate.getMonth()+1).padStart(2, '0') +
-                                        "-" + String(orderDate.getDate()).padStart(2, '0');
+    date_str = order_header_elements[0].innerText.replace(" purchase", "").replace("order", "");
+    processOrderDate(date_str, transaction)
 
     // Get Payment Method
     payment_section = document.getElementsByClassName("bill-order-payment-cards")[0]

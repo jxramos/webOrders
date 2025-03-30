@@ -30,10 +30,8 @@ function getOrderMetaData(transaction) {
     transaction["Order#"] = document.getElementById("browser-order-status-order-number").innerText.split("Order #: ")[1].trim();
 
     // Get OrderDate
-    var dateText = document.getElementById("browser-order-status-order-date").innerText;
-    var dateString = dateText.split(": ")[1];
-    var orderDate = new Date(dateString);
-    transaction["OrderDate"] = orderDate.toLocaleDateString();
+    date_str = document.getElementById("browser-order-status-order-date").innerText.split(": ")[1];
+     processOrderDate(date_str, transaction)
 
     // TODO Get ShipDate (aka Delivery Time)
     //xpathShipDate = "/html/body/table/tbody/tr/td/table[2]/tbody/tr/td/table/tbody/tr[1]/td/table/tbody/tr/td/b/center";

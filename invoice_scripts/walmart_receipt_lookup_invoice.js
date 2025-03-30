@@ -48,11 +48,8 @@ function getOrderMetaData(transaction) {
 
     // Get OrderDate
     receipt_head = document.querySelector(".receipt-head-split")
-    var orderDate = new Date(receipt_head.children[1].innerText.split("|")[0].trim().replace(/(th|rd),/, ''));
-    transaction["OrderDate"] = orderDate.toLocaleDateString();
-    transaction["OrderDateFormatted"] = orderDate.getFullYear() +
-                                        "-" + String(orderDate.getMonth()+1).padStart(2, '0') +
-                                        "-" + String(orderDate.getDate()).padStart(2, '0');
+    date_str = receipt_head.children[1].innerText.split("|")[0].trim().replace(/(th|rd),/, '');
+    processOrderDate(date_str, transaction)
 
     // Get Payment Method
     order_summary_table = document.querySelector(".receipt-total").rows

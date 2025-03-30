@@ -95,12 +95,7 @@ function getGasOrderMetaData(transaction) {
 
     // Get Order Date
     date_str = div_sections[2].children[5].innerText
-    var orderDate = new Date(date_str);
-    transaction["OrderDate"] = orderDate.toLocaleDateString();
-    order_date_formatted = orderDate.getFullYear() +
-    "-" + String(orderDate.getMonth()+1).padStart(2, '0') +
-    "-" + String(orderDate.getDate()).padStart(2, '0');
-    transaction["OrderDateFormatted"] = order_date_formatted
+    processOrderDate(date_str, transaction)
 
     // Get Order Total
     div_sale = div_sections[5]
@@ -132,12 +127,7 @@ function getOrderMetaData(idx_meta, table_rows, transaction) {
 
     // Get Order Date
     date_str = table_rows[idx_meta + 5].children[0].innerText.substr(0,10)
-    var orderDate = new Date(date_str);
-    transaction["OrderDate"] = orderDate.toLocaleDateString();
-    order_date_formatted = orderDate.getFullYear() +
-                            "-" + String(orderDate.getMonth()+1).padStart(2, '0') +
-                            "-" + String(orderDate.getDate()).padStart(2, '0');
-    transaction["OrderDateFormatted"] = order_date_formatted
+    processOrderDate(date_str, transaction)
 
     // Get Payment Method
     account_name = table_rows[idx_meta + 6].children[0].innerText

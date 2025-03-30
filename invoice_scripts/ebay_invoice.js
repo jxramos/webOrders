@@ -40,12 +40,8 @@ function getOrderMetaData(transaction) {
     transaction["Order#"] = order_info_div.children[1].getElementsByTagName("dd")[0].innerText
 
     // Get OrderDate
-    date_str = order_info_div.children[0].getElementsByTagName("dd")[0].innerText.replace("at ", "") //
-    var orderDate = new Date(date_str)
-    transaction["OrderDate"] = orderDate.toLocaleDateString();
-    transaction["OrderDateFormatted"] = orderDate.getFullYear() +
-                                        "-" + String(orderDate.getMonth()+1).padStart(2, '0') +
-                                        "-" + String(orderDate.getDate()).padStart(2, '0');
+    date_str = order_info_div.children[0].getElementsByTagName("dd")[0].innerText.replace("at ", "")
+    processOrderDate(date_str, transaction)
 
     // Get Order Total
     payment_info_div = document.getElementById("payment-info")

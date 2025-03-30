@@ -61,14 +61,9 @@ function getOrderMetaData(transaction) {
 
     // Get OrderDate
     xpathOrderDate = "/html/body/div[1]/div[1]/table[2]/tbody/tr[1]/td";
-    dateText = document.evaluate(xpathOrderDate, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null )
-                    .singleNodeValue.innerText;
-    dateString = dateText.split(": ")[1];
-    orderDate = new Date(dateString);
-    transaction["OrderDate"] = orderDate.toLocaleDateString();
-    transaction["OrderDateFormatted"] = orderDate.getFullYear() +
-                                        "-" + String(orderDate.getMonth()+1).padStart(2, '0') +
-                                        "-" + String(orderDate.getDate()).padStart(2, '0');
+    date_str = document.evaluate(xpathOrderDate, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null )
+                    .singleNodeValue.innerText.split(": ")[1];
+    processOrderDate(date_str, transaction)
 
     // Get Order Total
     xpathOrderTotal = "/html/body/div[1]/table/tbody/tr[2]/td/table/tbody/tr/td/div/div[2]/div[last()]"

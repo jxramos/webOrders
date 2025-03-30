@@ -41,12 +41,8 @@ function getPayslipMetaData(table_captions, transaction) {
                                         pay_period_end.substring(0,5)
 
     // Use Pay Date to serve as the "OrderDate"
-    var orderDate = new Date(cells[4].innerText);
-    transaction["OrderDate"] = orderDate.toLocaleDateString();
-    order_date_formatted = orderDate.getFullYear() +
-                            "-" + String(orderDate.getMonth()+1).padStart(2, '0') +
-                            "-" + String(orderDate.getDate()).padStart(2, '0');
-    transaction["OrderDateFormatted"] = order_date_formatted
+    date_str = cells[4].innerText
+    processOrderDate(date_str, transaction)
 
     //------------------------------------------------------------------------
     // Table: Payment Information

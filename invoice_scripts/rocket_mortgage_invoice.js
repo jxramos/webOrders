@@ -46,11 +46,7 @@ function getOrderMetaData(transaction) {
 
     // Get OrderDate
     date_str = div_metadata.children[1].children[1].children[1].innerText
-    var orderDate = new Date(date_str)
-    transaction["OrderDate"] = orderDate.toLocaleDateString();
-    transaction["OrderDateFormatted"] = orderDate.getFullYear() +
-    "-" + String(orderDate.getMonth()+1).padStart(2, '0') +
-    "-" + String(orderDate.getDate()).padStart(2, '0');
+    processOrderDate(date_str, transaction)
 
     // Get Order Total
     div_payment_summary = div_common.children[1].firstChild.firstChild

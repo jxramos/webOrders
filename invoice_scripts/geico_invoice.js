@@ -42,11 +42,7 @@ function getOrderMetaData(transaction) {
     // Get OrderDate
     meta_group1 = meta_group1[2].children
     date_str = meta_group1[1].innerText.split(": ")[1]
-    var orderDate = new Date(date_str)
-    transaction["OrderDate"] = orderDate.toLocaleDateString();
-    transaction["OrderDateFormatted"] = orderDate.getFullYear() +
-                                        "-" + String(orderDate.getMonth()+1).padStart(2, '0') +
-                                        "-" + String(orderDate.getDate()).padStart(2, '0');
+    processOrderDate(date_str, transaction)
 
     // Get policy number
     transaction["Description"] = meta_group1[0].innerText

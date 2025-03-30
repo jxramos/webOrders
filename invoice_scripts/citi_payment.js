@@ -41,11 +41,7 @@ function getOrderMetaData(transaction) {
 
     // Get OrderDate
     date_str = print_section.children[4].getElementsByTagName("citi-column")[1].innerText
-    var orderDate = new Date(date_str)
-    transaction["OrderDate"] = orderDate.toLocaleDateString();
-    transaction["OrderDateFormatted"] = orderDate.getFullYear() +
-        "-" + String(orderDate.getMonth() + 1).padStart(2, '0') +
-        "-" + String(orderDate.getDate()).padStart(2, '0');
+    processOrderDate(date_str, transaction)
 
     // Get Order Total
     payment_amount = print_section.children[3].getElementsByTagName("citi-column")[1]

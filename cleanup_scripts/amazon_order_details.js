@@ -18,12 +18,8 @@ function getOrderMetaData(transaction) {
     transaction["Order#"] = document.querySelector("[data-component=orderId").innerText
 
     // Get OrderDate
-    dateString = document.querySelector("[data-component=orderDate").innerText
-    orderDate = new Date(dateString);
-    transaction["OrderDate"] = orderDate.toLocaleDateString();
-    transaction["OrderDateFormatted"] = orderDate.getFullYear() +
-                                        "-" + String(orderDate.getMonth()+1).padStart(2, '0') +
-                                        "-" + String(orderDate.getDate()).padStart(2, '0');
+    date_str = document.querySelector("[data-component=orderDate").innerText
+    processOrderDate(date_str, transaction)
 }
 
 /*==========================================================================================

@@ -40,11 +40,8 @@ function getOrderMetaData(transaction) {
     transaction["Order#"] = order_summary_container.getElementsByClassName("orderSummary__refNumber")[0].children[1].innerText
 
     // Get OrderDate
-    var orderDate = new Date()
-    transaction["OrderDate"] = orderDate.toLocaleDateString();
-    transaction["OrderDateFormatted"] = orderDate.getFullYear() +
-                                        "-" + String(orderDate.getMonth()+1).padStart(2, '0') +
-                                        "-" + String(orderDate.getDate()).padStart(2, '0');
+    date_str = new Date().toLocaleDateString();
+    processOrderDate(date_str, transaction)
 
     // Get Order Total
     transaction["Total"] = parsePrice(order_summary_container.getElementsByClassName("orderSummary--isComplete")[0].children[1]);
