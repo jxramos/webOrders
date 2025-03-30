@@ -66,9 +66,8 @@ function getOrderMetaData(transaction) {
     processOrderDate(date_str, transaction)
 
     // Get Order Total
-    xpathOrderTotal = "/html/body/div[1]/table/tbody/tr[2]/td/table/tbody/tr/td/div/div[2]/div[last()]"
-    transaction["Total"] = parseFloat(document.evaluate(xpathOrderTotal, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null )
-                                      .singleNodeValue.innerText.split("$")[1]);
+    order_total = document.querySelector("#a-page > table > tbody > tr:nth-child(2) > td > table > tbody > tr > td > div > div.a-column.a-span5.pmts-amount-breakdown.a-span-last > ul:nth-child(3) > li > span > div > div.a-column.a-span4.a-text-right.a-span-last > span")
+    transaction["Total"] = parsePrice(order_total);
 }
 
 /*==========================================================================================
