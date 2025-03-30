@@ -170,7 +170,7 @@
          "https://wd5.myworkday.com/*/d/inst/*/rel-task/*.htmld"
        ],
        "js": [
-        "common/json_utilities.js",
+         "common/json_utilities.js",
          "invoice_scripts/workday_payslip.js"
        ]
     }
