@@ -19,21 +19,6 @@ function scrapePayslip(table_captions, transaction) {
     getPayslipItemization(table_captions, transaction);
 }
 
-function downloadContent(filename, content) {
-    let a = document.createElement('a');
-    a.href = "data:application/octet-stream,"+encodeURIComponent(content);
-    a.download = filename;
-    a.click();
-}
-
-function downloadJsonTransaction(transaction) {
-    console.log("downloadJsonTransaction")
-
-    var transactionJson = JSON.stringify(transaction);
-    filename = transaction["OrderDateFormatted"] + ' ' + transaction['Vendor']+'--'+transaction['Order#'].split(" ")[0]+'.wo.json'
-    downloadContent(filename, transactionJson);
-}
-
 /*==========================================================================================
 ORDER METADATA
 ==========================================================================================*/

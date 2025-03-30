@@ -18,21 +18,6 @@ function scrapeOrderData(transaction) {
     getOrderItemization(payment_information_div, transaction);
 }
 
-function downloadContent(filename, content) {
-    let a = document.createElement('a');
-    a.href = "data:application/octet-stream,"+encodeURIComponent(content);
-    a.download = filename;
-    a.click();
-}
-
-function downloadJsonTransaction(transaction) {
-    console.log("downloadJsonTransaction")
-
-    var transactionJson = JSON.stringify(transaction);
-    filename = transaction["OrderDateFormatted"] + ' ' + transaction['Vendor']+'--'+transaction['Order#']+'.wo.json'
-    downloadContent(filename, transactionJson);
-}
-
 function retitlePage(transaction) {
     console.log("retitlePage")
 
@@ -40,39 +25,6 @@ function retitlePage(transaction) {
     xpathPageTitle = "/html/head/title";
     pageTitle = document.evaluate(xpathPageTitle, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null )
     pageTitle.singleNodeValue.innerText = transaction["OrderDateFormatted"] + " " + pageTitle.singleNodeValue.innerText.replace(" - Order ", "--")
-}
-
-function downloadQifTransaction(transaction) {
-    // Header
-    var transactionQif = "!Type:Bank\n";
-
-    // Date
-    transactionQif += "D" + transaction["OrderDate"] + "\n";
-
-    // Payee
-    transactionQif += "P" + transaction["Vendor"] + "\n";
-
-    // Total Amount
-    transactionQif += "T-" + transaction["Total"] + "\n";
-
-    // Memo
-    memo = "M" + transaction["Order#"]
-    if (transaction["PaymentMethod"].length > 1 ) {
-        memo += "; (split payment, " + transaction["PaymentMethod"].slice(1,) + ")"
-    }
-    transactionQif += memo + "\n";
-
-    // Splits
-    items = transaction["Items"];
-    for (let i = 0; i < items.length; i++) {
-        item = items[i];
-        transactionQif += "E"  + item[0] + "\n";
-        transactionQif += "$-" + item[1] + "\n";
-    }
-    transactionQif += "^\n"
-
-    // Save to disk
-    downloadContent(transaction['Vendor']+'--'+transaction['Order#']+'.qif', transactionQif);
 }
 
 
