@@ -178,15 +178,6 @@ function getOrderItemization(payment_information_div, transaction){
     transaction["Items"] = purchased_items;
 }
 
-function parsePrice(item){
-    if (typeof item === 'string' || item instanceof String){
-        price_value = item
-    } else {
-        price_value = item.textContent
-    }
-    return parseFloat(price_value.trim().replace('$',''))
-}
-
 function cleanupPage(){
     // delete the last two trailing details at the footer
     var center_elems = document.getElementsByTagName('center');

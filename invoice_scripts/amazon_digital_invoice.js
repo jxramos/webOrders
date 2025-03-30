@@ -180,8 +180,4 @@ function getOrderItemization(transaction){
     transaction["Items"] = purchased_items;
 }
 
-function parsePrice(item){
-    return parseFloat(item.textContent.trim().replace('$',''))
-}
-
 processAmazonDigitalInvoice();

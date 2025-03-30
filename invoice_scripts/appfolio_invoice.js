@@ -50,22 +50,4 @@ function getOrderMetaData(transaction) {
     transaction["Description"] = order_id + "; " + document.getElementsByClassName("js-property-address")[0].innerText
 }
 
-
-function parsePrice(item) {
-    // handle literal numeric
-    if (isFinite(item)) {
-        return item
-    }
-    var price = item.textContent.trim().replace('$', '').replace(',', '')
-
-    // handle negative representation
-    if (price.includes("(")) {
-        price = "-" + price.replace("(", "").replace(")", "")
-        // handle free literals
-    } else if (price == "FREE") {
-        price = 0.0;
-    }
-    return parseFloat(price)
-}
-
 processAppFolioInvoice();

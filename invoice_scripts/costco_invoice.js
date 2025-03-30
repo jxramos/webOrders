@@ -194,27 +194,5 @@ function getOrderItemization(table_rows, transaction){
     }
 }
 
-function parsePrice(item){
-    // handle literal numeric
-    if (isFinite(item)) {
-        return parseFloat(item)
-    }
-    if (typeof item === 'string' || item instanceof String){
-        price_value = item
-    } else {
-        price_value = item.textContent
-    }
-    price_value = price_value.trim().replace('$','').replace(',', '')
-
-    // handle negative representation
-    if (price_value.includes("(")) {
-        price_value = "-" + price_value.replace("(","").replace(")", "")
-    // handle free literals
-    } else if (price_value == "FREE") {
-        price_value = 0.0;
-    }
-    return parseFloat(price_value)
-}
-
 
 crawlCostcoReceipts()

@@ -54,22 +54,4 @@ function getOrderMetaData(transaction) {
     target_account = print_section.children[5].getElementsByTagName("citi-column")[1].innerText
 }
 
-
-function parsePrice(item) {
-    // handle literal numeric
-    if (isFinite(item)) {
-        return item
-    }
-    var price = item.textContent.trim().replace('$', '').replace(",", "")
-
-    // handle negative representation
-    if (price.includes("(")) {
-        price = "-" + price.replace("(", "").replace(")", "")
-        // handle free literals
-    } else if (price == "Free") {
-        price = 0.0;
-    }
-    return parseFloat(price)
-}
-
 processCitiPaymentInvoice();

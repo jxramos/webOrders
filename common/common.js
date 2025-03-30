@@ -1,3 +1,30 @@
+function parsePrice(item) {
+    // handle literal numeric
+    if (isFinite(item)) {
+        return item
+    }
+
+    // Get the price string value
+    if (typeof item === 'string' || item instanceof String) {
+        price_value = item
+    } else {
+        price_value = item.textContent
+    }
+
+    // Clean and process the price string value
+    price_value = price_value.trim().replace("$", "").replace(",", "")
+    if (price_value.includes("(")) {
+        // handle parenthetical negative representation
+        price_value = "-" + price_value.replace("(", "").replace(")", "")
+    } else if (price_value.toLowerCase() == "free") {
+        // handle free literals
+        price_value = 0.0;
+    }
+
+    // Parse the price string value
+    return parseFloat(price_value)
+}
+
 function processOrderDate(date_str, transaction) {
     orderDate = new Date(date_str);
     transaction["OrderDate"] = orderDate.toLocaleDateString();

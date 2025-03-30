@@ -88,21 +88,4 @@ function getOrderItemization(div_payment_summary, transaction){
     transaction["Items"] = purchased_items;
 }
 
-function parsePrice(item){
-    // handle literal numeric
-    if (isFinite(item)) {
-        return item
-    }
-    var price = item.textContent.trim().replace('$','').replace(",", "")
-
-    // handle negative representation
-    if (price.includes("(")) {
-        price = "-" + price.replace("(","").replace(")", "")
-    // handle free literals
-    } else if (price == "Free") {
-        price = 0.0;
-    }
-    return parseFloat(price)
-}
-
 processRocketMortgageInvoice();

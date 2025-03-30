@@ -187,15 +187,4 @@ function getOrderItemization(transaction){
     transaction["Items"] = purchased_items;
 }
 
-function parsePrice(item){
-    if (isFinite(item)) {
-        return item
-    }
-    var price = item.textContent.trim().replace('$','')
-    if (price == "FREE") {
-        price = 0.0;
-    }
-    return parseFloat(price)
-}
-
 processAmazonPrimeNowInvoice();
