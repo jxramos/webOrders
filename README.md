@@ -54,6 +54,7 @@ The current list of vendors supported.
 * fcpeuro.com
 * geico.com
 * homedepot.com
+* mrcooper.com
 * rocketmortgage.com
 * vitacost.com
 * walmart.com
