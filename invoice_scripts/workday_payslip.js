@@ -60,7 +60,7 @@ function getPayslipMetaData(table_captions, transaction) {
     transaction["PaymentMethod"] = account_name + " " + account_num
 
     // Get Order Number
-    transaction["Order#"] = "payslip " + order_date_formatted
+    transaction["Order#"] = "payslip " + transaction["OrderDateFormatted"]
 }
 
 /*==========================================================================================
