@@ -122,6 +122,15 @@
     },
     {
       "matches": [
+        "https://www.mrcooper.com/servicing/payments/additionals_only/confirmation"
+      ],
+      "js": [
+        "common/common.js",
+        "invoice_scripts/mr_cooper_additional_payment_invoice.js"
+      ]
+    },
+    {
+      "matches": [
         "https://www.mrcooper.com/servicing/payments/onetime/confirmation"
       ],
       "js": [
