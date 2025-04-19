@@ -1,7 +1,7 @@
 function parsePrice(item) {
     // handle literal numeric
     if (isFinite(item)) {
-        return item
+        return parseFloat(item)
     }
 
     // Get the price string value
