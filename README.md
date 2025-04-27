@@ -51,6 +51,7 @@ The current list of vendors supported.
 * citi.com (credit card payments)
 * costco.com
 * ebay.com
+* ereplacementparts.com
 * fcpeuro.com
 * geico.com
 * homedepot.com

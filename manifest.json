@@ -95,6 +95,15 @@
     },
     {
       "matches": [
+        "https://www.ereplacementparts.com/checkout_success.php?order=*"
+      ],
+      "js": [
+        "common/common.js",
+        "invoice_scripts/e_replacement_parts_invoice.js"
+      ]
+    },
+    {
+      "matches": [
         "https://www.fcpeuro.com/orders/R*?checkout_complete=true"
       ],
       "js": [
