@@ -11,8 +11,8 @@ async function processWalmartInvoice() {
     };
 
     scrapeOrderData(transaction);
-    retitlePage(transaction);
     downloadJsonTransaction(transaction);
+    retitlePage(transaction);
 }
 
 function scrapeOrderData(transaction) {

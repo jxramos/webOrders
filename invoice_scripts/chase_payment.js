@@ -7,8 +7,8 @@ function processChasePaymentInvoice() {
         "is_transfer": "scheduled payment authorization"
     };
     scrapeOrderData(transaction);
-    retitlePage(transaction);
     downloadJsonTransaction(transaction);
+    retitlePage(transaction);
 }
 
 function scrapeOrderData(transaction) {

@@ -6,8 +6,8 @@ function processAmazonDigitalInvoice() {
         "URL": window.location.href
     };
     scrapeOrderData(transaction);
-    reformatPage(transaction);
     downloadJsonTransaction(transaction);
+    reformatPage(transaction);
 }
 
 function scrapeOrderData(transaction) {

@@ -11,8 +11,8 @@ async function processWalmartInvoice() {
 
     var order = document.getElementsByClassName("print-bill-body")[0];
     scrapeOrderData(order, transaction);
-    retitlePage(transaction);
     downloadJsonTransaction(transaction);
+    retitlePage(transaction);
 }
 
 function scrapeOrderData(order, transaction) {

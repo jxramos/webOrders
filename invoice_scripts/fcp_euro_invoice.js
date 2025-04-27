@@ -6,8 +6,8 @@ function processFcpEuroInvoice() {
         "URL": window.location.href
     };
     scrapeOrderData(transaction);
-    retitlePage(transaction);
     downloadJsonTransaction(transaction);
+    retitlePage(transaction);
 }
 
 function scrapeOrderData(transaction) {
