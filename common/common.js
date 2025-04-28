@@ -33,6 +33,16 @@ function processOrderDate(date_str, transaction) {
         "-" + String(orderDate.getDate()).padStart(2, '0');
 }
 
+function retitlePage(transaction, suffix="") {
+    console.log("retitlePage")
+
+    // Rename title bar to prefix with order date to keep printed invoices sorted by order date
+    xpathPageTitle = "/html/head/title";
+    pageTitle = document.evaluate(xpathPageTitle, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null)
+    pageTitle.singleNodeValue.innerText = transaction["OrderDateFormatted"] + " " + transaction["Vendor"] + "--" + transaction["Order#"] + suffix
+}
+
+
 function downloadContent(filename, content) {
     let a = document.createElement('a');
     a.href = "data:application/octet-stream," + encodeURIComponent(content);

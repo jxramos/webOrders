@@ -7,7 +7,7 @@ function processEReplacementPartsInvoice() {
     };
     scrapeOrderData(transaction);
     downloadJsonTransaction(transaction);
-    retitlePage(transaction);
+    cleanupPage(transaction);
 }
 
 function scrapeOrderData(transaction) {
@@ -17,12 +17,9 @@ function scrapeOrderData(transaction) {
     getOrderItemization(transaction);
 }
 
-function retitlePage(transaction) {
-    console.log("retitlePage")
-
-    // Rename title bar to prefix with order date to keep printed invoices sorted by order date
-    pageTitle = document.querySelector("body > form > title")
-    pageTitle.innerText = transaction["OrderDateFormatted"] + " " + transaction["Order#"] + " " + pageTitle.innerText
+function cleanupPage(transaction) {
+    console.log("cleanupPage")
+    retitlePage(transaction)
 
     // cleanup page cruft
     // Delete select elements by ID

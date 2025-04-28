@@ -12,7 +12,7 @@ async function processWalmartInvoice() {
     var order = document.getElementsByClassName("print-bill-body")[0];
     scrapeOrderData(order, transaction);
     downloadJsonTransaction(transaction);
-    retitlePage(transaction);
+    cleanupPage(transaction);
 }
 
 function scrapeOrderData(order, transaction) {
@@ -22,13 +22,9 @@ function scrapeOrderData(order, transaction) {
     getOrderItemization(order, transaction);
 }
 
-function retitlePage(transaction) {
-    console.log("retitlePage")
-
-    // Rename title bar to prefix with order date to keep printed invoices sorted by order date
-    xpathPageTitle = "/html/head/title";
-    pageTitle = document.evaluate(xpathPageTitle, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null )
-    pageTitle.singleNodeValue.innerText = transaction["OrderDateFormatted"] + " " + pageTitle.singleNodeValue.innerText.replace("Manage Account - Purchase history - ", "") + " " + transaction["Order#"]
+function cleanupPage(transaction) {
+    console.log("cleanupPage")
+    retitlePage(transaction)
 
     // Clean up the page of cruft
     footer_element = document.getElementsByTagName("footer")[0]

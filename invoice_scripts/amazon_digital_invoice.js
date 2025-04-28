@@ -7,7 +7,7 @@ function processAmazonDigitalInvoice() {
     };
     scrapeOrderData(transaction);
     downloadJsonTransaction(transaction);
-    reformatPage(transaction);
+    cleanupPage(transaction);
 }
 
 function scrapeOrderData(transaction) {
@@ -18,17 +18,8 @@ function scrapeOrderData(transaction) {
     getOrderItemization(transaction);
 }
 
-/*==========================================================================================
-WEBSITE BEAUTIFICATION
-==========================================================================================*/
-
-function reformatPage(transaction) {
-    /*
-    Deletes extraneous elements not necessary for printing out the return information.
-    Inject order information to make discovery easier
-    */
+function cleanupPage(transaction) {
     console.log("reformatPage")
-
     retitlePage(transaction)
 
     // Delete the footer elements
@@ -40,14 +31,6 @@ function reformatPage(transaction) {
     footer.parentElement.removeChild(footer)
 }
 
-function retitlePage(transaction) {
-    console.log("retitlePage")
-
-    // Rename title bar to prefix with order date to keep printed invoices sorted by order date
-    xpathPageTitle = "/html/head/title";
-    pageTitle = document.evaluate(xpathPageTitle, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null )
-    pageTitle.singleNodeValue.innerText = transaction["OrderDateFormatted"] + " " + pageTitle.singleNodeValue.innerText.replace(": Digital Order Summary ", "--") + transaction["Order#"]
-}
 
 /*==========================================================================================
 ORDER METADATA
