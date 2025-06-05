@@ -50,6 +50,7 @@ The current list of vendors supported.
 * chase.com (credit card payments)
 * citi.com (credit card payments)
 * costco.com
+* dmv.ca.gov
 * ebay.com
 * ereplacementparts.com
 * fcpeuro.com
