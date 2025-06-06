@@ -49,9 +49,20 @@ function getPayslipMetaData(table_captions, transaction) {
     table_payment_information = table_captions[11].parentElement
     rows = table_payment_information.children[2].children
 
-    // Get Order Total
-    total = rows[1].children[3].innerText
-    transaction["Total"] = parsePrice(total.replace("Total:\n", ""));
+    // Get Order Total (same as Current Net Pay)
+    var total = parsePrice(table_captions[2].parentElement.rows[1].lastChild.innerText);
+    if (total == 0.0) {
+        // handle RSU vesting full cash payment case
+        employee_post_tax_deduction_rows = table_captions[6].parentElement.rows
+        for (let i = 1; i < employee_post_tax_deduction_rows.length - 1; i++) {
+            row = employee_post_tax_deduction_rows[i]
+            if (row.children[0].innerText == "RSU Value Vested" && row.children[1].innerText != "") {
+                total = parsePrice(row.children[1].innerText)
+                break
+            }
+        }
+    }
+    transaction["Total"] = total
 
     // Get Payment Method
     row_payment_info = rows[0]
