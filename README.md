@@ -53,6 +53,7 @@ The current list of vendors supported.
 * dmv.ca.gov
 * ebay.com
 * ereplacementparts.com
+* etrade.com
 * fcpeuro.com
 * geico.com
 * homedepot.com

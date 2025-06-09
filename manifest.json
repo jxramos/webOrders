@@ -113,6 +113,15 @@
     },
     {
       "matches": [
+        "https://us.etrade.com/etx/pxy/transfer-money/confirm"
+      ],
+      "js": [
+        "common/common.js",
+        "invoice_scripts/etrade_tx.js"
+      ]
+    },
+    {
+      "matches": [
         "https://www.fcpeuro.com/orders/R*?checkout_complete=true"
       ],
       "js": [
