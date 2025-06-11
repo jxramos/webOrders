@@ -32,7 +32,7 @@ function getOrderMetaData(transaction) {
     transaction["Order#"] = order_meta_tokens[0].split("#")[1].trim();
 
     // Get OrderDate
-    dates_str = order_meta_tokens[1].replace("at ", "")
+    date_str = order_meta_tokens[1].replace("at ", "")
     processOrderDate(date_str, transaction)
 
     // Get Order Total
