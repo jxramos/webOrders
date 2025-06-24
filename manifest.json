@@ -6,11 +6,11 @@
   "content_scripts": [
     {
       "matches": [
-        "https://*.amazon.com/gp/css/summary/print.html*"
+        "https://*.amazon.com/gp/legacy/css/summary/print.html*"
       ],
       "js": [
         "common/common.js",
-        "invoice_scripts/amazon_invoice.js"
+        "invoice_scripts/amazon_legacy_invoice.js"
       ]
     },
     {

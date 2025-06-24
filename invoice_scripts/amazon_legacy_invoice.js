@@ -1,5 +1,5 @@
 function processAmazonInvoice() {
-    console.log("processAmazonInvoice")
+    console.log("processAmazonLegacyInvoice")
 
     var transaction = {
         "Vendor":"Amazon.com",
