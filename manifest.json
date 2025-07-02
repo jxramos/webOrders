@@ -149,6 +149,15 @@
     },
     {
       "matches": [
+        "https://directpay.irs.gov/directpay/payment?execution=*"
+      ],
+      "js": [
+        "common/common.js",
+        "invoice_scripts/irs_invoice.js"
+      ]
+    },
+    {
+      "matches": [
         "https://www.mrcooper.com/servicing/payments/additionals_only/confirmation"
       ],
       "js": [
