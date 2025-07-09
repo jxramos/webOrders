@@ -86,6 +86,15 @@
     },
     {
       "matches": [
+        "https://www.costcochecks.com/ConfirmationRs.aspx*"
+      ],
+      "js": [
+        "common/common.js",
+        "invoice_scripts/costco_checks_invoice.js"
+      ]
+    },
+    {
+      "matches": [
         "https://www.dmv.ca.gov/sc/shoppingcart/submitECheckPayment.do"
       ],
       "js": [
