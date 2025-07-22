@@ -194,6 +194,15 @@
     },
     {
       "matches": [
+        "https://myhealthonline.sutterhealth.org/MHO/Billing/PrevBalPayment/ShowPaymentResults"
+      ],
+      "js": [
+        "common/common.js",
+        "invoice_scripts/sutter_health_invoice.js"
+      ]
+    },
+    {
+      "matches": [
         "https://www.vitacost.com/MyAccount/OrderSummary.aspx*"
       ],
       "js": [

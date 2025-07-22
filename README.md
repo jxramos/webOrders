@@ -61,6 +61,7 @@ The current list of vendors supported.
 * irs.gov
 * mrcooper.com
 * rocketmortgage.com
+* sutterhealth.org
 * vitacost.com
 * walmart.com
 * workday.com payslips
