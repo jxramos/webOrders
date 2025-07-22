@@ -27,6 +27,10 @@ function getPayslipMetaData(table_captions, transaction) {
     console.log("getPayslipMetaData")
 
     //------------------------------------------------------------------------
+    // Table: Company Information
+    transaction["Vendor"] = table_captions[0].parentElement.children[2].children[0].children[0].innerText
+
+    //------------------------------------------------------------------------
     // Table: Payslip Information
     table_payslip_information = table_captions[1].parentElement
     cells = table_payslip_information.children[2].getElementsByTagName("td")
