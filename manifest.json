@@ -3,6 +3,10 @@
   "name": "Web Orders",
   "description": "Extension to save online order Invoices to structured file on disk.",
   "version": "0.1",
+  "action": {},
+  "background": {
+    "service_worker": "common/service-worker.js"
+  },
   "content_scripts": [
     {
       "matches": [
@@ -248,6 +252,7 @@
     }
   ],
   "permissions": [
-    "activeTab"
+    "activeTab",
+    "scripting"
   ]
 }

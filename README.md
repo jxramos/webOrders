@@ -1,8 +1,17 @@
 # webOrders
-chrome extension to write web order history to a report.
+chrome extension to write a web order invoice to a locally saved json report file.
 
 ## Report Format
-Currently renders order history to a json file from select website url filters mapped in the plugin's `manifest.json` file. The report will be automatically downloaded to the default Downloads folder with a file name taking the form of the order date, followed by the e-commerce vendor name, followed by the order number.
+Currently renders order history invoices to a json file, one file per invoice, from supported websites
+whose order confirmation or order history pages have urls matching known patterns maintained within
+the extension. The report will be automatically downloaded to the user's default Downloads folder
+with a file name taking the form of the order date, followed by the e-commerce vendor name, followed
+by the order number.
+
+If the web order report does not download automatically the user may manually trigger a download by clicking
+on the extension's *action icon* found within the Chrome "Extensions" part of the browser which is identified
+by the puzzle piece icon to the right of the address bar.
+
 
 ### File Name
     <order_date> <vendor_name>-<order_num>.wo.json
