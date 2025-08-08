@@ -207,6 +207,15 @@
     },
     {
       "matches": [
+        "https://trapsdirect.com/checkout/order-received/*"
+      ],
+      "js": [
+        "common/common.js",
+        "invoice_scripts/traps_direct_invoice.js"
+      ]
+    },
+    {
+      "matches": [
         "https://www.vitacost.com/MyAccount/OrderSummary.aspx*"
       ],
       "js": [

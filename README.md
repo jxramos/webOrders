@@ -71,6 +71,7 @@ The current list of vendors supported.
 * mrcooper.com
 * rocketmortgage.com
 * sutterhealth.org
+* trapsdirect.com
 * vitacost.com
 * walmart.com
 * workday.com payslips
