@@ -66,6 +66,8 @@ The current list of vendors supported.
 * etrade.com
 * fcpeuro.com
 * geico.com
+* gmail.com
+    - Square
 * homedepot.com
 * irs.gov
 * mrcooper.com
