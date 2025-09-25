@@ -35,8 +35,8 @@ function getPayslipMetaData(table_captions, transaction) {
     table_payslip_information = table_captions[1].parentElement
     cells = table_payslip_information.children[2].getElementsByTagName("td")
 
-    pay_period_begin = cells[2].innerText
-    pay_period_end = cells[3].innerText
+    pay_period_begin = cells[3].innerText
+    pay_period_end = cells[4].innerText
     transaction["Description"] = "Pay period: " +
                                         pay_period_begin.substring(6) + "/" +
                                         pay_period_begin.substring(0,5) +
@@ -45,7 +45,7 @@ function getPayslipMetaData(table_captions, transaction) {
                                         pay_period_end.substring(0,5)
 
     // Use Pay Date to serve as the "OrderDate"
-    date_str = cells[4].innerText
+    date_str = cells[5].innerText
     processOrderDate(date_str, transaction)
 
     //------------------------------------------------------------------------
