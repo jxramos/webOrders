@@ -25,24 +25,24 @@ ORDER METADATA
 function getOrderMetaData(transaction) {
     console.log("getOrderMetaData")
 
-    print_section  = document.querySelector("#printsec > citi-row > div > citi-column:nth-child(2) > div > citi-row:nth-child(2) > div > citi-column > div")
+    payment_success_details = document.querySelectorAll(".cds-payment-suc-details-txt")
 
     // Get Order Number
-    transaction["Order#"] = document.getElementsByClassName("refrenceNum")[0].innerText
+    transaction["Order#"] = document.getElementsByClassName("cds-payment-suc-ref ng-star-inserted")[0].innerText.split(": ")[1]
 
     // Get OrderDate
-    date_str = print_section.children[4].getElementsByTagName("citi-column")[1].innerText
+    date_str = payment_success_details[2].innerText
     processOrderDate(date_str, transaction)
 
     // Get Order Total
-    payment_amount = print_section.children[3].getElementsByTagName("citi-column")[1]
+    payment_amount = document.querySelector(".cds-payment-suc-amountlg").innerText
     transaction["Total"] = parsePrice(payment_amount);
 
     // Get Payment Methods(s) element
-    payment_method = print_section.children[6].getElementsByTagName("citi-column")[1].innerText
+    payment_method = payment_success_details[0].innerText
     transaction["PaymentMethod"] = payment_method;
 
-    target_account = print_section.children[5].getElementsByTagName("citi-column")[1].innerText
+    target_account = payment_success_details[1].innerText
 }
 
 processCitiPaymentInvoice();
