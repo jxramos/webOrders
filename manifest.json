@@ -108,7 +108,8 @@
     },
     {
       "matches": [
-        "https://order.ebay.com/ord/show?*"
+        "https://order.ebay.com/ord/show?*",
+        "https://vod.ebay.com/vod/FetchOrderDetails?/ViewPaymentStatus&purchaseOrderId=*"
       ],
       "js": [
         "common/common.js",
