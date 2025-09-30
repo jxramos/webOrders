@@ -190,6 +190,15 @@
     },
     {
       "matches": [
+        "https://www.paypal.com/myaccount/activities/print-details/*"
+      ],
+      "js": [
+        "common/common.js",
+        "invoice_scripts/paypal_invoice.js"
+      ]
+    },
+    {
+      "matches": [
         "https://myaccount.pge.com/myaccount/s/manage-payments"
       ],
       "js": [
