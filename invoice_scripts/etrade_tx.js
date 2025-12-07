@@ -27,20 +27,27 @@ function getOrderMetaData(transaction) {
 
     order_details = document.querySelector("[data-test-id=confirmListData]").children[2].children
 
+    if (order_details[0].innerText == "Amount") {
+        order_id = "TODO_get_confirmation"
+        idx_offset = 2
+    } else {
+        order_id = order_details[1].innerText
+        idx_offset = 0
+    }
+
     // Get Order Number
-    order_id = order_details[1].innerText
     transaction["Order#"] = order_id
 
     // Get OrderDate
-    date_str = order_details[9].innerText
+    date_str = order_details[9 - idx_offset].innerText
     processOrderDate(date_str, transaction)
 
     // Get Order Total
-    transaction["Total"] = parsePrice(order_details[3]);
+    transaction["Total"] = parsePrice(order_details[3-idx_offset]);
 
     // Get Payment Methods(s) element
-    account_from = order_details[5].innerText
-    account_to   = order_details[7].innerText
+    account_from = order_details[5-idx_offset].innerText
+    account_to   = order_details[7-idx_offset].innerText
     transaction["Transfer"] = [account_from, account_to]
 
     // Description
