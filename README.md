@@ -77,6 +77,7 @@ The current list of vendors supported.
 * homedepot.com
 * irs.gov
 * mrcooper.com
+* overstock.com
 * paypal.com
 * pge.com (NOTE manual console execution required)
 * rocketmortgage.com

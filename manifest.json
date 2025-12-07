@@ -244,6 +244,15 @@
     },
     {
       "matches": [
+        "https://www.overstock.com/order-confirmation"
+      ],
+      "js": [
+        "common/common.js",
+        "invoice_scripts/overstock_invoice.js"
+      ]
+    },
+    {
+      "matches": [
         "https://www.paypal.com/myaccount/activities/print-details/*"
       ],
       "js": [
