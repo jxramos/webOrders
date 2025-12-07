@@ -54,6 +54,15 @@
     },
     {
       "matches": [
+        "https://www.appliancepartspros.com/checkout-confirm.aspx"
+      ],
+      "js": [
+        "common/common.js",
+        "invoice_scripts/appliance_parts_pros_invoice.js"
+      ]
+    },
+    {
+      "matches": [
         "https://*.appfolio.com/connect/payments_flow_v2/payments/confirmation?mode=oneTimePayment"
       ],
       "js": [
