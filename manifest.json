@@ -181,6 +181,15 @@
     },
     {
       "matches": [
+        "https://GoSun.com/checkouts/cn/*/en-us/thank-you*"
+      ],
+      "js": [
+        "common/common.js",
+        "invoice_scripts/gosun_invoice.js"
+      ]
+    },
+    {
+      "matches": [
         "https://grip6.com/checkouts/cn/*/en-us/thank-you?_r=*"
       ],
       "js": [
