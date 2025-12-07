@@ -181,6 +181,15 @@
     },
     {
       "matches": [
+        "https://grip6.com/checkouts/cn/*/en-us/thank-you?_r=*"
+      ],
+      "js": [
+        "common/common.js",
+        "invoice_scripts/grip6_invoice.js"
+      ]
+    },
+    {
+      "matches": [
         "https://www.homedepot.com/order/view/ereceipt/summary"
       ],
       "js": [

@@ -71,6 +71,7 @@ The current list of vendors supported.
 * geico.com
 * gmail.com
     - Square
+* grip6.com
 * homedepot.com
 * irs.gov
 * mrcooper.com
