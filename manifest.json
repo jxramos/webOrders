@@ -244,6 +244,15 @@
     },
     {
       "matches": [
+        "https://www.walgreens.com/ordercapture/order-ui?checkout=*"
+      ],
+      "js": [
+        "common/common.js",
+        "invoice_scripts/walgreens_invoice.js"
+      ]
+    },
+    {
+      "matches": [
         "https://www.walmart.com/account/wmpurchasehistory*"
       ],
       "js": [

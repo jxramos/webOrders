@@ -77,5 +77,6 @@ The current list of vendors supported.
 * sutterhealth.org
 * trapsdirect.com
 * vitacost.com
+* walgreens.com
 * walmart.com
 * workday.com payslips
