@@ -90,7 +90,7 @@
     },
     {
       "matches": [
-        "https://secure.chase.com/web/auth/dashboard#/dashboard/*/index;flyout=payCardConfirm*"
+        "https://secure.chase.com/web/auth/dashboard#/dashboard/*flyout=payCardConfirm*"
       ],
       "js": [
         "common/common.js",
