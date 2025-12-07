@@ -58,6 +58,7 @@ The current list of vendors supported.
 * appfolio.com
 * appliancepartspros.com
 * bambooinsurance.com
+* blueland.com
 * chase.com (credit card payments)
 * citi.com (credit card payments)
 * costco.com

@@ -81,6 +81,15 @@
     },
     {
       "matches": [
+        "https://shop.blueland.com/checkouts/cn/*/en-us/thank-you?_r=*"
+      ],
+      "js": [
+        "common/common.js",
+        "invoice_scripts/blueland_invoice.js"
+      ]
+    },
+    {
+      "matches": [
         "https://secure.chase.com/web/auth/dashboard#/dashboard/*/index;flyout=payCardConfirm*"
       ],
       "js": [
