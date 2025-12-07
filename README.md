@@ -57,6 +57,7 @@ The current list of vendors supported.
     + digital orders
 * appfolio.com
 * appliancepartspros.com
+* bambooinsurance.com
 * chase.com (credit card payments)
 * citi.com (credit card payments)
 * costco.com

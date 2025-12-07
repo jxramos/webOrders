@@ -72,6 +72,15 @@
     },
     {
       "matches": [
+        "https://insured.bambooinsurance.com/login/secureCheckout?pol_num=*"
+      ],
+      "js": [
+        "common/common.js",
+        "invoice_scripts/bamboo_insurance_payment.js"
+      ]
+    },
+    {
+      "matches": [
         "https://secure.chase.com/web/auth/dashboard#/dashboard/*/index;flyout=payCardConfirm*"
       ],
       "js": [
