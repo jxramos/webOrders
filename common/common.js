@@ -12,7 +12,7 @@ function parsePrice(item) {
     }
 
     // Clean and process the price string value
-    price_value = price_value.trim().replace("$", "").replace(",", "")
+    price_value = price_value.trim().replace(/[$, ]/g, "")
     if (price_value.includes("(")) {
         // handle parenthetical negative representation
         price_value = "-" + price_value.replace("(", "").replace(")", "")
