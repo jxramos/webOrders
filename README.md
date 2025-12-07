@@ -62,6 +62,7 @@ The current list of vendors supported.
 * citi.com (credit card payments)
 * costco.com
 * costcochecks.com
+* digikey.com
 * dmv.ca.gov
 * ebay.com
 * ereplacementparts.com

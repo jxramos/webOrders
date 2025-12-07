@@ -117,6 +117,15 @@
     },
     {
       "matches": [
+        "https://www.digikey.com/ordering/submit?submit=yes"
+      ],
+      "js": [
+        "common/common.js",
+        "invoice_scripts/digikey_invoice.js"
+      ]
+    },
+    {
+      "matches": [
         "https://www.dmv.ca.gov/sc/shoppingcart/submitECheckPayment.do"
       ],
       "js": [
