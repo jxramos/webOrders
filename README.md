@@ -82,6 +82,7 @@ The current list of vendors supported.
 * paypal.com
 * pge.com (NOTE manual console execution required)
 * questdiagnostics.com
+* questhealth.com
 * rocketmortgage.com
 * sutterhealth.org
 * trapsdirect.com
