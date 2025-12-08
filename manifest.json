@@ -81,6 +81,15 @@
     },
     {
       "matches": [
+        "https://www.bayareafastrak.org/vector/invoices/invoiceViewAllDetail.do"
+      ],
+      "js": [
+        "common/common.js",
+        "invoice_scripts/fastrak_invoice.js"
+      ]
+    },
+    {
+      "matches": [
         "https://shop.blueland.com/checkouts/cn/*/en-us/thank-you?_r=*"
       ],
       "js": [
