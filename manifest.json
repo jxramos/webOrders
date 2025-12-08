@@ -280,6 +280,15 @@
     },
     {
       "matches": [
+        "https://patientbill.questdiagnostics.com/consolidated-bills?*p_auth=*"
+      ],
+      "js": [
+        "common/common.js",
+        "invoice_scripts/quest_diagnostics_invoice.js"
+      ]
+    },
+    {
+      "matches": [
         "https://servicing.rocketmortgage.com/v2/payments/one-time-payment"
       ],
       "js": [

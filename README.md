@@ -81,6 +81,7 @@ The current list of vendors supported.
 * overstock.com
 * paypal.com
 * pge.com (NOTE manual console execution required)
+* questdiagnostics.com
 * rocketmortgage.com
 * sutterhealth.org
 * trapsdirect.com
