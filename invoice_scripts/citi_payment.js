@@ -4,7 +4,8 @@ function processCitiPaymentInvoice() {
     var transaction = {
         "Vendor": "Citi",
         "URL": window.location.href,
-        "is_transfer": "scheduled payment authorization"
+        "is_transfer": "scheduled payment authorization",
+        "is_delete_after_ingest": true,
     };
     scrapeOrderData(transaction);
     downloadJsonTransaction(transaction);

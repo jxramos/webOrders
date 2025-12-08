@@ -4,7 +4,8 @@ async function processWorkdayPayslip() {
 
     var transaction = {
         "Vendor": "CompanyXYZ",
-        "URL": window.location.href
+        "URL": window.location.href,
+        "is_delete_after_ingest": true,
     };
 
     var table_captions = document.getElementsByTagName("caption")

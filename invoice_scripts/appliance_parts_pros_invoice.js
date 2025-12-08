@@ -3,7 +3,8 @@ function processAppliancePartsProsInvoice() {
 
     var transaction = {
         "Vendor":"Appliance Parts Pros.com",
-        "URL": window.location.href
+        "URL": window.location.href,
+        "is_delete_after_ingest": true,
     };
     scrapeOrderData(transaction);
     downloadJsonTransaction(transaction);

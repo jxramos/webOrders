@@ -3,7 +3,8 @@ function processAppFolioInvoice() {
 
     var transaction = {
         "Vendor": document.getElementsByClassName("payment-confirmation-notification")[0].innerText.split(", and ")[1].replace(" has been notified.", ""),
-        "URL": window.location.href
+        "URL": window.location.href,
+        "is_delete_after_ingest": true,
     };
     scrapeOrderData(transaction);
     downloadJsonTransaction(transaction);

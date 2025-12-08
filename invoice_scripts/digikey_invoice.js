@@ -3,7 +3,8 @@ function processDigikeyInvoice() {
 
     var transaction = {
         "Vendor":"digikey.com",
-        "URL": window.location.href
+        "URL": window.location.href,
+        "is_delete_after_ingest": true,
     };
     scrapeOrderData(transaction);
     downloadJsonTransaction(transaction);
@@ -64,7 +65,7 @@ function getOrderItemization(transaction){
         if (quantity !== "1") {
             description += quantity + "x "
         }
-        
+
         for(j = 0; j < row.children[30].children.length; j++) {
             td = row.children[30].children[j]
             description += td.innerText.replace(/[\u{0080}-\u{FFFF}]/gu,"") + "; "

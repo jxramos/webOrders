@@ -3,7 +3,8 @@ function processGeicoInvoice() {
 
     var transaction = {
         "Vendor":"Geico",
-        "URL": window.location.href
+        "URL": window.location.href,
+        "is_delete_after_ingest": true,
     };
     scrapeOrderData(transaction);
     downloadJsonTransaction(transaction);

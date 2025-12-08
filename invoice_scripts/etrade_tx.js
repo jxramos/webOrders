@@ -4,7 +4,8 @@ function processETradeTxInvoice() {
     var transaction = {
         "Vendor": "eTrade.com",
         "URL": window.location.href,
-        "is_transfer": "scheduled payment authorization"
+        "is_transfer": "scheduled payment authorization",
+        "is_delete_after_ingest": true,
     };
     scrapeOrderData(transaction);
     downloadJsonTransaction(transaction);
