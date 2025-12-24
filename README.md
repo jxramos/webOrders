@@ -77,6 +77,7 @@ The current list of vendors supported.
 * grip6.com
 * homedepot.com
 * irs.gov
+* littlecaesars.com
 * mrcooper.com
 * overstock.com
 * paypal.com

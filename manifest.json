@@ -235,6 +235,15 @@
     },
     {
       "matches": [
+        "https://order.littlecaesars.com/en-us/order/pickup/stores/*/checkout/*/order-confirmed/"
+      ],
+      "js": [
+        "common/common.js",
+        "invoice_scripts/little_caesars_invoice.js"
+      ]
+    },
+    {
+      "matches": [
         "https://www.mrcooper.com/servicing/payments/additionals_only/confirmation"
       ],
       "js": [
