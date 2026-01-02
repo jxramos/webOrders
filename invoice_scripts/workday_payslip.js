@@ -1,6 +1,5 @@
 async function processWorkdayPayslip() {
     console.log("processWorkdayPayslip")
-    await new Promise(r => setTimeout(r, 4200));
 
     var transaction = {
         "Vendor": "CompanyXYZ",
