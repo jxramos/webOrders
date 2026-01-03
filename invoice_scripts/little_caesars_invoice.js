@@ -8,6 +8,7 @@ function processLittleCaesarsInvoice() {
     };
     scrapeOrderData(transaction);
     downloadJsonTransaction(transaction);
+    cleanupPage(transaction);
 }
 
 function scrapeOrderData(transaction) {
@@ -26,6 +27,12 @@ function cleanupPage(transaction) {
     if (portal_instruction) {
         elem  = portal_instruction.parentElement.parentElement.parentElement;
         elem.parentElement.removeChild(elem)
+    }
+
+    // cleanup track order button
+    var track_order_button = document.querySelector("[data-testid=ordConf__pickup-track-order-button]")
+    if (track_order_button) {
+        track_order_button.parentElement.removeChild(track_order_button)
     }
 
     // cleanup campaign images
