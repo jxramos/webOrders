@@ -244,6 +244,16 @@
     },
     {
       "matches": [
+        "https://www.landsend.com/co/account/order-history/*",
+        "https://www.landsend.com/secure-checkout/order-confirm?orderid=*"
+      ],
+      "js": [
+        "common/common.js",
+        "invoice_scripts/lands_end_invoice.js"
+      ]
+    },
+    {
+      "matches": [
         "https://www.mrcooper.com/servicing/payments/additionals_only/confirmation"
       ],
       "js": [
