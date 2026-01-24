@@ -95,18 +95,18 @@ function getPayslipItemization(table_captions, transaction){
     //------------------------------------------------------------------------
     // Table: Earnings
     table_earnings = table_captions[3].parentElement.children[2].children
-    for (let i = 1; i < table_earnings.length - 1; i++) {
+    for (let i = 0; i < table_earnings.length - 1; i++) {
         row_earning = table_earnings[i]
         line_item = []
+        line_description = row_earning.children[0].innerText
         line_amount = row_earning.children[4].innerText
 
         // ignore absent items not used in this payslip
-        if (line_amount == "") {
+        if (line_amount == "" || line_description.includes("Basic Life GTL")) {
             continue
         }
 
         // Description
-        line_description = row_earning.children[0].innerText
         line_dates = row_earning.children[1].innerText
         line_hours = row_earning.children[2].innerText
         line_rate = row_earning.children[3].innerText
