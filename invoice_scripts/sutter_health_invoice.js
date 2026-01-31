@@ -26,23 +26,23 @@ ORDER METADATA
 function getOrderMetaData(transaction) {
     console.log("getOrderMetaData")
 
-    var order_summary_divs = document.getElementsByClassName("paymentSummarySection col-4")
+    var order_summary_divs = document.querySelector(".payingNowGrid").children
 
     // Get Order Number
-    transaction["Order#"] = order_summary_divs[1].children[1].innerText
+    transaction["Order#"] = order_summary_divs[2].lastChild.innerText
 
     // Get OrderDate
-    date_str = order_summary_divs[0].children[1].innerText
+    date_str = order_summary_divs[1].lastChild.innerText
     processOrderDate(date_str, transaction)
 
     // Get Order Total
-    transaction["Total"] = parsePrice(document.getElementById("PaymentAmount"));
+    transaction["Total"] = parsePrice(document.querySelector(".amountInfoAmount").innerText);
 
     // Get Payment Method
-    div_payment_method = document.getElementsByClassName("paymentSummarySection col-6")[1].children[1]
-    card = div_payment_method.children[0].children[0].attributes["alt"].textContent
-    card_num = div_payment_method.children[1].children[1].innerText.replace("x", " *")
-    transaction["PaymentMethod"] = card + card_num
+    div_payment_method = document.querySelector(".compactCard")
+    card = div_payment_method.lastChild.firstChild.getAttribute("alt")
+    card_num = div_payment_method.firstChild.lastChild.firstChild.innerText.split(" ")[1]
+    transaction["PaymentMethod"] = card + " " + card_num
 }
 
 /*==========================================================================================

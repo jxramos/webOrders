@@ -326,7 +326,7 @@
     },
     {
       "matches": [
-        "https://myhealthonline.sutterhealth.org/MHO/Billing/PrevBalPayment/ShowPaymentResults"
+        "https://myhealthonline.sutterhealth.org/MHO/app/bill-pay?id=*"
       ],
       "js": [
         "common/common.js",
