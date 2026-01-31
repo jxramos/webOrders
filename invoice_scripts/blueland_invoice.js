@@ -36,7 +36,7 @@ function getOrderMetaData(transaction) {
 
     // Get Order Total
     parts = div_checkout_main.querySelector('[aria-label="Order details"]').firstChild.lastChild.lastChild.firstChild.firstChild.lastChild.firstChild.firstChild.firstChild.children
-    transaction["Total"] = parts[1].lastChild.lastChild.textContent.split(" ")[0]
+    transaction["Total"] = parsePrice(parts[1].lastChild.lastChild.textContent.split(" ")[0])
 
     // Get Payment Method
     transaction["PaymentMethod"] = parts[0].getAttribute("alt") + " " + parts[1].firstChild.textContent

@@ -35,7 +35,7 @@ function getOrderMetaData(transaction) {
 
     // Get Order Total
     parts = document.querySelector(".payment-method-list").firstElementChild.children
-    transaction["Total"] = parts[2].innerText.split(" ")[1]
+    transaction["Total"] = parsePrice(parts[2].innerText.split(" ")[1])
 
     // Get Payment Method
     transaction["PaymentMethod"] = parts[0].classList[1].split("--")[1] + " " + parts[1].innerText.split(" with ")[1]
