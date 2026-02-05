@@ -61,7 +61,7 @@ function getOrderItemization(transaction){
         //-------------------------
         // Item Description
         var description = "";
-        var quantity = line_item[2].children[0].childNodes[2].textContent
+        var quantity = line_item[3].children[0].childNodes[2].textContent
         if (quantity !== "1") {
             description += quantity + "x "
         }
@@ -70,7 +70,7 @@ function getOrderItemization(transaction){
 
         //-------------------------
         // Item Price
-        var price = parsePrice(line_item[2].children[1].innerText);
+        var price = parsePrice(line_item[3].children[1].lastChild.innerText);
         purchased_item.push(price);
 
         // Integrate line item
