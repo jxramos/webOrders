@@ -53,7 +53,7 @@ function downloadContent(filename, content) {
 function downloadJsonTransaction(transaction) {
     console.log("downloadJsonTransaction")
 
-    var transactionJson = JSON.stringify(transaction);
+    var transactionJson = JSON.stringify(transaction, null, 4);
     filename = transaction["OrderDateFormatted"] + ' ' + transaction['Vendor'].replace(" ", "") + '--' + transaction['Order#'] + '.wo.json'
     downloadContent(filename, transactionJson);
 }
