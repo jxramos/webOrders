@@ -178,13 +178,12 @@ function getOrderItemization(table_rows, transaction){
         line_product = row[2].innerText
         line_amount = row[3].innerText.replace(/ [AYN]$/, "")
         is_coupon = false
-        if (line_amount.substr(-1) == "-") {
+        if (line_amount.endsWith("-")) {
             // detect if coupon
             if (line_product.startsWith("/")){
                 line_description = line_product + " (coupon) " + line_items[i-1][0]
                 is_coupon = true
             }
-            line_amount = "-" + line_amount.substr(0, line_amount.length-1)
         }
         if (!is_coupon) {
             line_description = line_product + " (SKU " + line_sku + ")"

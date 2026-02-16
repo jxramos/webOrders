@@ -19,6 +19,9 @@ function parsePrice(item) {
     } else if (price_value.toLowerCase() == "free") {
         // handle free literals
         price_value = 0.0;
+    } else if (price_value.endsWith("-")) {
+        // handle negative valued suffixes
+        price_value = "-" + price_value
     }
 
     // Parse the price string value
