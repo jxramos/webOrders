@@ -8,7 +8,7 @@ function processPgeInvoice() {
   scrapeOrderData(transaction);
   downloadJsonTransaction(transaction);
   retitlePage(transaction);
-  console.warn("WARNING: you must manually copy/paste the common.js and this content script and paste it into the Console to avoid the cross site limitations from their iframe usage")
+  console.warn("WARNING: you must first click the payment page popup, manually copy/paste the common.js and this content script and paste it into the Console to avoid the cross site limitations from their iframe usage")
 }
 
 function scrapeOrderData(transaction) {
