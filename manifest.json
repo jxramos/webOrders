@@ -172,6 +172,15 @@
     },
     {
       "matches": [
+        "https://us.etrade.com/etx/alertscenter/inbox/all/*"
+      ],
+      "js": [
+        "common/common.js",
+        "invoice_scripts/etrade_inbox_invoice.js"
+      ]
+    },
+    {
+      "matches": [
         "https://us.etrade.com/etx/pxy/transfer-money/confirm"
       ],
       "js": [
