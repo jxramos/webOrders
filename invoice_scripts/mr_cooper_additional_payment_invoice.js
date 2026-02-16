@@ -8,7 +8,7 @@ function processMrCooperInvoice() {
     };
     scrapeOrderData(transaction);
     downloadJsonTransaction(transaction);
-    retitlePage(transaction);
+    cleanupPage(transaction);
 }
 
 function scrapeOrderData(transaction) {
@@ -16,6 +16,18 @@ function scrapeOrderData(transaction) {
 
     getOrderMetaData(transaction);
     getOrderItemization(transaction);
+}
+
+function cleanupPage(transaction) {
+    console.log("cleanupPage")
+    retitlePage(transaction);
+
+    // cleanup refi banner
+    var section_refi = document.getElementById("standard_banner-root")
+    if (section_refi) {
+        console.log("-cleaning up refinance banner")
+        section_refi.parentElement.removeChild(section_refi)
+    }
 }
 
 
