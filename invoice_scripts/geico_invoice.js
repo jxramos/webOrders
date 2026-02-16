@@ -29,22 +29,22 @@ function getOrderMetaData(transaction) {
     meta_group1 = document.querySelector("#wrapper > ng-component > section > div.asd-print-hide > edg-confirmation-message > asd-confirmation > div > div > div > div").children
 
     // Get Order Number
-    transaction["Order#"] = meta_group1[1].innerText.split(": ")[1]
+    transaction["Order#"] = document.querySelector(".confirmation-number").lastChild.textContent.trimEnd()
 
     // Get OrderDate
-    meta_group1 = meta_group1[2].children
-    date_str = meta_group1[1].innerText.split(": ")[1]
+    meta_group1_3 = meta_group1[3].children
+    date_str = meta_group13[1].lastChild.textContent.trim()
     processOrderDate(date_str, transaction)
 
     // Get policy number
-    transaction["Description"] = meta_group1[0].innerText
+    transaction["Description"] = meta_group13[0].lastChild.textContent.trim()
 
     // Get Order Total
     meta_group2 = document.querySelector("#wrapper > ng-component > section > div.asd-print-hide > div.confirmation-header-container > div > edg-txn-summary > edg-txn-summary-section > edg-txn-summary-billing-payments > div > div > ul").children
     transaction["Total"] = parsePrice(meta_group2[0].children[1]);
 
     // Get Payment Methods(s) element
-    transaction["PaymentMethod"] = meta_group2[2].children[1].innerText
+    transaction["PaymentMethod"] = meta_group2[2].children[1].innerText.replace("ending in ", "")
 }
 
 /*==========================================================================================
