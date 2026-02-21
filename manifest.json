@@ -226,7 +226,7 @@
     },
     {
       "matches": [
-        "https://www.homedepot.com/order/view/ereceipt/summary"
+        "https://www.homedepot.com/myaccount/order-details?orderNumber=*"
       ],
       "js": [
         "common/common.js",

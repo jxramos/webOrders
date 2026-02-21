@@ -1,98 +1,33 @@
-async function crawlHomeDepotReceipts() {
-    console.log("crawlHomeDepotReceipts")
-
-    await new Promise(r => setTimeout(r, 11000));
-    while(document.getElementsByClassName("segment-spinner").length > 0){
-        console.log("waiting for data")
-        await new Promise(r => setTimeout(r, 500));
-    }
-
-    // navigate to every button and view receipts
-    var is_continue = true;
-    while(is_continue) {
-        receipt_buttons = document.getElementsByClassName("accordion__input")
-        for(i = 0; i < receipt_buttons.length; i++){
-            receipt_button = receipt_buttons[i]
-
-            // Check if order history is displayed, if not open it
-            order_element = receipt_button.parentElement.parentElement
-            is_receipt_open = order_element.children[1].className.endsWith("--open")
-            if(!is_receipt_open) {
-                receipt_button.click()
-                await new Promise(r => setTimeout(r, 2500));
-
-                while(document.getElementsByClassName("segment-spinner").length > 0){
-                    console.log("waiting for transaction data")
-                    await new Promise(r => setTimeout(r, 500));
-                }
-            }
-
-            processHomeDepotInvoice(order_element)
-
-            // prompt user to continue to the next receipt
-            is_continue = confirm("Do you wish to continue to the next HomeDepot receipt?")
-        }
-
-        // advance to the next page if desired
-        if(is_continue) {
-            current_page = document.getElementsByClassName("hd-pagination__current")[0]
-
-            // find the current page selector index
-            page_selector = current_page.parentElement.parentElement.children
-            idx_selector_current_page = Array.from(page_selector).findIndex((e) => e.innerText == current_page.innerText)
-
-            // get the element of the next page
-            idx_selector_next_page = idx_selector_current_page + 1
-
-            if (idx_selector_next_page == page_selector.length) {
-                alert("No more receipts to process.")
-                break
-            }
-            next_page = page_selector[idx_selector_next_page].firstChild
-            console.log(" --> advance to next page: " + next_page.innerText)
-            next_page.click()
-        }
-    }
-}
-
-function processHomeDepotInvoice(order_element) {
+function processHomeDepotInvoice() {
     console.log("processHomeDepotInvoice")
 
     var transaction = {
         "Vendor": "Home Depot",
         "URL": window.location.href,
-        "Order#": "",
-        "OrderDate": "",
-        "Total" : 0,
-        "PaymentMethod": "",
     };
 
-    scrapeOrderData(order_element, transaction);
+    scrapeOrderData(transaction);
     downloadJsonTransaction(transaction);
-    cleanupPage();
+    cleanupPage(transaction);
 }
 
-function scrapeOrderData(order_element, transaction) {
+function scrapeOrderData(transaction) {
     console.log("scrapeOrderData")
 
-    getOrderMetaData(order_element, transaction)
-    getOrderItemization(order_element, transaction)
+    non_product_items = getOrderMetaData(transaction)
+    getOrderItemization(non_product_items, transaction)
 }
 
-function cleanupPage(){
-    // ignore info & guides link
-    ignoreDivs = Array.from(document.getElementsByClassName("infoGuides-inline"));
+function cleanupPage(transaction){
+    retitlePage(transaction);
 
-    // ignore buy again buttons
-    buy_again_buttons = document.getElementsByClassName("bttn-outline bttn-outline--primary bttn-outline--dark");
-    for(i = 0; i < buy_again_buttons.length; i++){
-        ignoreDivs.push(buy_again_buttons[i].parentElement)
-    }
+    ignoreDivs = []
 
-    // ignore the in store card grey box notice
-    in_store_card_notice = document.querySelectorAll('[data-automation-id="ereceipt-summary-payment-cards"]')
-    for(i=0; i < in_store_card_notice.length; i++){
-        ignoreDivs.push(in_store_card_notice[i].parentElement)
+    // ignore start a return button
+    div_sar = document.querySelector("[data-testid=sar-button]")
+    if(div_sar){
+        div_sar = div_sar.parentElement
+        ignoreDivs.push(div_sar)
     }
 
     // delete the header navigation buttons
@@ -101,10 +36,16 @@ function cleanupPage(){
         ignoreDivs.push(header_nav)
     }
 
-    // delete the search bar
-    search_bar = document.getElementsByClassName("sui-w-full");
-    for(i = 0; i < search_bar.length; i++){
-        ignoreDivs.push(search_bar[i])
+    // ignore the live chat button
+    div_live_chat = document.getElementById("spr-live-chat-app")
+    if(div_live_chat){
+        ignoreDivs.push(div_live_chat)
+    }
+
+    // ignore the feedback link
+    div_feedback = document.querySelector(".QSIFeedBackLink")
+    if(div_feedback){
+        ignoreDivs.push(div_feedback)
     }
 
     // delete the footer
@@ -124,76 +65,102 @@ function cleanupPage(){
 ORDER METADATA
 ==========================================================================================*/
 
-function getOrderMetaData(order_element, transaction) {
+function getOrderMetaData(transaction) {
     console.log("getOrderMetaData")
 
-    // Get Order Total
-    transaction["Total"] = parsePrice(order_element.querySelectorAll('[data-automation-id="eReceiptsHeaderOrderTotalValue"]')[0].innerText);
-
-    // Get Order Date
-    date_str = order_element.querySelectorAll('[data-automation-id="eReceiptsHeaderDateOrderedValue"]')[0].innerText;
-    processOrderDate(date_str, transaction)
+    div_order = document.getElementById("root").firstChild.firstChild.lastChild.lastChild.lastChild
 
     // Get Order Number
-    transaction["Order#"] = order_element.querySelectorAll('[data-automation-id="eReceiptsHeaderOrderNumberValue"]')[0].innerText;
+    transaction["Order#"] = div_order.firstChild.firstChild.firstChild.textContent.split(" # ")[1]
+
+    // Get OrderDate
+    div_order_details = div_order.children[1].firstChild.children
+    date_str = div_order_details[0].lastChild.textContent
+    processOrderDate(date_str, transaction)
+
+    // Get Order Total
+    div_total = document.querySelector("[data-testid=order-total-value]")
+    transaction["Total"] = parsePrice(div_total.innerText);
 
     // Get Payment Method
-    payment_method_elements = order_element.querySelectorAll('[data-automation-id="orderFooterPaymentMethodTitle"]')[0].parentElement.children[1].getElementsByTagName("span")
-    account_name = payment_method_elements[0].className.replace(' card-', '')
-    account_num  = payment_method_elements[1].innerText.substr(14)
-    transaction["PaymentMethod"] = account_name + account_num
+    div_payment_method = div_order_details[2].lastChild.firstChild
+    transaction["PaymentMethod"] = div_payment_method.firstChild.getAttribute("alt").split('-')[0] + " " + div_payment_method.lastChild.textContent
+
+    // select the non_product_items for later use in itemization
+    var non_product_items = div_order.children[3].firstChild.getElementsByTagName("div")
+
+    return non_product_items
 }
 
 /*==========================================================================================
 ORDER ITEMIZATION
 ==========================================================================================*/
 
-function getOrderItemization(order_element, transaction){
+function getOrderItemization(non_product_items, transaction){
     console.log("getOrderItemization");
 
-    var line_items = [];
+    var purchased_items = [];
 
-    // Scrape line items
-    order_group = order_element.getElementsByClassName("u__order--group")[0].lastChild.children
-    for (let i = 0; i < order_group.length; i+=2) {
-        purchased_item = []
-        item_data = order_group[i].lastChild.children
+    // Get Items Purchased
+    var line_items = document.querySelectorAll("[data-testid=lineitems]")
+
+    // Parse purchased items
+    for(var i = 0; i < line_items.length; i++) {
+        var purchased_item = []
+
+        // Drill into purchased item
+        var line_item = line_items[i]
+        line_item_parts = line_item.firstChild.lastChild.firstChild.lastChild.children
 
         //-------------------------
         // Item Description
-        line_product = item_data[0].innerText
-        line_qty = item_data[1].children[0].innerText.replace("Qty: ", "").split("\n")[0]
-        item_count = parseInt(line_qty)
-        line_amount = item_data[1].children[1].innerText
-        description = ""
-        if(item_count > 1){
-            description += line_qty + "x "
+        var description = "";
+        var quantity = line_item_parts[1].textContent.split(": ")[1]
+        if (quantity !== "1") {
+            description += quantity + "x "
         }
-        description += line_product
+        description += line_item_parts[0].textContent
         purchased_item.push(description)
 
         //-------------------------
         // Item Price
-        price = parsePrice(line_amount)
-        purchased_item.push(price)
+        var price = parsePrice(line_item_parts[2].textContent);
+        purchased_item.push(price);
 
-        // integrate line item
-        line_items.push(purchased_item)
+        // Integrate line item
+        purchased_items.push(purchased_item);
+
+        //---------------------------------------------------------
+        // clean up the line item kruft
+        is_online_order = Boolean(document.querySelector("[data-testid=order-barcode]"))
+        if (is_online_order) {
+            // hide the shipping details
+            line_item.parentElement.parentElement.lastChild.style.visibility = "hidden"
+
+            // hide the return deadline details
+            line_item.firstChild.firstChild.style.visibility = "hidden"
+        }
+
+        // hide the buy again button
+        line_item.firstChild.lastChild.lastChild.style.visibility = "hidden"
+
+        // hide the info & guides link
+        line_item.firstChild.lastChild.firstChild.lastChild.lastChild.style.visibility = "hidden"
     }
 
-    // Sales tax
-    sales_tax = order_element.querySelector('[data-automation-id="ereceiptPaymentDetailsSalesTaxValue"]')
-    if(sales_tax){
-        // sales tax isn't listed on return receipts
-        line_items.push(["sales tax", parsePrice(sales_tax.innerText)])
+    // Non-Product Itemization: delivery fee, sales tax, tip, promotions, etc
+    for (var i = 1; i < non_product_items.length - 1; i++) {
+        var line_item = non_product_items[i]
+
+        description = line_item.children[0].innerText.replace(":", "")
+        if (description == "Savings") {
+            continue
+        }
+
+        purchased_items.push([description, parsePrice(line_item.children[1])]);
     }
 
-    // Integrate all found purchased items into the transaction
-    transaction["Items"] = line_items;
-
-    // close the order
-    order_element.children[0].children[1].click()
-
+    transaction["Items"] = purchased_items;
 }
 
-crawlHomeDepotReceipts()
+processHomeDepotInvoice();
