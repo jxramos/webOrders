@@ -33,11 +33,11 @@ function getOrderMetaData(transaction) {
 
     // Get OrderDate
     meta_group1_3 = meta_group1[3].children
-    date_str = meta_group13[1].lastChild.textContent.trim()
+    date_str = meta_group1_3[1].lastChild.textContent.trim()
     processOrderDate(date_str, transaction)
 
     // Get policy number
-    transaction["Description"] = meta_group13[0].lastChild.textContent.trim()
+    transaction["Description"] = meta_group1_3[0].lastChild.textContent.trim()
 
     // Get Order Total
     meta_group2 = document.querySelector("#wrapper > ng-component > section > div.asd-print-hide > div.confirmation-header-container > div > edg-txn-summary > edg-txn-summary-section > edg-txn-summary-billing-payments > div > div > ul").children
