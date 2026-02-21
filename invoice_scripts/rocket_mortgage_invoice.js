@@ -8,7 +8,7 @@ function processRocketMortgageInvoice() {
     };
     scrapeOrderData(transaction);
     downloadJsonTransaction(transaction);
-    retitlePage(transaction);
+    cleanupPage(transaction);
 }
 
 function scrapeOrderData(transaction) {
@@ -16,6 +16,16 @@ function scrapeOrderData(transaction) {
 
     payment_info_div = getOrderMetaData(transaction);
     getOrderItemization(payment_info_div, transaction);
+}
+
+function cleanupPage(transaction) {
+    retitlePage(transaction);
+
+    // Hide the buttons
+    ignoreDivs = document.querySelectorAll(".nova-button");
+    for (var i=0; i < ignoreDivs.length; i++){
+        ignoreDivs[i].style.visibility = "hidden"
+    }
 }
 
 
@@ -26,51 +36,47 @@ ORDER METADATA
 function getOrderMetaData(transaction) {
     console.log("getOrderMetaData")
 
-    div_main = document.getElementById("main")
-    div_inner = div_main.getElementsByTagName("servicing-web-v2-root")[0].shadowRoot
-    div_common = div_inner.querySelector("html > app-root > main > app-payments > rkt-stack > div > div.rkt-Stack__item.ng-star-inserted > app-payment-confirmation > div > div > mat-card > div > div > div.payment-confirmation-display > div:nth-child(2)")
-
     // Order Metadata
-    div_metadata   = div_common.children[0]
+    div_metadata = document.querySelector("body > main > div > div.bg-white > div > div > div > div > div > div > div > div").children
 
     // Get Order Number
-    transaction["Order#"] = div_metadata.children[0].children[1].children[1].innerText
+    transaction["Order#"] = div_metadata[2].children[2].lastChild.lastChild.textContent.replace("#", "")
 
     // Get OrderDate
-    date_str = div_metadata.children[1].children[1].children[1].innerText
+    date_str = div_metadata[2].children[0].lastChild.lastChild.textContent
     processOrderDate(date_str, transaction)
 
     // Get Order Total
-    div_payment_summary = div_common.children[1].firstChild.firstChild
-    transaction["Total"] = parsePrice(div_payment_summary.children[div_payment_summary.children.length - 1].children[1]);
+    transaction["Total"] = parsePrice(div_metadata[3].lastChild.lastChild.textContent);
 
     // Get Payment Methods(s) element
-    transaction["PaymentMethod"] = div_metadata.children[2].children[1].children[1].innerText
+    transaction["PaymentMethod"] = div_metadata[2].children[4].lastChild.lastChild.textContent.replace(/[(.)]/g, "")
 
-    return div_payment_summary
+    return div_metadata[3].children
 }
 
 /*==========================================================================================
 ORDER ITEMIZATION
 ==========================================================================================*/
 
-function getOrderItemization(div_payment_summary, transaction){
+function getOrderItemization(line_items, transaction){
     console.log("getOrderItemization");
 
     var purchased_items = [];
 
     // Parse purchased items
-    for(i = 2; i < div_payment_summary.children.length - 2; i++) {
+    for(i = 1; i < line_items.length - 2; i++) {
         var purchased_item = []
-        line_item = div_payment_summary.children[i]
+        line_item = line_items[i].firstChild.firstChild
+
         //-------------------------
         // Item Description
-        item_description = line_item.children[0].innerText
+        item_description = line_item.firstChild.textContent
         purchased_item.push(item_description)
 
         //-------------------------
         // Item Price
-        item_price = line_item.children[1]
+        item_price = line_item.lastChild.textContent
         purchased_item.push(parsePrice(item_price));
 
         // Integrate line item

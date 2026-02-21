@@ -326,7 +326,7 @@
     },
     {
       "matches": [
-        "https://servicing.rocketmortgage.com/v2/payments/one-time-payment"
+        "https://rocket.com/mortgage/servicing/make-a-payment?loanNumber=*"
       ],
       "js": [
         "common/common.js",
