@@ -9,13 +9,25 @@ function processCitiPaymentInvoice() {
     };
     scrapeOrderData(transaction);
     downloadJsonTransaction(transaction);
-    retitlePage(transaction);
+    cleanupPage(transaction);
 }
 
 function scrapeOrderData(transaction) {
     console.log("scrapeOrderData")
 
     getOrderMetaData(transaction);
+}
+
+function cleanupPage(transaction) {
+    console.log("reformatPage")
+    retitlePage(transaction)
+
+    // Delete the message elements
+    ignoreDivs = document.querySelectorAll(".cds-message-bar, .pega-div");
+    for (var i=0; i < ignoreDivs.length; i++){
+        element = ignoreDivs[i]
+        element.parentElement.removeChild(element);
+    }
 }
 
 
