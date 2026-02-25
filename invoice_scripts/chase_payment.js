@@ -40,8 +40,12 @@ function getOrderMetaData(transaction) {
     transaction["Total"] = parsePrice(payment_amount);
 
     // Get Payment Methods(s) element
-    payment_method = payment_detail_divs[3].children[1].innerText
+    payment_method = payment_detail_divs[3].children[1].innerText // aka Pay from
     transaction["PaymentMethod"] = payment_method;
+
+    // Form the accounts transfer list
+    target_account = document.getElementById("creditCardPayeeName").innerText
+    transaction["Transfer"] = [payment_method, target_account]
 }
 
 processChasePaymentInvoice();
