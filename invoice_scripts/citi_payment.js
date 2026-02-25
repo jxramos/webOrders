@@ -52,10 +52,12 @@ function getOrderMetaData(transaction) {
     transaction["Total"] = parsePrice(payment_amount);
 
     // Get Payment Methods(s) element
-    payment_method = payment_success_details[0].innerText
+    payment_method = payment_success_details[0].innerText // aka Payment Account
     transaction["PaymentMethod"] = payment_method;
 
-    target_account = payment_success_details[1].innerText
+    // Form the accounts transfer list
+    target_account = payment_success_details[1].innerText // aka To Account
+    transaction["Transfer"] = [payment_method, target_account]
 }
 
 processCitiPaymentInvoice();
