@@ -58,9 +58,6 @@ function getOrderMetaData(transaction) {
     } else if (alert_header == "Funds transfer confirmation") {
         transfer_rows = div_inbox_body[1].firstElementChild.children
 
-        // Mark transaction as the transfer that it is
-        transaction["is_transfer"] = "account funds transfer"
-
         // Get Order Number
         order_id = transfer_rows[4].lastElementChild.textContent
         transaction["Order#"] = order_id
@@ -72,7 +69,7 @@ function getOrderMetaData(transaction) {
         // Get Order Total
         transaction["Total"] = parsePrice(transfer_rows[2].lastElementChild.textContent);
 
-        // Get Payment Methods(s) element
+        // Form the accounts transfer list
         account_from = transfer_rows[0].lastElementChild.textContent
         account_to   = transfer_rows[1].lastElementChild.textContent
         transaction["Transfer"] = [account_from, account_to]
@@ -89,7 +86,7 @@ ORDER ITEMIZATION
 function getOrderItemization(transaction){
     console.log("getOrderItemization");
 
-    if ("is_transfer" in transaction) {
+    if ("Transfer" in transaction) {
         return
     }
 

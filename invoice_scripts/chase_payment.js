@@ -4,7 +4,6 @@ function processChasePaymentInvoice() {
     var transaction = {
         "Vendor": "Chase",
         "URL": window.location.href,
-        "is_transfer": "scheduled payment authorization",
         "is_delete_after_ingest": true,
     };
     scrapeOrderData(transaction);

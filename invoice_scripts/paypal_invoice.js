@@ -9,7 +9,6 @@ function processPayPalTxInvoice() {
     var transaction = {
         "Vendor": "paypal.com",
         "URL": window.location.href,
-        "is_transfer": "scheduled payment authorization"
     };
     scrapeOrderData(transaction);
     downloadJsonTransaction(transaction);
@@ -41,7 +40,7 @@ function getOrderMetaData(transaction) {
     // Get Order Total
     transaction["Total"] = parsePrice(document.getElementById("td_funding_list_value"));
 
-    // Get Payment Methods(s) element
+    // Form the accounts transfer list
     account_from = document.getElementById("td_transferFromPaypalBalanceContent").innerText
     account_to   = document.getElementById("source_type").innerText.slice(1,-1)
     transaction["Transfer"] = [account_from, account_to]

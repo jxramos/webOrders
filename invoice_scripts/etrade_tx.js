@@ -4,7 +4,6 @@ function processETradeTxInvoice() {
     var transaction = {
         "Vendor": "eTrade.com",
         "URL": window.location.href,
-        "is_transfer": "scheduled payment authorization",
         "is_delete_after_ingest": true,
     };
     scrapeOrderData(transaction);
@@ -46,7 +45,7 @@ function getOrderMetaData(transaction) {
     // Get Order Total
     transaction["Total"] = parsePrice(order_details[3-idx_offset]);
 
-    // Get Payment Methods(s) element
+    // Form the accounts transfer list
     account_from = order_details[5-idx_offset].innerText
     account_to   = order_details[7-idx_offset].innerText
     transaction["Transfer"] = [account_from, account_to]

@@ -22,7 +22,7 @@ The extension prefix `.wo` is short for web order.
 
 
 ### File Body
-The contents of the file assume the following form given below, albeit in a minified form:
+The contents of the file for a purchase transaction will assume the following form given below.
 ```json
 {
     "Vendor": "VendorXYZ",
@@ -46,6 +46,22 @@ The contents of the file assume the following form given below, albeit in a mini
             1.35
         ]
     ]
+}
+```
+
+If that file originates from a transfer transaction the format will go according to the structure below.
+The `Transfer` list is ordered as the *From* account followed by the *To* account.
+
+```json
+{
+    "Vendor": "AccountABC",
+    "URL": "https://account-abc.com/transfer_x.html",
+    "OrderDate": "M/DD/YYYY",
+    "OrderDateFormatted": "YYYY-MM-DD",
+    "Total": 33.33,
+    "PaymentMethod": "Checking1234",
+    "Order#": "XXXXXXXXXX",
+    "Transfer": ["Checking1234", "Visa 5678"]
 }
 ```
 
