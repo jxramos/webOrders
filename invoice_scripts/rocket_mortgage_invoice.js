@@ -52,7 +52,7 @@ function getOrderMetaData(transaction) {
     // Get Payment Methods(s) element
     transaction["PaymentMethod"] = div_metadata[2].children[4].lastChild.lastChild.textContent.replace(/[(.)]/g, "")
 
-    return div_metadata[3].children
+    return div_metadata[3].children[1].firstChild.children
 }
 
 /*==========================================================================================
@@ -65,9 +65,9 @@ function getOrderItemization(line_items, transaction){
     var purchased_items = [];
 
     // Parse purchased items
-    for(i = 1; i < line_items.length - 2; i++) {
+    for(i = 0; i < line_items.length; i++) {
         var purchased_item = []
-        line_item = line_items[i].firstChild.firstChild
+        line_item = line_items[i]
 
         //-------------------------
         // Item Description
