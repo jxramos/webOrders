@@ -138,7 +138,7 @@ function getOrderItemizationHarborFreight(transaction, div_details){
             line_items.push(line_item)
         }
     }
-    for (var i=1; i < line_items.length-8; i++){
+    for (var i=1; i < line_items.length-7; i++){
         row = line_items[i].firstElementChild.firstElementChild.firstElementChild.firstElementChild.firstElementChild.firstElementChild
 
         //-------------------------
