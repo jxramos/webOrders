@@ -99,6 +99,16 @@
     },
     {
       "matches": [
+        "https://www.bootstrapfarmer.com/checkouts/*/thank-you*",
+        "https://account.bootstrapfarmer.com/orders/*"
+      ],
+      "js": [
+        "common/common.js",
+        "invoice_scripts/bootstrap_farmer_invoice.js"
+      ]
+    },
+    {
+      "matches": [
         "https://secure.chase.com/web/auth/dashboard#/dashboard/*flyout=payCardConfirm*"
       ],
       "js": [

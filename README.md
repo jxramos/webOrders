@@ -76,6 +76,7 @@ The current list of vendors supported.
 * bambooinsurance.com
 * bayareafastrak.org
 * blueland.com
+* bootstrapfarmer.com
 * chase.com (credit card payments)
 * citi.com (credit card payments)
 * costco.com
