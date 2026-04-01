@@ -47,7 +47,7 @@ function getOrderMetaData(transaction) {
     processOrderDate(date_str, transaction)
 
     // Get Order Total
-    payment_amount = document.querySelector(".cds-payment-suc-amount").innerText
+    payment_amount = document.querySelector("[class^=cds-payment-suc-amount]").innerText
     transaction["Total"] = parsePrice(payment_amount);
 
     // Get Payment Methods(s) element
