@@ -105,6 +105,7 @@ The current list of vendors supported.
 * rocketmortgage.com
 * sutterhealth.org
 * trapsdirect.com
+* turo.com
 * vitacost.com
 * walgreens.com
 * walmart.com

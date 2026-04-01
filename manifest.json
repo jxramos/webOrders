@@ -363,6 +363,15 @@
     },
     {
       "matches": [
+        "https://turo.com/us/en/reservation/*/receipt"
+      ],
+      "js": [
+        "common/common.js",
+        "invoice_scripts/turo_invoice.js"
+      ]
+    },
+    {
+      "matches": [
         "https://www.vitacost.com/MyAccount/OrderSummary.aspx*"
       ],
       "js": [
