@@ -25,6 +25,25 @@ function parsePrice(item) {
     return parseFloat(price_value)
 }
 
+function validateTotal(transaction) {
+    // aggregate all item amounts
+    items = transaction["Items"]
+    item_total = 0
+    for(i = 0; i < items.length; i++) {
+        item_total += items[i][1]
+    }
+
+    // feedback total mismatches
+    transaction_total = transaction["Total"]
+    has_matching_total = item_total == transaction_total
+    if(!has_matching_total) {
+        error_message = "ERROR--item totals (" + item_total + ") not equal to total " + transaction_total
+        alert(error_message)
+        console.warn(error_message)
+    }
+    return has_matching_total
+}
+
 function processOrderDate(date_str, transaction) {
     orderDate = new Date(date_str);
     transaction["OrderDate"] = orderDate.toLocaleDateString();
@@ -52,6 +71,11 @@ function downloadContent(filename, content) {
 
 function downloadJsonTransaction(transaction) {
     console.log("downloadJsonTransaction")
+
+    // validate transaction order itemization before downloading a malformed web order
+    if (! validateTotal(transaction)) {
+        return
+    }
 
     var transactionJson = JSON.stringify(transaction, null, 4);
     filename = transaction["OrderDateFormatted"] + ' ' + transaction['Vendor'].replace(" ", "") + '--' + transaction['Order#'] + '.wo.json'
