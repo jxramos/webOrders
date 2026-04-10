@@ -47,7 +47,7 @@ function getOrderMetaData(transaction) {
     processOrderDate(date_str, transaction)
 
     // Get Order Total
-    transaction["Total"] = parsePrice(div_charge_summary[div_charge_summary.length-1].firstElementChild.firstElementChild.lastElementChild.innerText);
+    transaction["Total"] = 0
 
     // Get Payment Method
     transaction["PaymentMethod"] = document.querySelector(".pmts-payments-instrument-detail-box-paystationpaymentmethod").innerText.replace("Amazon ", "").replace(" ending in", "").trimRight()
@@ -81,16 +81,20 @@ function getOrderItemization(div_charge_summary, transaction){
         if(item_condition) {
             description += "; " + item_condition
         }
-        var quantity = line_item.querySelector(["[data-component=quantity]"]).innerText
+        var quantity = line_item.parentElement.parentElement.querySelector(".od-item-view-qty")
         if (quantity) {
-            description += quantity + "x "
+            quantity = quantity.innerText
+            description = quantity + "x " + description
+            quantity = parseInt(quantity)
+        } else {
+            quantity = 1
         }
         purchased_item.push(description)
 
         //-------------------------
         // Item Price
         var price = parsePrice(line_item.querySelector("[data-component=unitPrice]").lastElementChild.firstElementChild.innerText);
-        purchased_item.push(price);
+        purchased_item.push(quantity * price);
 
         // Integrate line item
         purchased_items.push(purchased_item);
@@ -98,13 +102,17 @@ function getOrderItemization(div_charge_summary, transaction){
 
     // Non-Product Itemization: delivery fee, sales tax, tip, promotions, etc
     var non_product_items = div_charge_summary;
-    for (var i = 1; i < non_product_items.length - 1; i++) {
+    for (var i = 1; i < non_product_items.length; i++) {
         var line_item = non_product_items[i].firstChild.firstElementChild
         description = line_item.firstElementChild.innerText.replace(":", "")
-        if(description.toLowerCase().includes("total")){
+        price = parsePrice(line_item.lastElementChild.innerText)
+        if (description == "Grand Total") {
+            transaction["Total"] = price
+            break
+        } else if (description.toLowerCase().includes("total")) {
             continue
         }
-        purchased_items.push([description, parsePrice(line_item.lastElementChild.innerText)]);
+        purchased_items.push([description, price]);
     }
 
     transaction["Items"] = purchased_items;
