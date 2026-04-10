@@ -28,16 +28,17 @@ function parsePrice(item) {
 function validateTotal(transaction) {
     // aggregate all item amounts
     items = transaction["Items"]
-    item_total = 0
+    item_total = 0.0
     for(i = 0; i < items.length; i++) {
         item_total += items[i][1]
     }
+    item_total = Math.round(item_total * 100) / 100
 
     // feedback total mismatches
     transaction_total = transaction["Total"]
     has_matching_total = item_total == transaction_total
     if(!has_matching_total) {
-        error_message = "ERROR--item totals (" + item_total + ") not equal to total " + transaction_total
+        error_message = "ERROR--item total '" + item_total + "' not equal to transaction total '" + transaction_total + "'"
         alert(error_message)
         console.warn(error_message)
     }
