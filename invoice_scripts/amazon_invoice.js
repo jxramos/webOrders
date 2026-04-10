@@ -65,7 +65,7 @@ function getOrderItemization(div_charge_summary, transaction){
     var purchased_items = [];
 
     // Get Items Purchased
-    var line_items = document.querySelector("[data-component=purchasedItems]").firstElementChild.children
+    var line_items = document.querySelectorAll("[data-component=purchasedItems]")
 
     // Parse purchased items
     for(var i = 0; i < line_items.length; i++) {
