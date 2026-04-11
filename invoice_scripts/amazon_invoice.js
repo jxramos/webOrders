@@ -64,40 +64,40 @@ function getOrderItemization(div_charge_summary, transaction){
 
     var purchased_items = [];
 
-    // Get Items Purchased
-    var line_items = document.querySelectorAll("[data-component=purchasedItems]")
+    // Get Purchased Item Groups
+    var line_item_groups = document.querySelectorAll("[data-component=purchasedItems]")
+    for(var i = 0; i < line_item_groups.length; i++) {
+        // Drill into purchased item(s)
+        var line_items = line_item_groups[i].querySelectorAll("[data-component=purchasedItemsRightGrid]")
+        for(var j = 0; j < line_items.length; j++) {
+            var purchased_item = []
+            line_item = line_items[j].firstElementChild
 
-    // Parse purchased items
-    for(var i = 0; i < line_items.length; i++) {
-        var purchased_item = []
+            //-------------------------
+            // Item Description
+            var description = line_item.querySelector(["[data-component=itemTitle]"]).innerText
+            item_condition = line_item.querySelector(["[data-component=itemCondition]"]).innerText
+            if(item_condition) {
+                description += "; " + item_condition
+            }
+            var quantity = line_item.parentElement.parentElement.querySelector(".od-item-view-qty")
+            if (quantity) {
+                quantity = quantity.innerText
+                description = quantity + "x " + description
+                quantity = parseInt(quantity)
+            } else {
+                quantity = 1
+            }
+            purchased_item.push(description)
 
-        // Drill into purchased item
-        var line_item = line_items[i].querySelector("[data-component=purchasedItemsRightGrid]").firstElementChild
+            //-------------------------
+            // Item Price
+            var price = parsePrice(line_item.querySelector("[data-component=unitPrice]").lastElementChild.firstElementChild.innerText);
+            purchased_item.push(quantity * price);
 
-        //-------------------------
-        // Item Description
-        var description = line_item.querySelector(["[data-component=itemTitle]"]).innerText
-        item_condition = line_item.querySelector(["[data-component=itemCondition]"]).innerText
-        if(item_condition) {
-            description += "; " + item_condition
+            // Integrate line item
+            purchased_items.push(purchased_item);
         }
-        var quantity = line_item.parentElement.parentElement.querySelector(".od-item-view-qty")
-        if (quantity) {
-            quantity = quantity.innerText
-            description = quantity + "x " + description
-            quantity = parseInt(quantity)
-        } else {
-            quantity = 1
-        }
-        purchased_item.push(description)
-
-        //-------------------------
-        // Item Price
-        var price = parsePrice(line_item.querySelector("[data-component=unitPrice]").lastElementChild.firstElementChild.innerText);
-        purchased_item.push(quantity * price);
-
-        // Integrate line item
-        purchased_items.push(purchased_item);
     }
 
     // Non-Product Itemization: delivery fee, sales tax, tip, promotions, etc
