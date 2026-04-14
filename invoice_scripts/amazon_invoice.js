@@ -93,7 +93,7 @@ function getOrderItemization(div_charge_summary, transaction){
             //-------------------------
             // Item Price
             var price = parsePrice(line_item.querySelector("[data-component=unitPrice]").lastElementChild.firstElementChild.innerText);
-            purchased_item.push(quantity * price);
+            purchased_item.push(roundCurrency(quantity * price));
 
             // Integrate line item
             purchased_items.push(purchased_item);
@@ -106,7 +106,7 @@ function getOrderItemization(div_charge_summary, transaction){
         var line_item = non_product_items[i].firstChild.firstElementChild
         description = line_item.firstElementChild.innerText.replace(":", "")
         price = parsePrice(line_item.lastElementChild.innerText)
-        if (description == "Grand Total") {
+        if (description == "Grand Total" || description == "Total for this Order") {
             transaction["Total"] = price
             break
         } else if (description.toLowerCase().includes("total")) {
