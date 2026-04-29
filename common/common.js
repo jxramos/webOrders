@@ -32,7 +32,7 @@ function validateTotal(transaction) {
     for(i = 0; i < items.length; i++) {
         item_total += items[i][1]
     }
-    item_total = Math.round(item_total * 100) / 100
+    item_total = roundCurrency(item_total)
 
     // feedback total mismatches
     transaction_total = transaction["Total"]
@@ -43,6 +43,10 @@ function validateTotal(transaction) {
         console.warn(error_message)
     }
     return has_matching_total
+}
+
+function roundCurrency(val) {
+    return Math.round(val * 100) / 100
 }
 
 function processOrderDate(date_str, transaction) {
