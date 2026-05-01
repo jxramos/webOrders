@@ -103,6 +103,7 @@ The current list of vendors supported.
 * questdiagnostics.com
 * questhealth.com
 * rocketmortgage.com
+* supplyhouse.com
 * sutterhealth.org
 * trapsdirect.com
 * turo.com

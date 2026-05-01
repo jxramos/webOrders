@@ -346,6 +346,15 @@
     },
     {
       "matches": [
+        "https://www.supplyhouse.com/sh/control/checkoutConfirmation"
+      ],
+      "js": [
+        "common/common.js",
+        "invoice_scripts/supply_house_invoice.js"
+      ]
+    },
+    {
+      "matches": [
         "https://myhealthonline.sutterhealth.org/MHO/app/bill-pay?id=*"
       ],
       "js": [
