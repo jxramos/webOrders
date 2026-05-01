@@ -336,7 +336,8 @@
     },
     {
       "matches": [
-        "https://rocket.com/mortgage/servicing/make-a-payment?loanNumber=*"
+        "https://rocket.com/mortgage/servicing/make-a-payment?loanNumber=*",
+        "https://rocket.com/mortgage/servicing/*/make-a-payment"
       ],
       "js": [
         "common/common.js",
