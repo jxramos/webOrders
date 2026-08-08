@@ -8,7 +8,7 @@ function processETradeInboxInvoice() {
     };
     scrapeOrderData(transaction);
     downloadJsonTransaction(transaction);
-    retitlePage(transaction);
+    cleanupPage(transaction);
 }
 
 function scrapeOrderData(transaction) {
@@ -16,6 +16,18 @@ function scrapeOrderData(transaction) {
 
     getOrderMetaData(transaction);
     getOrderItemization(transaction);
+}
+
+function cleanupPage(transaction) {
+    console.log("cleanupPage")
+    retitlePage(transaction)
+
+    removeElement("etrade-footer")
+    removeElement(".sa-inbox-footer")
+    removeElement("#cobrowsing-mouse-container")
+    removeElement("#salemove")
+    removeElement(".kore-chat-window")
+    removeElement("[id^=batBeacon]")
 }
 
 

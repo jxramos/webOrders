@@ -86,3 +86,12 @@ function downloadJsonTransaction(transaction) {
     filename = transaction["OrderDateFormatted"] + ' ' + transaction['Vendor'].replace(" ", "") + '--' + transaction['Order#'] + '.wo.json'
     downloadContent(filename, transactionJson);
 }
+
+function removeElement(selector) {
+    var element = document.querySelector(selector);
+    if (element) {
+        element.remove();
+    } else {
+        console.warn("removeElement: no match for" + selector)
+    }
+}
