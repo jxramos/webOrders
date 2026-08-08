@@ -47,12 +47,12 @@ function getOrderMetaData(transaction) {
     processOrderDate(date_str, transaction)
 
     // Get Order Total
-    transaction["Total"] = parsePrice(div_metadata[3].lastChild.lastChild.textContent);
+    transaction["Total"] = parsePrice(Array.from(div_metadata[3].getElementsByTagName("dd")).at(-1).textContent);
 
     // Get Payment Methods(s) element
     transaction["PaymentMethod"] = div_metadata[2].children[4].lastChild.lastChild.textContent.replace(/[(.)]/g, "")
 
-    return div_metadata[3].children[1].firstChild.children
+    return Array.from(div_metadata[3].querySelectorAll("[data-amp-mask=true]")).map((el) => el.parentElement)
 }
 
 /*==========================================================================================
