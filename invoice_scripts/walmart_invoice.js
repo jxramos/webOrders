@@ -53,7 +53,7 @@ function getOrderMetaData(order, transaction) {
     processOrderDate(date_str, transaction)
 
     // Get Payment Method
-    payment_section = document.getElementsByClassName("bill-order-payment-cards")[0]
+    payment_section = document.getElementsByClassName("bill-order-payment-cards")[0] // check multiple payment methods, eg walmart cash
     transaction["PaymentMethod"] = payment_section.innerText.split("\n")[1].replace(" ending in", "")
 
     // Get Order Total
@@ -83,44 +83,42 @@ function getOrderItemization(order, transaction){
     var purchased_items = [];
 
     // get purchased items
-    xpathPaymentInfo = "//*[@data-testid='category-accordion-']"
-    var paymentInfoXPR = document.evaluate(xpathPaymentInfo, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null ).singleNodeValue.children;
+    line_items = document.querySelectorAll("[data-testid=itemtile-stack]")
 
     // Parse purchased items
-    for(var i = 1; i < paymentInfoXPR.length; i += 2) {  // take every second element
+    for(var i = 0; i < line_items.length; i++) {
         purchased_item = []
-        nodePaymentInfo = paymentInfoXPR[i]
+        line_item = line_items[i]
 
-        // TODO handle Qty > 1
-        //class="bill-order-weight-adjust"
         //-------------------------
         // Item Description
-        purchased_item.push(nodePaymentInfo.getElementsByClassName("print-item-title")[0].innerText.replace("\n", " "));
+        var description = line_item.querySelector("[data-testid=productName]").innerText;
+        var weight = line_item.querySelector(".bill-order-weight-adjust").innerText;
+        if (weight) {
+            description += " (" + weight + ")"
+        }
+        var quantity = line_item.querySelector(".bill-item-quantity").innerText.split(" ")[1]
+        if (quantity !== "1") {
+            description = quantity + "x " + description
+        }
+        purchased_item.push(description);
 
         //-------------------------
         // Item Price
-        var price = parsePrice(nodePaymentInfo.getElementsByClassName("black tr")[0].innerText);
+        var price = parsePrice(line_item.querySelector("[data-testid=line-price]").innerText);
         purchased_item.push(price);
 
         // Integrate line item
         purchased_items.push(purchased_item);
     }
 
-    // Integrate any sales tax
-    summary_section = document.getElementsByClassName("bill-order-payment-spacing")[0].children;
-    for (var i = 0; i < summary_section.length; i++) {
-        var row = summary_section[i];
-        // ignore non-div elements
-        if (!(row instanceof HTMLDivElement)) {
-            continue
-        }
+    // Non-Product Itemization: delivery fee, sales tax, tip, promotions, etc
+    var non_product_items = document.querySelectorAll(".print-fees-item")
+    for (var i = 0; i < non_product_items.length; i++) {
+        var line_item = non_product_items[i];
 
-        if(row.children[0].innerText.match("Tax")){
-            var sales_tax = parsePrice(row.children[1].innerText);
-            purchased_item = ["Tax", sales_tax];
-            purchased_items.push(purchased_item);
-            break
-        }
+        purchased_item = [line_item.children[1].innerText.trim(), parsePrice(line_item.children[2].innerText)];
+        purchased_items.push(purchased_item);
     }
 
     transaction["Items"] = purchased_items;
