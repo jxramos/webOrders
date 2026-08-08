@@ -78,7 +78,7 @@ function downloadJsonTransaction(transaction) {
     console.log("downloadJsonTransaction")
 
     // validate transaction order itemization before downloading a malformed web order
-    if (! validateTotal(transaction)) {
+    if ("Items" in transaction && !validateTotal(transaction)) {
         return
     }
 
