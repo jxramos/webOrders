@@ -433,6 +433,14 @@
         "common/common.js",
         "invoice_scripts/workday_payslip.js"
       ]
+    },
+    {
+      "matches": [
+          "<all_urls>"
+      ],
+      "js": [
+          "common/page_introspection.js"
+      ]
     }
   ],
   "permissions": [
