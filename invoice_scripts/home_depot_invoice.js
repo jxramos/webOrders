@@ -87,7 +87,12 @@ function getOrderMetaData(transaction) {
     transaction["PaymentMethod"] = div_payment_method.firstChild.getAttribute("alt").split('-')[0] + " " + div_payment_method.lastChild.textContent
 
     // select the non_product_items for later use in itemization
-    var non_product_items = div_order.children[3].firstChild.getElementsByTagName("div")
+    for(var i = 1; i < div_order.children.length; i++) {
+        div_child = div_order.children[i]
+        if( div_child.innerText.includes("Subtotal:")) {
+            non_product_items = div_child.firstChild.getElementsByTagName("div")
+        }
+    }
 
     return non_product_items
 }
@@ -124,7 +129,7 @@ function getOrderItemization(non_product_items, transaction){
 
         //-------------------------
         // Item Price
-        var price = parsePrice(line_item_parts[2].textContent);
+        var price = quantity * parsePrice(line_item_parts[2].textContent);
         purchased_item.push(price);
 
         // Integrate line item
@@ -135,29 +140,43 @@ function getOrderItemization(non_product_items, transaction){
         is_online_order = Boolean(document.querySelector("[data-testid=order-barcode]"))
         if (is_online_order) {
             // hide the shipping details
-            line_item.parentElement.parentElement.lastChild.style.visibility = "hidden"
+            try {
+                line_item.parentElement.parentElement.lastChild.style.visibility = "hidden"
+            } catch (error) {
+                console.warn("failed to hide shipping details for line item " + description)
+                console.error(error);
+            }
 
             // hide the return deadline details
-            line_item.firstChild.firstChild.style.visibility = "hidden"
+            try {
+                line_item.firstChild.firstChild.style.visibility = "hidden"
+            } catch (error) {
+                console.warn("failed to hide return deadline details for line item " + description)
+                console.error(error);
+            }
         }
 
         // hide the buy again button
         line_item.firstChild.lastChild.lastChild.style.visibility = "hidden"
 
         // hide the info & guides link
-        line_item.firstChild.lastChild.firstChild.lastChild.lastChild.style.visibility = "hidden"
+        div_info_guides = line_item.firstChild.lastChild.firstChild.lastChild.lastChild
+        if (div_info_guides.innerText.includes("Info & Guides")) {
+            div_info_guides.style.visibility = "hidden"
+        }
     }
 
     // Non-Product Itemization: delivery fee, sales tax, tip, promotions, etc
+    var refund_corrector =  Math.sign(transaction["Total"])
     for (var i = 1; i < non_product_items.length - 1; i++) {
         var line_item = non_product_items[i]
 
         description = line_item.children[0].innerText.replace(":", "")
-        if (description == "Savings") {
+        if (["Savings", "Refund Total"].includes(description)) {
             continue
         }
 
-        purchased_items.push([description, parsePrice(line_item.children[1])]);
+        purchased_items.push([description, refund_corrector * parsePrice(line_item.children[1])]);
     }
 
     transaction["Items"] = purchased_items;
