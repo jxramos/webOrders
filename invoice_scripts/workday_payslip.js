@@ -145,11 +145,16 @@ function process_deductions(table_deduction, gross_pay, line_items) {
         }
         line_amount = parsePrice(line_amount)
 
+        // Description
+        description = row_deduction.children[0].innerText
+        if (description == "RSU Value Vested" || line_amount == 0) {
+            // ignore RSU tax offset for the line itemization to equal this expected value
+            continue
+        }
+
         // Percent of gross pay
         pct_gross = Number(line_amount / gross_pay).toLocaleString(undefined,{style: 'percent', minimumFractionDigits:2});
-
-        // Description
-        description = row_deduction.children[0].innerText + " (" + pct_gross + ")"
+        description += " (" + pct_gross + ")"
 
         line_item.push(description)
         line_item.push(-1 * line_amount)
