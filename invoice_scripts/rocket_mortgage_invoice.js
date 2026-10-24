@@ -37,22 +37,25 @@ function getOrderMetaData(transaction) {
     console.log("getOrderMetaData")
 
     // Order Metadata
-    div_metadata = document.querySelector("body > main > div > div.bg-white > div > div > div > div > div > div > div > div").children
+    selector_for_metadata_elements = "#main-content > div > dialog > div.flex.h-full.flex-col > div.min-h-0.flex-1.overflow-y-auto.overscroll-contain > div > div.w-full.rounded-2xl.bg-gray-50.p-6"
+    div_metadata = document.querySelector(selector_for_metadata_elements)
+    div_metadata_elements = div_metadata.children
+    div_count = div_metadata_elements.length
 
     // Get Order Number
-    transaction["Order#"] = div_metadata[2].children[2].lastChild.lastChild.textContent.replace("#", "")
+    transaction["Order#"] = div_metadata_elements[div_count-1].lastChild.textContent
 
     // Get OrderDate
-    date_str = div_metadata[2].children[0].lastChild.lastChild.textContent
+    date_str = div_metadata_elements[div_count-5].lastChild.textContent
     processOrderDate(date_str, transaction)
 
     // Get Order Total
-    transaction["Total"] = parsePrice(Array.from(div_metadata[3].getElementsByTagName("dd")).at(-1).textContent);
+    transaction["Total"] = parsePrice(div_metadata_elements[0].lastChild.textContent);
 
     // Get Payment Methods(s) element
-    transaction["PaymentMethod"] = div_metadata[2].children[4].lastChild.lastChild.textContent.replace(/[(.)]/g, "")
+    transaction["PaymentMethod"] = div_metadata_elements[div_count-3].lastChild.textContent
 
-    return Array.from(div_metadata[3].querySelectorAll("[data-amp-mask=true]")).map((el) => el.parentElement)
+    return Array.from(div_metadata.querySelectorAll('.text-\\(--nova-text-subtle\\)')).map((el) => el.parentElement)
 }
 
 /*==========================================================================================
