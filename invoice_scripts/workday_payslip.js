@@ -7,32 +7,46 @@ async function processWorkdayPayslip() {
         "is_delete_after_ingest": true,
     };
 
+    // convert table captions to table mapping
     var table_captions = document.getElementsByTagName("caption")
-    scrapePayslip(table_captions, transaction);
+    tables = new Map();
+    for (let i = 0; i < table_captions.length; i++) {
+        table_caption = table_captions[i].textContent
+
+        // ignore non-contributing tables
+        if (['Taxable Wages', 'Withholding', 'Employer Paid Benefits'].includes(table_caption)) {
+            continue
+        }
+        tables.set(table_caption, table_captions[i].parentElement)
+    }
+
+    scrapePayslip(tables, transaction);
     downloadJsonTransaction(transaction);
 }
 
-function scrapePayslip(table_captions, transaction) {
+function scrapePayslip(tables, transaction) {
     console.log("scrapeOrderData")
 
-    getPayslipMetaData(table_captions, transaction);
-    getPayslipItemization(table_captions, transaction);
+    getPayslipMetaData(tables, transaction);
+    getPayslipItemization(tables, transaction);
 }
 
 /*==========================================================================================
 ORDER METADATA
 ==========================================================================================*/
 
-function getPayslipMetaData(table_captions, transaction) {
+function getPayslipMetaData(tables, transaction) {
     console.log("getPayslipMetaData")
 
     //------------------------------------------------------------------------
     // Table: Company Information
-    transaction["Vendor"] = table_captions[0].parentElement.children[2].children[0].children[0].innerText
+    transaction["Vendor"] = tables.get('Company Information').children[2].children[0].children[0].innerText
+    tables.delete('Company Information')
 
     //------------------------------------------------------------------------
     // Table: Payslip Information
-    table_payslip_information = table_captions[1].parentElement
+    table_payslip_information = tables.get('Payslip Information')
+    tables.delete('Payslip Information')
     cells = table_payslip_information.children[2].getElementsByTagName("td")
 
     pay_period_begin = cells[3].innerText
@@ -50,14 +64,15 @@ function getPayslipMetaData(table_captions, transaction) {
 
     //------------------------------------------------------------------------
     // Table: Payment Information
-    table_payment_information = table_captions[11].parentElement
+    table_payment_information = tables.get('Payment Information')
+    tables.delete('Payment Information')
     rows = table_payment_information.children[2].children
 
     // Get Order Total (same as Current Net Pay)
-    var total = parsePrice(table_captions[2].parentElement.rows[1].lastChild.innerText);
+    var total = parsePrice(tables.get('Current and YTD Totals').rows[1].lastChild.innerText);
     if (total == 0.0) {
         // handle RSU vesting full cash payment case
-        employee_post_tax_deduction_rows = table_captions[6].parentElement.rows
+        employee_post_tax_deduction_rows = tables.get('Employee Post Tax Deductions').rows
         for (let i = 1; i < employee_post_tax_deduction_rows.length - 1; i++) {
             row = employee_post_tax_deduction_rows[i]
             if (row.children[0].innerText == "RSU Value Vested" && row.children[1].innerText != "") {
@@ -82,19 +97,21 @@ function getPayslipMetaData(table_captions, transaction) {
 ORDER ITEMIZATION
 ==========================================================================================*/
 
-function getPayslipItemization(table_captions, transaction){
+function getPayslipItemization(tables, transaction){
     console.log("getPayslipItemization");
 
     var line_items = [];
 
     //------------------------------------------------------------------------
     // Table: Current and YTD Totals
-    table_current_totals = table_captions[2].parentElement
+    table_current_totals = tables.get('Current and YTD Totals')
+    tables.delete('Current and YTD Totals')
     gross_pay = parsePrice(table_current_totals.children[2].children[0].children[2].innerText)
 
     //------------------------------------------------------------------------
     // Table: Earnings
-    table_earnings = table_captions[3].parentElement.children[2].children
+    table_earnings = tables.get('Earnings').children[2].children
+    tables.delete('Earnings')
     for (let i = 0; i < table_earnings.length - 1; i++) {
         row_earning = table_earnings[i]
         line_item = []
@@ -123,15 +140,15 @@ function getPayslipItemization(table_captions, transaction){
 
     //------------------------------------------------------------------------
     // Table: Deductions
-    for (let i = 4; i <= 6; i++) {
-        table_deduction = table_captions[i].parentElement
-        process_deductions(table_deduction, gross_pay, line_items)
+    for (const [table_caption, table_deduction] of tables) {
+        process_deductions(table_caption, table_deduction, gross_pay, line_items)
     }
 
     transaction["Items"] = line_items;
 }
 
-function process_deductions(table_deduction, gross_pay, line_items) {
+function process_deductions(table_caption, table_deduction, gross_pay, line_items) {
+    console.log("-- processing deduction " + table_caption)
     rows_deduction = table_deduction.children[2].children
     for (let i = 0; i < rows_deduction.length - 1; i++) {
         row_deduction = rows_deduction[i]
