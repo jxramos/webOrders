@@ -86,6 +86,7 @@ The current list of vendors supported.
 * ebay.com
 * ereplacementparts.com
 * etrade.com
+* etsy.com
 * fcpeuro.com
 * geico.com
 * gmail.com
