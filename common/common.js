@@ -1,3 +1,4 @@
+//#region Currency and Date Functions
 function parsePrice(item) {
     // handle literal numeric
     if (isFinite(item)) {
@@ -57,15 +58,9 @@ function processOrderDate(date_str, transaction) {
         "-" + String(orderDate.getDate()).padStart(2, '0');
 }
 
-function retitlePage(transaction, suffix="") {
-    console.log("retitlePage")
+//#endregion Currency and Date Functions
 
-    // Rename title bar to prefix with order date to keep printed invoices sorted by order date
-    xpathPageTitle = "/html/head/title";
-    pageTitle = document.evaluate(xpathPageTitle, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null)
-    pageTitle.singleNodeValue.innerText = transaction["OrderDateFormatted"] + " " + transaction["Vendor"] + "--" + transaction["Order#"] + suffix
-}
-
+//#region File Export Functions
 
 function downloadContent(filename, content) {
     let a = document.createElement('a');
@@ -87,6 +82,19 @@ function downloadJsonTransaction(transaction) {
     downloadContent(filename, transactionJson);
 }
 
+//#endregion File Export Functions
+
+//#region DOM Transformation Functions
+
+function retitlePage(transaction, suffix="") {
+    console.log("retitlePage")
+
+    // Rename title bar to prefix with order date to keep printed invoices sorted by order date
+    xpathPageTitle = "/html/head/title";
+    pageTitle = document.evaluate(xpathPageTitle, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null)
+    pageTitle.singleNodeValue.innerText = transaction["OrderDateFormatted"] + " " + transaction["Vendor"] + "--" + transaction["Order#"] + suffix
+}
+
 function removeElement(selector) {
     var element = document.querySelector(selector);
     if (element) {
@@ -95,3 +103,5 @@ function removeElement(selector) {
         console.warn("removeElement: no match for" + selector)
     }
 }
+
+//#endregion DOM Transformation Functions
