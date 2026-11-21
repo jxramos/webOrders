@@ -23,6 +23,30 @@ function getAllAttributeValues(attribute_name) {
   console.log(Array.from(attribute_values).sort())
 }
 
+function getAllAttributesInUse() {
+  attributes = new Set()
+  const usedAttributes = [..._getAllAttributesInUse(document.documentElement, attributes)].sort()
+  return usedAttributes
+}
+
+function _getAllAttributesInUse(rootElement, attributes) {
+  if (!rootElement || rootElement.nodeType !== Node.ELEMENT_NODE) {
+    return attributes;
+  }
+
+  // Record all attribute names on the current element
+  for (const attrName of rootElement.getAttributeNames()) {
+    attributes.add(attrName);
+  }
+
+  // Recursively traverse element children (ignoring text/comment nodes)
+  for (const child of rootElement.children) {
+    _getAllAttributesInUse(child, attributes);
+  }
+
+  return attributes;
+}
+
 function getAllShadowRoots(root = document) {
   const shadowRoots = [];
 
