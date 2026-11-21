@@ -1,10 +1,5 @@
-function processPayPalTxInvoice() {
-    console.log("processPayPalTxInvoice")
-
-    if (document.getElementById("counterparty_name").innerText != "Bank Account") {
-        console.log("Not a bank transfer, exiting")
-        return
-    }
+function processPayPalInvoice() {
+    console.log("processPayPalInvoice")
 
     var transaction = {
         "Vendor": "paypal.com",
@@ -18,7 +13,13 @@ function processPayPalTxInvoice() {
 function scrapeOrderData(transaction) {
     console.log("scrapeOrderData")
 
-    getOrderMetaData(transaction);
+    seller = document.getElementById("counterparty_name").innerText
+    if (seller == "Bank Account") {
+        getTxMetaData(transaction);
+    } else {
+        transaction["Vendor"] = seller
+        getOrderMetaData(transaction);
+    }
 }
 
 
@@ -26,14 +27,14 @@ function scrapeOrderData(transaction) {
 ORDER METADATA
 ==========================================================================================*/
 
-function getOrderMetaData(transaction) {
-    console.log("getOrderMetaData")
+function getTxMetaData(transaction) {
+    console.log("getTxMetaData")
 
     // Get Order Number
     order_id = document.getElementById("td_transactionIdContent").innerText
     transaction["Order#"] = order_id
 
-    // Get OrderDate
+    // Get Order Date
     date_str = document.getElementById("eta-description").innerText + " " + new Date().getFullYear()
     processOrderDate(date_str, transaction)
 
@@ -49,4 +50,29 @@ function getOrderMetaData(transaction) {
     transaction["Description"] = "Confirmation: " + order_id + ", " + account_from + " --> " + account_to
 }
 
-processPayPalTxInvoice();
+function getOrderMetaData(transaction) {
+    // Get Order Number
+    order_id = document.getElementById("td_transactionIdContent").innerText
+    transaction["Order#"] = order_id
+
+    // Get Order Date
+    txf_description_parts = document.getElementById("transaction_description").innerText.split(" . ")
+    date_str = txf_description_parts[0]
+    processOrderDate(date_str, transaction)
+
+    // Get Order Total
+    transaction["Total"] = parsePrice(document.getElementById("td_funding_list_value"));
+
+    // Get Payment Method
+    transaction["PaymentMethod"] = document.getElementById("source_type").innerText.replace(/[()]/g,"")
+
+    // Description
+    notes = document.getElementById("td_notesInfoContent").innerText
+    transaction["Description"] = "Confirmation: " + order_id + "; " + txf_description_parts[1] + ", " + notes
+
+    // stub transaction items
+    var purchased_items = [["items TODO", transaction["Total"]]];
+    transaction["Items"] = purchased_items;
+}
+
+processPayPalInvoice();
