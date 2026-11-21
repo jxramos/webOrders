@@ -47,6 +47,14 @@ function _getAllAttributesInUse(rootElement, attributes) {
   return attributes;
 }
 
+function getAllTagsInUse() {
+  const usedTags = new Set(
+    Array.from(document.getElementsByTagName('*'), el => el.tagName.toLowerCase()) // note tags in html are not case sensitive
+  );
+
+  return [...usedTags].sort()
+}
+
 function getAllShadowRoots(root = document) {
   const shadowRoots = [];
 
