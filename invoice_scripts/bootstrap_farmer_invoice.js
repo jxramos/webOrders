@@ -35,7 +35,7 @@ function getOrderMetaData(transaction) {
     // Get Order Number
     transaction["Order#"] = div_checkout_main.firstChild.lastElementChild.firstChild.textContent.split(" #")[1]
 
-    // Get OrderDate
+    // Get Order Date
     date_str = new Date().toLocaleDateString("en-US")
     processOrderDate(date_str, transaction)
 
@@ -57,7 +57,7 @@ function getOrderMetaDataOrdersPage(transaction) {
     // Get Order Number
     transaction["Order#"] = div_order_data[1].textContent.split("#")[1]
 
-    // Get OrderDate
+    // Get Order Date
     date_str = div_order_data[3].innerText.replace("Confirmed ", "")
     processOrderDate(date_str, transaction)
 

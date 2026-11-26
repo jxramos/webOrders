@@ -31,7 +31,7 @@ function getOrderMetaData(transaction) {
     // Get Order Number
     transaction["Order#"] = order_summary_container.getElementsByClassName("orderSummary__refNumber")[0].children[1].innerText
 
-    // Get OrderDate
+    // Get Order Date
     date_str = new Date().toLocaleDateString();
     processOrderDate(date_str, transaction)
 

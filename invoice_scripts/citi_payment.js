@@ -42,7 +42,7 @@ function getOrderMetaData(transaction) {
     // Get Order Number
     transaction["Order#"] = document.getElementsByClassName("cds-payment-suc-ref ng-star-inserted")[0].innerText.split(": ")[1]
 
-    // Get OrderDate
+    // Get Order Date
     date_str = payment_success_details[2].innerText
     processOrderDate(date_str, transaction)
 

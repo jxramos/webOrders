@@ -45,7 +45,7 @@ function getOrderMetaData(transaction) {
     // Get Order Number
     transaction["Order#"] = div_metadata_elements[div_count-1].lastChild.textContent
 
-    // Get OrderDate
+    // Get Order Date
     date_str = div_metadata_elements[div_count-5].lastChild.textContent
     processOrderDate(date_str, transaction)
 

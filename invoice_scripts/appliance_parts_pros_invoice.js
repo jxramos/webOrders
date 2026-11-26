@@ -45,7 +45,7 @@ function getOrderMetaData(transaction) {
     // Get Order Number
     transaction["Order#"] = div_checkout_table.children[0].getElementsByTagName("th")[1].innerText
 
-    // Get OrderDate
+    // Get Order Date
     date_str = div_checkout_table_rows[0].children[1].innerText
     processOrderDate(date_str, transaction)
 

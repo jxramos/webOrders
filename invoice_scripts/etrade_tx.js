@@ -38,7 +38,7 @@ function getOrderMetaData(transaction) {
     // Get Order Number
     transaction["Order#"] = order_id
 
-    // Get OrderDate
+    // Get Order Date
     date_str = order_details[9 - idx_offset].innerText
     processOrderDate(date_str, transaction)
 

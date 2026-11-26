@@ -46,7 +46,7 @@ function getOrderMetaData(transaction) {
     // Get Order Number
     transaction["Order#"] = order_num = div_payment_summary.children[2].innerText.split("Number: ")[1].trim()
 
-    // Get OrderDate
+    // Get Order Date
     date_str = div_payment_summary.children[0].innerText.split(" : ")[1].split(" - ")[0].trim()
     processOrderDate(date_str, transaction)
 

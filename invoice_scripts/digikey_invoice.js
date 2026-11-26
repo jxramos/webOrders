@@ -29,7 +29,7 @@ function getOrderMetaData(transaction) {
     // Get Order Number
     transaction["Order#"] = document.querySelector("[for=WebID]").parentElement.children[1].innerText
 
-    // Get OrderDate
+    // Get Order Date
     date_str = document.querySelector("[for=DateSubmitted]").parentElement.children[1].innerText
     processOrderDate(date_str, transaction)
 

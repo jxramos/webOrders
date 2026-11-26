@@ -30,7 +30,7 @@ function getOrderMetaData(transaction) {
   // Get Order Number
   transaction["Order#"] = payment_block[2].innerText
 
-  // Get OrderDate
+  // Get Order Date
   date_str = new Date().toLocaleDateString();
   processOrderDate(date_str, transaction)
 

@@ -62,7 +62,7 @@ function getOrderMetaData(transaction) {
     // Get Order Number
     transaction["Order#"] = document.getElementById("order_id_display").innerText
 
-    // Get OrderDate
+    // Get Order Date
     date_str = div_order_details[1].innerText
     processOrderDate(date_str, transaction)
 

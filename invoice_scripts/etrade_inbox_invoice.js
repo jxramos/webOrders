@@ -51,7 +51,7 @@ function getOrderMetaData(transactions) {
     div_inbox_body = document.querySelector(".inbox-body-content").children
     alert_header = div_details_row[2].innerText.toLowerCase()
 
-    // Get OrderDate
+    // Get Order Date
     date_str = div_details_row[0].innerText.replace(" ET", "")
 
     // Process Dividend Alert
@@ -96,7 +96,7 @@ function getOrderMetaData(transactions) {
         order_id = transfer_rows[4].lastElementChild.textContent
         transaction["Order#"] = order_id
 
-        // Get OrderDate
+        // Get Order Date
         processOrderDate(date_str, transaction)
 
         // Get Order Total
@@ -119,7 +119,7 @@ function getOrderMetaData(transactions) {
         order_id = transfer_rows[6].textContent.replace(/.*\(reference #(.*)\).*/, "$1")
         transaction["Order#"] = order_id
 
-        // Get OrderDate
+        // Get Order Date
         processOrderDate(date_str, transaction)
 
         // Get Order Total
@@ -142,7 +142,7 @@ function getOrderMetaData(transactions) {
         order_id = transfer_rows[3].lastElementChild.textContent
         transaction["Order#"] = order_id
 
-        // Get OrderDate
+        // Get Order Date
         processOrderDate(date_str, transaction)
 
         // Get Order Total

@@ -29,7 +29,7 @@ function getOrderMetaData(transaction) {
     // Get Order Number
     transaction["Order#"] = document.querySelector("#checkout-main > div > div._1fragem32._1fragemn2 > div > div > div > div._5uqybw0._1fragemn2._1fragem3c._1fragem8w > header > div:nth-child(2) > p").innerText.split(" #")[1]
 
-    // Get OrderDate
+    // Get Order Date
     date_str = new Date().toLocaleDateString("en-US")
     processOrderDate(date_str, transaction)
 

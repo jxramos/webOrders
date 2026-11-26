@@ -30,7 +30,7 @@ function processCostcoChecksInvoice() {
     // Get Order Number
     transaction["Order#"] = document.getElementById("MainContent_orderNumber").innerText
 
-    // Get OrderDate
+    // Get Order Date
     date_str = document.getElementById("MainContent_currentDate").innerText
     processOrderDate(date_str, transaction)
 

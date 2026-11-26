@@ -31,7 +31,7 @@ function getOrderMetaData(transaction) {
     // Get Order Number
     transaction["Order#"] = order_info_div.children[1].getElementsByTagName("dd")[0].innerText
 
-    // Get OrderDate
+    // Get Order Date
     date_str = order_info_div.children[0].getElementsByTagName("dd")[0].innerText.replace("at ", "")
     processOrderDate(date_str, transaction)
 

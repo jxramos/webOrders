@@ -48,7 +48,7 @@ function getOrderMetaData(order, transaction) {
     // Get Order Number
     transaction["Order#"] = order_header_elements[2].innerText;
 
-    // Get OrderDate
+    // Get Order Date
     date_str = order_header_elements[0].innerText.replace(" purchase", "").replace("order", "");
     processOrderDate(date_str, transaction)
 

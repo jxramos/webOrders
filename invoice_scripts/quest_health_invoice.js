@@ -28,7 +28,7 @@ function getOrderMetaData(transaction) {
     // Get Order Number
     transaction["Order#"] = document.querySelector(".confirmation-order-number").firstElementChild.innerText
 
-    // Get OrderDate
+    // Get Order Date
     date_str = document.querySelector(".confirmation-detail").children[1].innerText.split(" at ")[0]
     processOrderDate(date_str, transaction)
 

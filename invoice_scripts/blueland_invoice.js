@@ -30,7 +30,7 @@ function getOrderMetaData(transaction) {
     // Get Order Number
     transaction["Order#"] = div_checkout_main.firstChild.firstChild.lastChild.firstChild.innerText.split(" #")[1]
 
-    // Get OrderDate
+    // Get Order Date
     date_str = new Date().toLocaleDateString("en-US")
     processOrderDate(date_str, transaction)
 

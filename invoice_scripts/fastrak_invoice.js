@@ -29,7 +29,7 @@ function getOrderMetaData(transaction) {
     // Get Order Number
     transaction["Order#"] = "TODO"
 
-    // Get OrderDate
+    // Get Order Date
     date_str = new Date().toLocaleDateString("en-US")
     processOrderDate(date_str, transaction)
 

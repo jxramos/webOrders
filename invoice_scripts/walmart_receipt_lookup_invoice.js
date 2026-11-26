@@ -42,7 +42,7 @@ function getOrderMetaData(transaction) {
     // Get Order Number
     transaction["Order#"] = document.querySelector(".tc-number").innerText
 
-    // Get OrderDate
+    // Get Order Date
     receipt_head = document.querySelector(".receipt-head-split")
     date_str = receipt_head.children[1].innerText.split("|")[0].trim().replace(/(th|rd),/, '');
     processOrderDate(date_str, transaction)

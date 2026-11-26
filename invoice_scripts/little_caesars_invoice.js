@@ -61,7 +61,7 @@ function getOrderMetaData(transaction) {
     // Get Order Number
     transaction["Order#"] = document.querySelector("[data-testid=ordConf__confirmation-number]").innerText
 
-    // Get OrderDate
+    // Get Order Date
     date_str = new Date().toLocaleDateString();
     processOrderDate(date_str, transaction)
 

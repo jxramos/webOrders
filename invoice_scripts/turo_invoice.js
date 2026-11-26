@@ -30,7 +30,7 @@ function getOrderMetaData(transaction) {
     div_receipt = document.querySelector("[data-testid=receipt]")
     transaction["Order#"] = div_receipt.children[1].firstElementChild.firstChild.lastElementChild.innerText.split("ID ")[1]
 
-    // Get OrderDate
+    // Get Order Date
     div_trip_details = document.querySelector("[data-testid=trip-details-section]")
     date_str = div_trip_details.firstChild.lastChild.innerText.replace("BOOKED ", "").split(" AT ")[0]
     processOrderDate(date_str, transaction)

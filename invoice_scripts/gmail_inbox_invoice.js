@@ -48,7 +48,7 @@ function getOrderMetaDataSquare(transaction, cell_main_frame_elements) {
     payment_details = cell_main_frame_elements[9].firstChild.firstChild.children[1].firstChild.firstChild.children[2].children
     transaction["Order#"] = payment_details[1].children[2].innerText.split(" ")[2]
 
-    // Get OrderDate
+    // Get Order Date
     date_str = payment_details[1].children[0].innerText.replace(" at", "")
     processOrderDate(date_str, transaction)
 
@@ -111,7 +111,7 @@ function getOrderMetaDataHarborFreight(transaction, div_current_email) {
     // Get Order Number
     transaction["Order#"] = div_details.firstElementChild.firstElementChild.firstElementChild.firstElementChild.children[1].textContent.split("#: ")[1]
 
-    // Get OrderDate
+    // Get Order Date
     date_str = div_details.firstElementChild.firstElementChild.firstElementChild.firstElementChild.children[2].textContent.split(": ")[1]
     processOrderDate(date_str, transaction)
 

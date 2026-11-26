@@ -28,7 +28,7 @@ function getOrderMetaData(transaction) {
     // Get Order Number
     transaction["Order#"] = document.querySelector("#portlet_com_quest_bwportal_consolidatedbills > div > div > div > section > div > div > div:nth-child(1) > div > div.ds-card.ds-mt-32.--md-mt-24 > div > div:nth-child(3) > div.ds-col-12.ds-mt-4.ds-flex.--start-start > span:nth-child(2)").innerText
 
-    // Get OrderDate
+    // Get Order Date
     div_table = document.querySelector("#portlet_com_quest_bwportal_consolidatedbills > div > div > div > section > div > div > div:nth-child(1) > div > div.ds-card.ds-mt-32.--md-mt-24 > div > div:nth-child(4)").children
     date_str = div_table[7].innerText
     processOrderDate(date_str, transaction)

@@ -30,7 +30,7 @@ function getOrderMetaData(transaction) {
     order_id = document.getElementById("eftID").innerText
     transaction["Order#"] = order_id
 
-    // Get OrderDate
+    // Get Order Date
     date_str = document.getElementById("payment.paymentDatevalue").innerText
     processOrderDate(date_str, transaction)
 

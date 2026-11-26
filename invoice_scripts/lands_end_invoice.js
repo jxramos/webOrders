@@ -52,7 +52,7 @@ function getOrderMetaData(transaction) {
     // Get Order Number
     transaction["Order#"] = order_info_container.firstChild.firstChild.firstElementChild.lastElementChild.innerText
 
-    // Get OrderDate
+    // Get Order Date
     date_str = order_info_container.lastElementChild.firstElementChild.lastElementChild.innerText
     processOrderDate(date_str, transaction)
 
@@ -71,7 +71,7 @@ function getOrderMetaDataFromHistoryPage(transaction) {
     // Get Order Number
     transaction["Order#"] = document.querySelector("app-page-header").innerText.split("#")[1]
 
-    // Get OrderDate
+    // Get Order Date
     date_str = order_detail_container.firstElementChild.lastElementChild.firstElementChild.firstElementChild.lastElementChild.innerText
     processOrderDate(date_str, transaction)
 

@@ -42,7 +42,7 @@ function getOrderMetaData(transaction) {
     // Get Order Number
     transaction["Order#"] = document.getElementsByClassName("h1")[0].innerText.split("Details for Order #")[1].trim();
 
-    // Get OrderDate
+    // Get Order Date
     xpathOrderDate = "/html/body/div[1]/div[1]/table[2]/tbody/tr[1]/td";
     date_str = document.evaluate(xpathOrderDate, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null )
                     .singleNodeValue.innerText.split(": ")[1];
