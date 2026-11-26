@@ -69,7 +69,6 @@ The `Transfer` list is ordered as the *From* account followed by the *To* accoun
 The current list of vendors supported.
 * amazon.com
     + regular orders
-    + prime now orders
     + digital orders
 * appfolio.com
 * appliancepartspros.com

@@ -36,15 +36,6 @@
     },
     {
       "matches": [
-        "https://primenow.amazon.com/orderStatus?orderId=*"
-      ],
-      "js": [
-        "common/common.js",
-        "invoice_scripts/primenow_invoice.js"
-      ]
-    },
-    {
-      "matches": [
         "https://*.amazon.com/gp/your-account/order-details*"
       ],
       "js": [
